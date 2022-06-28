@@ -1,13 +1,12 @@
 # JRobots
----
 JRobots is a programming game based on [CRobots](https://crobots.deepthought.it/home.php) by Tom Poindexter. The objective of the game is to code your own robot and fight against other robots.
 
 ## JRobots syntax
 The syntaxt of JRobots is very simple and intuitive. You can use the conditional operators, loops and call functions.
 ...
 
-**if** Conditional operator
-**for** Loop
+**if** Conditional operator  
+**for** Loop   
 ...
 
 ## JRobots functions
@@ -21,5 +20,5 @@ Move the robot in a specific direction at a specific speed
 ### posX()
 Get the current tobot X position
 ### posY()
-Get the current robot Y position
+Get the current robot Y position.
 ...
