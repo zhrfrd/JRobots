@@ -1,3 +1,3 @@
-Hello
-This is a test
-Bye
+while (true) {
+    System.out.println ("Ciao");
+}
