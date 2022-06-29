@@ -11,14 +11,14 @@ The syntaxt of JRobots is very simple and intuitive. You can use the conditional
 
 ## JRobots functions
 The following are in-build JRobots functions that you can use to control the behaviour of your robot.
-### scan(degree)
-Scan the battlefield in a specific direction
-### shoot(degree)
-The robot shoot in a specific direction
-### move(degree, speed)
-Move the robot in a specific direction at a specific speed
+### scan(direction)
+Scan the battlefield in a specific direction.
+### shoot(direction)
+The robot shoot in a specific direction.
+### move(direction, speed)
+Move the robot in a specific direction at a specific speed.
 ### posX()
-Get the current tobot X position
+Get the current tobot X position.
 ### posY()
-Get the current robot Y position.
+Get the current robot Y position.   
 ...

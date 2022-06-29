@@ -1,3 +1,5 @@
-while (true) {
-    System.out.println ("Ciao");
+public test() {
+    while (true) {
+        System.out.println ("Ciao");
+    }
 }
