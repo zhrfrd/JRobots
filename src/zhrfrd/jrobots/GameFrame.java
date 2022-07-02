@@ -1,11 +1,18 @@
 package zhrfrd.jrobots;
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
 	//Constructor
 	GameFrame() {
-		this.add(new GamePanel());
+		GamePanel gp = new GamePanel();
+		GamePanel gp2 = new GamePanel();
+		gp.setBackground(Color.black);
+		gp.t.start();
+		gp2.t.start();
+		this.add(gp);
 		this.setTitle("JRobots");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);

@@ -10,7 +10,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class GamePanel extends JPanel implements ActionListener{
+public class GamePanel extends JPanel implements Runnable{
 	static final int SCREEN_WIDTH = 600;
 	static final int SCREEN_HEIGHT = 600;
 	static final int UNIT_SIZE = 25;
@@ -21,25 +21,25 @@ public class GamePanel extends JPanel implements ActionListener{
 	final int x[] = new int[GAME_UNITS];
 	final int y[] = new int[GAME_UNITS];
 	boolean running = false;
-	Timer timer;
 	Random random;
+	Thread t;
 	
 	// Constructor
 	GamePanel() {
-		random = new Random();
 		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-		this.setBackground(Color.black);
+//		this.setBackground(Color.black);
 		this.setFocusable(true);
-		startGame();
+		t = new Thread(this, "Second robot");
+		
+
 		startGame();
 	}
 	
 	// Methods
 	public void startGame() {
-		newApple();
+		
+		newApplePos();
 		running = true;
-		timer = new Timer(DELAY, this);
-		timer.start();
 	}
 	
 	public void draw(Graphics g) {
@@ -47,7 +47,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		g.fillRect(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
 	}
 	
-	public void newApple() {
+	public void newApplePos() {
+		random = new Random();
+		System.out.println(random);
 		appleX = random.nextInt((int)(SCREEN_WIDTH / UNIT_SIZE)) * UNIT_SIZE;
 		appleY = random.nextInt((int)(SCREEN_HEIGHT / UNIT_SIZE)) * UNIT_SIZE;
 	}
@@ -63,7 +65,12 @@ public class GamePanel extends JPanel implements ActionListener{
 	}
 	
 	@Override
-	public void actionPerformed (ActionEvent e) {
+	public void run () {
+		
+			System.out.println("lksl");
+			
+			
+
 	}
 
 }
