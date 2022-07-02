@@ -16,8 +16,8 @@ public class JRobots {
 	static JPanel panel;
 	static final int SCREEN_WIDTH = 600;
 	static final int SCREEN_HEIGHT = 600;
-	static Robot robot1 = new Robot();
-	static Robot robot2 = new Robot();
+	static Robot robot1;
+	static Robot robot2;
 	static File fileRobot;
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
