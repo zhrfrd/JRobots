@@ -5,8 +5,11 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -24,7 +27,7 @@ public class JRobots {
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
 	
-	public static void main (String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 		frame = new JFrame("JRobots");
 		panel = new JPanel();
 		robot1 = new Robot();
@@ -52,11 +55,16 @@ public class JRobots {
 		panel.add(robot2);
 //		System.out.println(robot1.getX());
 		
-		
-		File file = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/test.txt");
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		String str;
-		while ((str = br.readLine()) != null)
-			System.out.println(str);
+		// Read external file
+		try {
+			InputStream file = new FileInputStream("/Users/faridzouheir/eclipse-workspace/JRobots/res/test.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(file));
+			String str;
+			
+			while ((str = br.readLine()) != null)
+				System.out.println(str);
+		} catch (FileNotFoundException e) {
+			System.out.println("Warning: File not found");
+		}
 	}
 }
