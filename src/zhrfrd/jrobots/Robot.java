@@ -15,7 +15,7 @@ public class Robot extends JLabel implements Runnable{
 	// Constructor
 	Robot() {
 		this.life = 100;
-		threadRobot = new Thread(this, "Thread");
+		threadRobot = new Thread(this, "My thread");
 	}
 	
 	// Methods

@@ -3,7 +3,9 @@ package zhrfrd.jrobots;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -48,6 +50,13 @@ public class JRobots {
 		robot2.threadRobot.start();
 		panel.add(robot1);
 		panel.add(robot2);
-		System.out.println(robot1.getX());
+//		System.out.println(robot1.getX());
+		
+		
+		File file = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/test.txt");
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String str;
+		while ((str = br.readLine()) != null)
+			System.out.println(str);
 	}
 }
