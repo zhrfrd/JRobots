@@ -37,6 +37,11 @@ public class Robot extends JLabel implements Runnable{
 
 		return 0;
 	}
+	
+	//TEST METHOD
+	public void boom() {
+		System.out.println("BOOM BOOM!!");
+	}
 
 	// Shoot the enemy
 	public void shoot(int direction) {

@@ -5,10 +5,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
@@ -49,6 +46,7 @@ public class JRobots {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		
+		robot1.boom();
 		robot1.threadRobot.start();
 		robot2.threadRobot.start();
 		panel.add(robot1);
@@ -71,16 +69,22 @@ public class JRobots {
 		
 		// Compile and execute external java program
 		try {
-			Runtime.getRuntime().exec("javac Test.java");
-			Process p = Runtime.getRuntime().exec("java Test");
-			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			Process processCompilation = Runtime.getRuntime().exec("javac /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots/Test.java");   // Compile Test.java
+			processCompilation.waitFor();   // Wait until the process is terminated before starting the following process (to avoid the second process not working properly)
+			Process processExecution = Runtime.getRuntime().exec("java -cp /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots Test");   // Execute java (-cp is class 
 			
+			BufferedReader in = new BufferedReader(new InputStreamReader(processExecution.getInputStream()));   // Get result of the execution of the external file
 			String line = null;
+			
 			while ((line = in.readLine()) != null) {  
 	            System.out.println(line); 
 			}
 		} catch (IOException e) {  
             e.printStackTrace();
+            System.out.println("Execution error.");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.out.println("Interrupted exception.");
 		}
 	}
 }
