@@ -56,15 +56,31 @@ public class JRobots {
 //		System.out.println(robot1.getX());
 		
 		// Read external file
+//		try {
+//			InputStream file = new FileInputStream("/Users/faridzouheir/eclipse-workspace/JRobots/res/test.txt");
+//			BufferedReader br = new BufferedReader(new InputStreamReader(file));
+//			String str;
+//			
+//			while ((str = br.readLine()) != null)
+//				System.out.println(str);
+//			
+//			br.close();
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Warning: File not found");
+//		}
+		
+		// Compile and execute external java program
 		try {
-			InputStream file = new FileInputStream("/Users/faridzouheir/eclipse-workspace/JRobots/res/test.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(file));
-			String str;
+			Runtime.getRuntime().exec("javac Test.java");
+			Process p = Runtime.getRuntime().exec("java Test");
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			
-			while ((str = br.readLine()) != null)
-				System.out.println(str);
-		} catch (FileNotFoundException e) {
-			System.out.println("Warning: File not found");
+			String line = null;
+			while ((line = in.readLine()) != null) {  
+	            System.out.println(line); 
+			}
+		} catch (IOException e) {  
+            e.printStackTrace();
 		}
 	}
 }
