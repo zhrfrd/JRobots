@@ -51,32 +51,17 @@ public class JRobots {
 		robot2.threadRobot.start();
 		panel.add(robot1);
 		panel.add(robot2);
-//		System.out.println(robot1.getX());
-		
-		// Read external file
-//		try {
-//			InputStream file = new FileInputStream("/Users/faridzouheir/eclipse-workspace/JRobots/res/test.txt");
-//			BufferedReader br = new BufferedReader(new InputStreamReader(file));
-//			String str;
-//			
-//			while ((str = br.readLine()) != null)
-//				System.out.println(str);
-//			
-//			br.close();
-//		} catch (FileNotFoundException e) {
-//			System.out.println("Warning: File not found");
-//		}
 		
 		// Compile and execute external java program
 		try {
-			Process processCompilation = Runtime.getRuntime().exec("javac /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots/Test.java");   // Compile Test.java
+			Process processCompilation = Runtime.getRuntime().exec("javac -d /Users/faridzouheir/eclipse-workspace/JRobots/src/ /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobotss/Test.java");   // Compile Test.java
 			processCompilation.waitFor();   // Wait until the process is terminated before starting the following process (to avoid the second process not working properly)
-			Process processExecution = Runtime.getRuntime().exec("java -cp /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots Test");   // Execute java (-cp is class 
+			Process processExecution = Runtime.getRuntime().exec("java -cp /Users/faridzouheir/eclipse-workspace/JRobots/src/ zhrfrd.jrobotss.Test");   // Execute java (-cp is class 
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(processExecution.getInputStream()));   // Get result of the execution of the external file
 			String line = null;
 			
-			while ((line = in.readLine()) != null) {  
+			while ((line = in.readLine()) != null) { 
 	            System.out.println(line); 
 			}
 		} catch (IOException e) {  

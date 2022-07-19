@@ -13,7 +13,7 @@ public class Robot extends JLabel implements Runnable{
 	private Dimension size;
 
 	// Constructor
-	Robot() {
+	public Robot() {
 		this.life = 100;
 		threadRobot = new Thread(this, "My thread");
 	}
