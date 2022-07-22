@@ -8,10 +8,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import zhrfrd.testjrobots.Test;
 
 public class JRobots {
 	static JFrame frame;
@@ -24,16 +25,11 @@ public class JRobots {
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		frame = new JFrame("JRobots");
 		panel = new JPanel();
-		robot1 = new Robot();
-		robot2 = new Robot();
-		fileRobot = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/robot.png");
-		bufferedImage = ImageIO.read(fileRobot);
-		imageIcon = new ImageIcon(bufferedImage);
-		robot1.setIcon(imageIcon);
-		robot2.setIcon(imageIcon);
+		robot1 = new Test();
+		robot2 = new Test();
 		
 		panel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		panel.setBackground(Color.black);
@@ -46,17 +42,18 @@ public class JRobots {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		
-		robot1.boom();
+//		robot1.boom();
 		robot1.threadRobot.start();
 		robot2.threadRobot.start();
 		panel.add(robot1);
 		panel.add(robot2);
 		
+//		robot1.goo();
 		// Compile and execute external java program
 		try {
-			Process processCompilation = Runtime.getRuntime().exec("javac -d /Users/faridzouheir/eclipse-workspace/JRobots/src/ /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobotss/Test.java");   // Compile Test.java
+			Process processCompilation = Runtime.getRuntime().exec("javac -d /Users/faridzouheir/eclipse-workspace/JRobots/src/ /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots/Robot.java /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/testjrobots/Test.java");   // Compile Test.java
 			processCompilation.waitFor();   // Wait until the process is terminated before starting the following process (to avoid the second process not working properly)
-			Process processExecution = Runtime.getRuntime().exec("java -cp /Users/faridzouheir/eclipse-workspace/JRobots/src/ zhrfrd.jrobotss.Test");   // Execute java (-cp is class 
+			Process processExecution = Runtime.getRuntime().exec("java -cp /Users/faridzouheir/eclipse-workspace/JRobots/src/ zhrfrd.testjrobots.Test");   // Execute java (-cp is class path)
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(processExecution.getInputStream()));   // Get result of the execution of the external file
 			String line = null;

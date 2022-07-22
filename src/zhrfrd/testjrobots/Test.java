@@ -1,4 +1,4 @@
-package zhrfrd.jrobotss;
+package zhrfrd.testjrobots;
 
 import java.awt.Dimension;
 
@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 
 import zhrfrd.jrobots.Robot;
 
-public class Test {
-	static Robot rob;
-    
+public class Test extends Robot {
+	private static final long serialVersionUID = 1L;
+
 	public static void main(String[] args) {
         int a = 300;
         int b = 23;
@@ -26,11 +26,13 @@ public class Test {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
         System.out.println(res);
-        // boom();
-        rob = new Robot();
-        rob.boom();
 	}
-
+	
+	@Override
+	public void boom() {
+		System.out.println("FAI BOOOOOOOOOOOM!!!");
+	}
+	
     public static int doSum(int a, int b) {
         return a + b;
     }

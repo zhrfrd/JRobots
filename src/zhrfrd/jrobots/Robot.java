@@ -1,8 +1,13 @@
 package zhrfrd.jrobots;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Robot extends JLabel implements Runnable{
@@ -11,14 +16,31 @@ public class Robot extends JLabel implements Runnable{
 	protected Thread threadRobot;
 	private Random random;
 	private Dimension size;
+	private File fileRobot;
+	private BufferedImage bufferedImage;
+	private ImageIcon imageIcon;
 
 	// Constructor
 	public Robot() {
 		this.life = 100;
+		
 		threadRobot = new Thread(this, "My thread");
+		setIconRobot();
 	}
 	
 	// Methods
+	// Generate robot icon
+	public void setIconRobot() {
+		fileRobot = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/robot.png");
+		try {
+			bufferedImage = ImageIO.read(fileRobot);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		imageIcon = new ImageIcon(bufferedImage);
+		setIcon(imageIcon);
+	}
+	
 	//Set robot position
 	public void setPosition() {
 		random = new Random();
