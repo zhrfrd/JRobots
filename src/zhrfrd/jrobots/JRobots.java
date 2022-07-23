@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -25,7 +28,7 @@ public class JRobots {
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		frame = new JFrame("JRobots");
 		panel = new JPanel();
 		robot1 = new Test();
@@ -48,10 +51,19 @@ public class JRobots {
 		panel.add(robot1);
 		panel.add(robot2);
 		
+		Class<?> c = Class.forName("zhrfrd.jrobots.Robot");   //
+		Constructor<?> cons = c.getConstructor();			  //
+		Object object = cons.newInstance();					  // Till here it works, the class Robot is found and recognised
+		System.out.println(object.getClass());
+		Method method = c.getDeclaredMethod("boom", null);	  //
+		method.invoke(object, null);						  //  Invoke specified method;
+		Method [] methods = c.getMethods();					  //
+		System.out.println(methods[1]);						  // Call method by position
+		
 //		robot1.goo();
 		// Compile and execute external java program
 		try {
-			Process processCompilation = Runtime.getRuntime().exec("javac -d /Users/faridzouheir/eclipse-workspace/JRobots/src/ /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots/Robot.java /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/testjrobots/Test.java");   // Compile Test.java
+			Process processCompilation = Runtime.getRuntime().exec("javac -d /Users/faridzouheir/eclipse-workspace/JRobots/src/ /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/jrobots/Robot.java /Users/faridzouheir/eclipse-workspace/JRobots/src/zhrfrd/testjrobots/Test.java");   // Compile Test.java and Robot.Java
 			processCompilation.waitFor();   // Wait until the process is terminated before starting the following process (to avoid the second process not working properly)
 			Process processExecution = Runtime.getRuntime().exec("java -cp /Users/faridzouheir/eclipse-workspace/JRobots/src/ zhrfrd.testjrobots.Test");   // Execute java (-cp is class path)
 			

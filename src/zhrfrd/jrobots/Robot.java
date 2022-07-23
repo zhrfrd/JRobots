@@ -24,7 +24,7 @@ public class Robot extends JLabel implements Runnable{
 	public Robot() {
 		this.life = 100;
 		
-		threadRobot = new Thread(this, "My thread");
+		threadRobot = new Thread(this, "Robot thread");
 		setIconRobot();
 	}
 	
@@ -49,7 +49,7 @@ public class Robot extends JLabel implements Runnable{
 		size = this.getPreferredSize();
 		this.setBounds(posX, posY, size.width, size.height);
 		
-		System.out.println(posX);
+		System.out.println("x: " + posX + " y: " + posY);
 	}
 	
 	// Scan the battlefield and, if your robot finds another robot, return the direction
@@ -93,7 +93,6 @@ public class Robot extends JLabel implements Runnable{
 
 	@Override
 	public void run () {
-		System.out.println(threadRobot.getName());
 		setPosition();
 		
 	}

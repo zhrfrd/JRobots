@@ -10,7 +10,7 @@ import zhrfrd.jrobots.Robot;
 public class Test extends Robot {
 	private static final long serialVersionUID = 1L;
 
-	public static void main(String[] args) {
+	public static void main (String[] args) {
         int a = 300;
         int b = 23;
         int res = doSum(a, b);
@@ -25,7 +25,7 @@ public class Test extends Robot {
 		frame.pack();
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-        System.out.println(res);
+        System.out.println("Test.java " + res);
 	}
 	
 	@Override
