@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 public class Robot extends JLabel implements Runnable{
 	protected static final long serialVersionUID = 1L;
 	protected int life, direction, speed, posX, posY;
-	protected Thread threadRobot;
+	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
 	private Dimension size;
 	private File fileRobot;
@@ -60,9 +60,9 @@ public class Robot extends JLabel implements Runnable{
 		return 0;
 	}
 	
-	//TEST METHOD
-	public void boom() {
-		System.out.println("BOOM BOOM!!");
+	// Starting method of the robot
+	public void start() {
+		
 	}
 
 	// Shoot the enemy
@@ -89,6 +89,11 @@ public class Robot extends JLabel implements Runnable{
 	public boolean enemyFound() {
 		// If yes return true, else return false
 		return false;
+	}
+	
+	//TEST METHOD
+	public void boom() {
+		System.out.println("BOOM BOOM!!");
 	}
 
 	@Override
