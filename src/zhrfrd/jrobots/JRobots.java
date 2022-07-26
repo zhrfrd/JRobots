@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -25,7 +26,7 @@ public class JRobots {
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
 	
-	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
 		frame = new JFrame("JRobots");
 		panel = new JPanel();
 		robot1 = new Test();
@@ -52,5 +53,8 @@ public class JRobots {
 		Object objectRobot = constructorRobot.newInstance();   // Create a new instance of the object
 		Method method = classRobot.getDeclaredMethod("start", null);   // Get the method specified as parameter
 		method.invoke(objectRobot, null);   // Invoke the method specified above
+//		Field fieldThreadRobot = classRobot.getField("threadRobot");
+		
+		
 	}
 }

@@ -23,6 +23,7 @@ public class Robot extends JLabel implements Runnable{
 	// Constructor
 	public Robot() {
 		this.life = 100;
+		size = this.getPreferredSize();
 		
 		threadRobot = new Thread(this, "Robot thread");
 		setIconRobot();
@@ -41,12 +42,17 @@ public class Robot extends JLabel implements Runnable{
 		setIcon(imageIcon);
 	}
 	
-	//Set robot position
-	public void setPosition() {
+	// Get the size of the robot icon
+	private void getSizeRobot() {
+		size = this.getPreferredSize();
+	}
+	
+	// Set robot position
+	public void setStartingPosition() {
 		random = new Random();
 		posX = random.nextInt(500);
 		posY = random.nextInt(500);
-		size = this.getPreferredSize();
+		
 		this.setBounds(posX, posY, size.width, size.height);
 		
 		System.out.println("x: " + posX + " y: " + posY);
@@ -98,7 +104,7 @@ public class Robot extends JLabel implements Runnable{
 
 	@Override
 	public void run () {
-		setPosition();
-		
+		getSizeRobot();
+		setStartingPosition();
 	}
 }
