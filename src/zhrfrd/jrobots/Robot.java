@@ -1,13 +1,9 @@
 package zhrfrd.jrobots;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Robot extends JLabel implements Runnable{
@@ -16,42 +12,21 @@ public class Robot extends JLabel implements Runnable{
 	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
 	private Dimension size;
-	private File fileRobot;
-	private BufferedImage bufferedImage;
-	private ImageIcon imageIcon;
 
 	// Constructor
 	public Robot() {
 		this.life = 100;
-		size = this.getPreferredSize();
-		
+
 		threadRobot = new Thread(this, "Robot thread");
-		setIconRobot();
 	}
 	
-	// Methods
-	// Generate robot icon
-	public void setIconRobot() {
-		fileRobot = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/robot.png");
-		try {
-			bufferedImage = ImageIO.read(fileRobot);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		imageIcon = new ImageIcon(bufferedImage);
-		setIcon(imageIcon);
-	}
-	
-	// Get the size of the robot icon
-	private void getSizeRobot() {
-		size = this.getPreferredSize();
-	}
-	
+	// Methods	
 	// Set robot position
 	public void setStartingPosition() {
 		random = new Random();
 		posX = random.nextInt(500);
 		posY = random.nextInt(500);
+		size = this.getPreferredSize();
 		
 		this.setBounds(posX, posY, size.width, size.height);
 		
@@ -104,7 +79,6 @@ public class Robot extends JLabel implements Runnable{
 
 	@Override
 	public void run () {
-		getSizeRobot();
 		setStartingPosition();
 	}
 }
