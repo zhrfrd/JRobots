@@ -46,10 +46,10 @@ public class JRobots {
 		Method method = classRobot.getDeclaredMethod("start", null);   // Get the method specified as parameter
 		method.invoke(objectRobot, null);   // Invoke the method specified above
 		
-		Robot robot = (Robot) objectRobot;
-		robot.setIcon(imageIcon);
-		robot.threadRobot.start();
-		panel.add(robot);
+		Robot robot1 = (Robot) objectRobot;
+		robot1.setIcon(imageIcon);
+		robot1.threadRobot.start();
+		panel.add(robot1);
 	}
 	
 	// Retrieve the icon of the robot from the selected path
