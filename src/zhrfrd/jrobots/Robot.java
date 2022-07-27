@@ -84,33 +84,42 @@ public class Robot extends JLabel implements Runnable{
 	}
 
 	@Override
+	// The run method contains the game loop responsible for the movements and animation in the battlefield
 	public void run () {
 		setStartingPosition();
+		
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
 		final double ns = 1000000000.0 / 60.0;
 		double delta = 0;
-		int frames = 0; // How many frames per second
-		int updates = 0; // How many updates per second (it should be always 60)
+		int frames = 0;   // How many frames per second
+		int updates = 0;   // How many updates per second (it should be always 60)
+		
+		// Game loop
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
+			
 			while (delta >= 1) {
-//				update(); // Update 60 times per second
+				update();   // Update 60 times per second
 				updates++;
 				delta--;
 			}
-//			render();
 			
 			frames++;
-			if (System.currentTimeMillis() - timer > 1000) { // Each second
-				move(1, 3);
-				timer += 1000; // Increase by 10000 each time in order to keep the upper condition
+			
+			if (System.currentTimeMillis() - timer > 1000) {   // Each second
+				timer += 1000;   // Increase by 10000 each time in order to keep the condition above
 				System.out.println(title + "  |  " + updates + "ups " + frames + "fps");
 				updates = 0;
 				frames = 0;
 			}
 		}
+	}
+	
+	// Update the animation 
+	private void update () {
+		move(1, 3);
 	}
 }
