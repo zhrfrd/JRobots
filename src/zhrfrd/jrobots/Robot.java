@@ -9,6 +9,10 @@ public class Robot extends JLabel implements Runnable{
 	protected static final long serialVersionUID = 1L;
 	protected int screenWidth, screenHeight;
 	protected int life, direction, speed, posX, posY;
+	protected final String UP = "up";
+	protected final String DOWN = "down";
+	protected final String LEFT = "left";
+	protected final String RIGHT = "right";
 	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
 	private Dimension size;
@@ -35,6 +39,91 @@ public class Robot extends JLabel implements Runnable{
 		System.out.println("x: " + posX + " y: " + posY);
 	}
 	
+	// Move the robot
+	public void move(String direction) {
+		switch (direction) {
+			case UP:
+				posY = this.getY() - 1;
+				this.setBounds(posX, posY, size.width, size.height);
+				System.out.println("x: " + posX + " y: " + posY);
+				
+				if (posY <= 0) {
+					posY ++;
+					this.setBounds(posX, posY, size.width, size.height);
+				}
+				
+				break;
+				
+			case DOWN:
+				posY = this.getY() + 1;
+				this.setBounds(posX, posY, size.width, size.height);
+				System.out.println("x: " + posX + " y: " + posY);
+				
+				if (posY >= screenWidth - this.getWidth()) {
+					posY --;
+					this.setBounds(posX, posY, size.width, size.height);
+				}
+				
+				break;
+				
+			case LEFT:
+				posX = this.getX() - 1;
+				this.setBounds(posX, posY, size.width, size.height);
+				System.out.println("x: " + posX + " y: " + posY);
+				
+				if (posX <= 0) {
+					posX ++;
+					this.setBounds(posX, posY, size.width, size.height);
+				}
+				
+				break;
+				
+			case RIGHT:
+				posX = this.getX() + 1;
+				this.setBounds(posX, posY, size.width, size.height);
+				System.out.println("x: " + posX + " y: " + posY);
+				
+				if (posX >= screenWidth - this.getWidth()) {
+					posX --;
+					this.setBounds(posX, posY, size.width, size.height);
+				}
+				
+				break;
+		}
+//		if (direction == 1) {
+//			posX = this.getX() + 1;
+//			this.setBounds(posX, posY, size.width, size.height);
+//			System.out.println("x: " + posX + " y: " + posY);
+//			if (posX >= screenWidth - this.getWidth()) {
+//				direction = 2;
+//			}
+//		}
+//		
+//		if (direction == 2) {
+//			posY = this.getY() + 1;
+//		}
+	}
+	
+	protected void getWindowSize(int screenWidth, int screenHeight) {
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+	}
+	
+	// Update the animation 
+	private void update () {
+		move(LEFT);
+	}
+
+	// Get the x position of the robot
+	public int getPosX() {
+		return this.posX;
+	}
+
+	// Get the y position of the robot
+	public int getPosY() {
+		return this.posY;
+	}	
+	
 	// Scan the battlefield and, if your robot finds another robot, return the direction
 	public int scan(int direction) {
 		if (enemyFound())
@@ -53,32 +142,6 @@ public class Robot extends JLabel implements Runnable{
 		// Shoot bullet toward the direction
 	}
 
-	// Move the robot
-	public void move(int direction, int speed) {
-		if (direction == 1) {
-			posX = this.getX() + 1;
-			this.setBounds(posX, posY, size.width, size.height);
-			System.out.println("x: " + posX + " y: " + posY);
-			if (posX >= screenWidth - this.getWidth()) {
-				direction = 2;
-			}
-		}
-		
-		if (direction == 2) {
-			posY = this.getY() + 1;
-		}
-	}
-
-	// Get the x position of the robot
-	public int getPosX() {
-		return this.posX;
-	}
-
-	// Get the y position of the robot
-	public int getPosY() {
-		return this.posY;
-	}
-
 	// Check if there is an enemy along the direction your robot is pointing 
 	public boolean enemyFound() {
 		// If yes return true, else return false
@@ -88,16 +151,6 @@ public class Robot extends JLabel implements Runnable{
 	//TEST METHOD
 	public void boom() {
 		System.out.println("BOOM BOOM!!");
-	}
-	
-	protected void getWindowSize(int screenWidth, int screenHeight) {
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
-	}
-	
-	// Update the animation 
-	private void update () {
-		move(1, 3);
 	}
 
 	@Override
@@ -119,7 +172,7 @@ public class Robot extends JLabel implements Runnable{
 			lastTime = now;
 			
 			while (delta >= 1) {
-				update();   // Update 60 times per second
+//				update();   // Update 60 times per second
 				start();
 				updates++;
 				delta--;
