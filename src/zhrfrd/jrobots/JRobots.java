@@ -42,14 +42,21 @@ public class JRobots {
 		
 		Class<?> classRobot = Class.forName("zhrfrd.testjrobots.Test");   // Specify robot path
 		Constructor<?> constructorRobot = classRobot.getConstructor();   // Get the constructor of the class specified
-		Object objectRobot = constructorRobot.newInstance();   // Create a new instance of the object
-		Method method = classRobot.getDeclaredMethod("start", null);   // Get the method specified as parameter
-		method.invoke(objectRobot, null);   // Invoke the method specified above
+		Object objectRobot1 = constructorRobot.newInstance();   // Create a new instance of the object
+		Object objectRobot2 = constructorRobot.newInstance();
+//		Method method = classRobot.getDeclaredMethod("start", null);   // Get the method specified as parameter
+//		method.invoke(objectRobot1, null);   // Invoke the method specified above
 		
-		Robot robot1 = (Robot) objectRobot;
+		Robot robot1 = (Robot) constructorRobot.newInstance();
+		Robot robot2 = (Robot) constructorRobot.newInstance();
+		robot1.getWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		robot2.getWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		robot1.setIcon(imageIcon);
+		robot2.setIcon(imageIcon);
 		robot1.threadRobot.start();
+		robot2.threadRobot.start();
 		panel.add(robot1);
+		panel.add(robot2);
 	}
 	
 	// Retrieve the icon of the robot from the selected path

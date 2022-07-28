@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 
 public class Robot extends JLabel implements Runnable{
 	protected static final long serialVersionUID = 1L;
+	protected int screenWidth, screenHeight;
 	protected int life, direction, speed, posX, posY;
 	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
@@ -58,8 +59,14 @@ public class Robot extends JLabel implements Runnable{
 			posX = this.getX() + 1;
 			this.setBounds(posX, posY, size.width, size.height);
 			System.out.println("x: " + posX + " y: " + posY);
+			if (posX >= screenWidth - this.getWidth()) {
+				direction = 2;
+			}
 		}
-		// Move the robot around the map in the specific direction with the specific speed
+		
+		if (direction == 2) {
+			posY = this.getY() + 1;
+		}
 	}
 
 	// Get the x position of the robot
@@ -82,6 +89,16 @@ public class Robot extends JLabel implements Runnable{
 	public void boom() {
 		System.out.println("BOOM BOOM!!");
 	}
+	
+	protected void getWindowSize(int screenWidth, int screenHeight) {
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+	}
+	
+	// Update the animation 
+	private void update () {
+		move(1, 3);
+	}
 
 	@Override
 	// The run method contains the game loop responsible for the movements and animation in the battlefield
@@ -103,6 +120,7 @@ public class Robot extends JLabel implements Runnable{
 			
 			while (delta >= 1) {
 				update();   // Update 60 times per second
+				start();
 				updates++;
 				delta--;
 			}
@@ -116,10 +134,5 @@ public class Robot extends JLabel implements Runnable{
 				frames = 0;
 			}
 		}
-	}
-	
-	// Update the animation 
-	private void update () {
-		move(1, 3);
 	}
 }
