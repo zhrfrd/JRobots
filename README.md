@@ -11,14 +11,19 @@ The syntaxt of JRobots is very simple and intuitive. You can use the conditional
 
 ## JRobots functions
 The following are in-build JRobots functions that you can use to control the behaviour of your robot.
+### start()
+This is the main function that get called first when the robot get launched. In here you write all the movements and behaviours of your robot.
 ### scan(direction)
 Scan the battlefield in a specific direction.
 ### shoot(direction)
 The robot shoot in a specific direction.
-### move(direction, speed)
-Move the robot in a specific direction at a specific speed.
-### posX()
-Get the current tobot X position.
-### posY()
-Get the current robot Y position.   
+### move(direction)
+Move the robot in a specific direction. The parameter **direction** is a String and can be one of these constant values: *UP*, *DOWN*, *LEFT* or *RIGHT*.
+*Example:*  
+`move(RIGHT)`  
+Move the robot to the right.
+### getPosX()
+Get the current X position of the robot.
+### getPosY()
+Get the current Y position of the robot. 
 ...

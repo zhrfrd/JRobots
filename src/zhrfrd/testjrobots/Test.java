@@ -6,7 +6,7 @@ public class Test extends Robot {
 	@Override
 	public void start() {
 		
-			move (UP);
+			move (LEFT);
 	}
 	
 	@Override
