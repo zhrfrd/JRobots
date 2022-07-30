@@ -18,7 +18,7 @@ Scan the battlefield in a specific direction.
 ### shoot(direction)
 The robot shoot in a specific direction.
 ### move(direction)
-Move the robot in a specific direction. The parameter **direction** is a String and can be one of these constant values: *UP*, *DOWN*, *LEFT* or *RIGHT*.
+Move the robot in a specific direction. The parameter **direction** is a String and can be one of these constant values: *UP*, *DOWN*, *LEFT* or *RIGHT*.  
 *Example:*  
 `move(RIGHT)`  
 Move the robot to the right.

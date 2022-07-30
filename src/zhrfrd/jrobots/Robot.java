@@ -47,22 +47,12 @@ public class Robot extends JLabel implements Runnable{
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
 				
-				if (posY <= 0) {
-					posY ++;
-					this.setBounds(posX, posY, size.width, size.height);
-				}
-				
 				break;
 				
 			case DOWN:
 				posY = this.getY() + 1;
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
-				
-				if (posY >= screenWidth - this.getWidth()) {
-					posY --;
-					this.setBounds(posX, posY, size.width, size.height);
-				}
 				
 				break;
 				
@@ -71,11 +61,6 @@ public class Robot extends JLabel implements Runnable{
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
 				
-				if (posX <= 0) {
-					posX ++;
-					this.setBounds(posX, posY, size.width, size.height);
-				}
-				
 				break;
 				
 			case RIGHT:
@@ -83,35 +68,13 @@ public class Robot extends JLabel implements Runnable{
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
 				
-				if (posX >= screenWidth - this.getWidth()) {
-					posX --;
-					this.setBounds(posX, posY, size.width, size.height);
-				}
-				
 				break;
 		}
-//		if (direction == 1) {
-//			posX = this.getX() + 1;
-//			this.setBounds(posX, posY, size.width, size.height);
-//			System.out.println("x: " + posX + " y: " + posY);
-//			if (posX >= screenWidth - this.getWidth()) {
-//				direction = 2;
-//			}
-//		}
-//		
-//		if (direction == 2) {
-//			posY = this.getY() + 1;
-//		}
 	}
 	
 	protected void getWindowSize(int screenWidth, int screenHeight) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-	}
-	
-	// Update the animation 
-	private void update () {
-		move(LEFT);
 	}
 
 	// Get the x position of the robot
@@ -172,8 +135,7 @@ public class Robot extends JLabel implements Runnable{
 			lastTime = now;
 			
 			while (delta >= 1) {
-//				update();   // Update 60 times per second
-				start();
+				start();   // Every 60 seconds
 				updates++;
 				delta--;
 			}
