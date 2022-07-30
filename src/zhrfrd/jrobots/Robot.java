@@ -17,12 +17,10 @@ public class Robot extends JLabel implements Runnable{
 	private Random random;
 	private Dimension size;
 	public static String title = "JRobots";
-	private boolean running = false;
 
 	// Constructor
 	public Robot() {
 		this.life = 100;
-		running = true;
 		threadRobot = new Thread(this, "Robot thread");
 	}
 	
@@ -47,12 +45,25 @@ public class Robot extends JLabel implements Runnable{
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
 				
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				break;
 				
 			case DOWN:
 				posY = this.getY() + 1;
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
+				
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
 				break;
 				
@@ -61,12 +72,25 @@ public class Robot extends JLabel implements Runnable{
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
 				
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
 				break;
 				
 			case RIGHT:
 				posX = this.getX() + 1;
 				this.setBounds(posX, posY, size.width, size.height);
 				System.out.println("x: " + posX + " y: " + posY);
+				
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				break;
 		}
@@ -121,33 +145,6 @@ public class Robot extends JLabel implements Runnable{
 	public void run () {
 		setStartingPosition();
 		
-		long lastTime = System.nanoTime();
-		long timer = System.currentTimeMillis();
-		final double ns = 1000000000.0 / 60.0;
-		double delta = 0;
-		int frames = 0;   // How many frames per second
-		int updates = 0;   // How many updates per second (it should be always 60)
-		
-		// Game loop
-		while (running) {
-			long now = System.nanoTime();
-			delta += (now - lastTime) / ns;
-			lastTime = now;
-			
-			while (delta >= 1) {
-				start();   // Every 60 seconds
-				updates++;
-				delta--;
-			}
-			
-			frames++;
-			
-			if (System.currentTimeMillis() - timer > 1000) {   // Each second
-				timer += 1000;   // Increase by 10000 each time in order to keep the condition above
-				System.out.println(title + "  |  " + updates + "ups " + frames + "fps");
-				updates = 0;
-				frames = 0;
-			}
-		}
+		start();
 	}
 }

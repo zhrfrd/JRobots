@@ -41,14 +41,16 @@ public class JRobots {
 		imageIcon = getIconRobot();
 		
 		Class<?> classRobot = Class.forName("zhrfrd.testjrobots.Test");   // Specify robot path
+		Class<?> classRobot2 = Class.forName("zhrfrd.testjrobots.Test2");
 		Constructor<?> constructorRobot = classRobot.getConstructor();   // Get the constructor of the class specified
+		Constructor<?> constructorRobot2 = classRobot2.getConstructor();
 		Object objectRobot1 = constructorRobot.newInstance();   // Create a new instance of the object
-		Object objectRobot2 = constructorRobot.newInstance();
+		Object objectRobot2 = constructorRobot2.newInstance();
 //		Method method = classRobot.getDeclaredMethod("start", null);   // Get the method specified as parameter
 //		method.invoke(objectRobot1, null);   // Invoke the method specified above
 		
 		Robot robot1 = (Robot) constructorRobot.newInstance();
-		Robot robot2 = (Robot) constructorRobot.newInstance();
+		Robot robot2 = (Robot) constructorRobot2.newInstance();
 		robot1.getWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		robot2.getWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		robot1.setIcon(imageIcon);
