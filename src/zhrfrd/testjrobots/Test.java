@@ -4,8 +4,11 @@ import zhrfrd.jrobots.Robot;
 
 public class Test extends Robot {
 	public void start() {
-		while (true)
+		while (isAlive()) {
 			move(RIGHT);
+		
+			
+		}
 	}
 	
 	@Override

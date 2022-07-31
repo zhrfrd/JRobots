@@ -6,7 +6,7 @@ import java.util.Random;
 import javax.swing.JLabel;
 
 public class Robot extends JLabel implements Runnable{
-	protected static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2377133046121834448L;
 	protected int screenWidth, screenHeight;
 	protected int life, direction, speed, posX, posY;
 	protected final String UP = "up";
@@ -48,9 +48,11 @@ public class Robot extends JLabel implements Runnable{
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				if (posY <= 0)
+					life = 0;
 				
 				break;
 				
@@ -88,9 +90,12 @@ public class Robot extends JLabel implements Runnable{
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				// Test
+				if (posX >= screenWidth - size.width)
+					life = 0;
 				
 				break;
 		}
@@ -109,7 +114,15 @@ public class Robot extends JLabel implements Runnable{
 	// Get the y position of the robot
 	public int getPosY() {
 		return this.posY;
-	}	
+	}
+	
+	// Check if the robot is still alive
+	public boolean isAlive() {
+		if (life <= 0)
+			return false;
+		
+		return true;
+	}
 	
 	// Scan the battlefield and, if your robot finds another robot, return the direction
 	public int scan(int direction) {

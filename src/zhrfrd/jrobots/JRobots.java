@@ -2,21 +2,26 @@ package zhrfrd.jrobots;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class JRobots {
+public class JRobots{
 	static JFrame frame;
 	static JPanel panel;
+	static JButton bttLoad;
+	static JFileChooser fileChooser;
 	static final int SCREEN_WIDTH = 600;
 	static final int SCREEN_HEIGHT = 600;
 	static File fileIconRobot;
@@ -26,17 +31,35 @@ public class JRobots {
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
 		frame = new JFrame("JRobots");
 		panel = new JPanel();
+		bttLoad = new JButton("Load robot");
 		
 		panel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		panel.setBackground(Color.black);
-		panel.setLayout(null);   // Or new FlowLayout()??
+//		panel.setLayout(null);   // Or new FlowLayout()??
 		panel.setFocusable(true);
+		panel.add(bttLoad);
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
+		
+		bttLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				if (e.getSource() == bttLoad) {
+					fileChooser = new JFileChooser();
+					
+					int response = fileChooser.showOpenDialog(null);
+					
+					if (response == JFileChooser.APPROVE_OPTION) {
+						File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+						System.out.println(file);
+					}
+				}
+			}
+		});
 		
 		imageIcon = getIconRobot();
 		
@@ -55,7 +78,7 @@ public class JRobots {
 		robot2.getWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		robot1.setIcon(imageIcon);
 		robot2.setIcon(imageIcon);
-		robot1.threadRobot.start();
+ 		robot1.threadRobot.start();
 		robot2.threadRobot.start();
 		panel.add(robot1);
 		panel.add(robot2);
