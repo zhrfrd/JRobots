@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 public class Robot extends JLabel implements Runnable{
 	private static final long serialVersionUID = -2377133046121834448L;
-	protected int screenWidth, screenHeight;
+	protected int battlefieldWidth, battlefieldHeight;
 	protected int life, direction, speed, posX, posY;
 	protected final String UP = "up";
 	protected final String DOWN = "down";
@@ -33,8 +33,6 @@ public class Robot extends JLabel implements Runnable{
 		size = this.getPreferredSize();
 		
 		this.setBounds(posX, posY, size.width, size.height);
-		
-		System.out.println("x: " + posX + " y: " + posY);
 	}
 	
 	// Move the robot
@@ -51,6 +49,7 @@ public class Robot extends JLabel implements Runnable{
 					e.printStackTrace();
 				}
 				
+				// TEST 
 				if (posY <= 0)
 					life = 0;
 				
@@ -93,17 +92,17 @@ public class Robot extends JLabel implements Runnable{
 					e.printStackTrace();
 				}
 				
-				// Test
-				if (posX >= screenWidth - size.width)
+				// TEST
+				if (posX >= battlefieldWidth - size.width)
 					life = 0;
 				
 				break;
 		}
 	}
 	
-	protected void getWindowSize(int screenWidth, int screenHeight) {
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
+	protected void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
+		this.battlefieldWidth = battlefieldWidth;
+		this.battlefieldHeight = battlefieldHeight;
 	}
 
 	// Get the x position of the robot
