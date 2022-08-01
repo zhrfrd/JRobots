@@ -24,12 +24,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class JRobots extends JFrame implements ActionListener{
+	private static final long serialVersionUID = -3190346657795484951L;
 	static JPanel panel;
 	static JPanel panelBattlefield;
 	static JPanel panelSideMenu;
 	static JPanel panelRobot1, panelRobot2, panelRobot3, panelRobot4;
 	static JButton bttLoad1, bttLoad2, bttLoad3, bttLoad4;
 	static JLabel labelRobot1Path, labelRobot2Path, labelRobot3Path, labelRobot4Path;
+	static JLabel labelRobot1Life, labelRobot2Life, labelRobot3Life, labelRobot4Life;
 	static JScrollPane scrollPane;
 	static final int SCREEN_WIDTH = 900;
 	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 9;   // ASPECT RATIO 16:9
@@ -49,10 +51,14 @@ public class JRobots extends JFrame implements ActionListener{
 		panelRobot2 = new JPanel();
 		panelRobot3 = new JPanel();
 		panelRobot4 = new JPanel();
-		labelRobot1Path = new JLabel();
-		labelRobot2Path = new JLabel();
-		labelRobot3Path = new JLabel();
-		labelRobot4Path = new JLabel();
+		labelRobot1Path = new JLabel("Path: ");
+		labelRobot2Path = new JLabel("Path: ");
+		labelRobot3Path = new JLabel("Path: ");
+		labelRobot4Path = new JLabel("Path: ");
+		labelRobot1Life = new JLabel("Life: ");
+		labelRobot2Life = new JLabel("Life: ");
+		labelRobot3Life = new JLabel("Life: ");
+		labelRobot4Life = new JLabel("Life: ");
 		bttLoad1 = new JButton("Load robot 1");
 		bttLoad2 = new JButton("Load robot 2");
 		bttLoad3 = new JButton("Load robot 3");
@@ -63,44 +69,7 @@ public class JRobots extends JFrame implements ActionListener{
 		bttLoad3.addActionListener(this);
 		bttLoad4.addActionListener(this);
 		
-		panelRobot1.setLayout(new BoxLayout(panelRobot1, BoxLayout.Y_AXIS));
-		panelRobot1.setBackground(Color.gray);
-		panelRobot1.setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot1.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot1.add(bttLoad1);
-		panelRobot1.add(labelRobot1Path);
-		panelRobot2.setLayout(new BoxLayout(panelRobot2, BoxLayout.Y_AXIS));
-		panelRobot2.setBackground(Color.gray);
-		panelRobot2.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot2.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot2.add(bttLoad2);
-		panelRobot2.add(labelRobot2Path);
-		panelRobot3.setLayout(new BoxLayout(panelRobot3, BoxLayout.Y_AXIS));
-		panelRobot3.setBackground(Color.gray);
-		panelRobot3.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot3.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot3.add(bttLoad3);
-		panelRobot3.add(labelRobot3Path);
-		panelRobot4.setLayout(new BoxLayout(panelRobot4, BoxLayout.Y_AXIS));
-		panelRobot4.setBackground(Color.gray);
-		panelRobot4.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot4.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot4.add(bttLoad4);
-		panelRobot4.add(labelRobot4Path);
-		
-		
-		panelBattlefield.setBackground(Color.black);
-		panelBattlefield.setPreferredSize(new Dimension(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT));
-		
-		panelSideMenu.setLayout(new GridLayout(0,1));
-		panelSideMenu.setBackground(Color.gray);
-		panelSideMenu.add(panelRobot1);
-		panelSideMenu.add(panelRobot2);
-		panelSideMenu.add(panelRobot3);
-		panelSideMenu.add(panelRobot4);
-		
-		scrollPane = new JScrollPane(panelSideMenu, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT));
+		organizeScreenLayout();
 		
 		panel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -108,7 +77,7 @@ public class JRobots extends JFrame implements ActionListener{
 		panel.add(panelBattlefield);
 		panel.add(scrollPane);
 	}
-	
+
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
 		JRobots frame = new JRobots();
 		frame.add(panel);
@@ -144,6 +113,54 @@ public class JRobots extends JFrame implements ActionListener{
 		System.out.println(s);
 	}
 	
+	// This function encloses the panels and their layout separately just for organisational purposes
+	private void organizeScreenLayout () {
+		panelRobot1.setLayout(new BoxLayout(panelRobot1, BoxLayout.Y_AXIS));
+		panelRobot1.setBackground(Color.gray);
+		panelRobot1.setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
+		panelRobot1.setBorder(BorderFactory.createLoweredBevelBorder());
+		panelRobot1.add(bttLoad1);
+		panelRobot1.add(labelRobot1Path);
+		panelRobot1.add(labelRobot1Life);
+		
+		panelRobot2.setLayout(new BoxLayout(panelRobot2, BoxLayout.Y_AXIS));
+		panelRobot2.setBackground(Color.gray);
+		panelRobot2.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
+		panelRobot2.setBorder(BorderFactory.createLoweredBevelBorder());
+		panelRobot2.add(bttLoad2);
+		panelRobot2.add(labelRobot2Path);
+		panelRobot2.add(labelRobot2Life);
+		
+		panelRobot3.setLayout(new BoxLayout(panelRobot3, BoxLayout.Y_AXIS));
+		panelRobot3.setBackground(Color.gray);
+		panelRobot3.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
+		panelRobot3.setBorder(BorderFactory.createLoweredBevelBorder());
+		panelRobot3.add(bttLoad3);
+		panelRobot3.add(labelRobot3Path);
+		panelRobot3.add(labelRobot3Life);
+		
+		panelRobot4.setLayout(new BoxLayout(panelRobot4, BoxLayout.Y_AXIS));
+		panelRobot4.setBackground(Color.gray);
+		panelRobot4.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
+		panelRobot4.setBorder(BorderFactory.createLoweredBevelBorder());
+		panelRobot4.add(bttLoad4);
+		panelRobot4.add(labelRobot4Path);
+		panelRobot4.add(labelRobot4Life);
+		
+		panelBattlefield.setBackground(Color.black);
+		panelBattlefield.setPreferredSize(new Dimension(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT));
+		
+		panelSideMenu.setLayout(new GridLayout(0,1));
+		panelSideMenu.setBackground(Color.gray);
+		panelSideMenu.add(panelRobot1);
+		panelSideMenu.add(panelRobot2);
+		panelSideMenu.add(panelRobot3);
+		panelSideMenu.add(panelRobot4);
+		
+		scrollPane = new JScrollPane(panelSideMenu, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT));
+	}
+	
 	// Retrieve the icon of the robot from the selected path
 	private static ImageIcon getIconRobot() {
 		fileIconRobot = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/robot.png");
@@ -164,7 +181,7 @@ public class JRobots extends JFrame implements ActionListener{
 			int response = fileChooser.showOpenDialog(null);
 			
 			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
+				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
 			
 			labelRobot1Path.setText(fileRobot.toString()); 
 		}
@@ -175,7 +192,7 @@ public class JRobots extends JFrame implements ActionListener{
 			int response = fileChooser.showOpenDialog(null);
 			
 			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
+				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
 			
 			labelRobot2Path.setText(fileRobot.toString()); 
 		}
@@ -186,7 +203,7 @@ public class JRobots extends JFrame implements ActionListener{
 			int response = fileChooser.showOpenDialog(null);
 			
 			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
+				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
 			
 			labelRobot3Path.setText(fileRobot.toString()); 
 		}
@@ -197,7 +214,7 @@ public class JRobots extends JFrame implements ActionListener{
 			int response = fileChooser.showOpenDialog(null);
 			
 			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
+				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
 			
 			labelRobot4Path.setText(fileRobot.toString()); 
 		}
