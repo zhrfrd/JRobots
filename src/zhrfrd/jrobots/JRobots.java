@@ -7,7 +7,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,8 +44,10 @@ public class JRobots extends JFrame implements ActionListener{
 	static File fileRobot;
 	static File fileIconRobot;
 	private JFileChooser fileChooser;
+	static BufferedReader fileReader;
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
+	static String firstLineFile = "";
 	
 	/*
 	 *  Constructor
@@ -97,7 +102,7 @@ public class JRobots extends JFrame implements ActionListener{
 	/*
 	 *  This function encloses the panels and their layout separately just for organisational purposes
 	 */
-	private void organizeScreenLayout () {
+	private void organizeScreenLayout() {
 		panelRobot1.setLayout(new BoxLayout(panelRobot1, BoxLayout.Y_AXIS));
 		panelRobot1.setBackground(Color.gray);
 		panelRobot1.setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
@@ -164,12 +169,20 @@ public class JRobots extends JFrame implements ActionListener{
 	private void loadRobot(JLabel labelPathRobot, Class<?> classRobot, Robot robot) {
 		fileChooser = new JFileChooser();
 		int response = fileChooser.showOpenDialog(null);
+		String fullClass = "";
 		Constructor<?> constructorRobot;
 		
 		if (response == JFileChooser.APPROVE_OPTION)
-			fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
+			fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
 		
-		labelPathRobot.setText(fileRobot.toString());
+		fullClass = extractFullClassRobot();
+		labelPathRobot.setText(fullClass);
+		
+		try {
+			classRobot = Class.forName(fullClass);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		};
 		
 		try {
 			constructorRobot = classRobot.getConstructor();
@@ -184,18 +197,31 @@ public class JRobots extends JFrame implements ActionListener{
 		panelBattlefield.add(robot);
 	}
 
+	/*
+	 * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
+	 */
+	protected String extractFullClassRobot() {
+		// Read the first line of the file 
+		try {
+			fileReader = new BufferedReader(new FileReader(fileRobot));
+			firstLineFile = fileReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int index = firstLineFile.indexOf(" ");
+		StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, "");   // Extract ONLY package name from the first line of the file
+		String className = fileRobot.getName().replace(".java", "");   // Get the class name removing the .java extension from the file name (for convention class name = to file name)
+		String fullClass = (strPackageRobot + "." + className).replace(";", "");   // Merge package name and class name to create the full class name necessary for loading the robot
+		
+		return fullClass;
+	}
+
 	@Override
-	public void actionPerformed (ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == bttLoad1) {
 			Class<?> classRobot1 = null;
 			Robot robot1 = null;
-			
-			try {
-				classRobot1 = Class.forName("zhrfrd.testjrobots.Test");
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			};
 			
 			loadRobot(labelPathRobot1, classRobot1, robot1);
 		}
@@ -204,42 +230,21 @@ public class JRobots extends JFrame implements ActionListener{
 			Class<?> classRobot2 = null;
 			Robot robot2 = null;
 			
-			try {
-				classRobot2 = Class.forName("zhrfrd.testjrobots.Test");
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			};
-			
-			loadRobot(labelPathRobot1, classRobot2, robot2);
+			loadRobot(labelPathRobot2, classRobot2, robot2);
 		}
 		
 		if (e.getSource() == bttLoad3) {
 			Class<?> classRobot3 = null;
 			Robot robot3 = null;
 			
-			try {
-				classRobot3 = Class.forName("zhrfrd.testjrobots.Test");
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			};
-			
-			loadRobot(labelPathRobot1, classRobot3, robot3);
+			loadRobot(labelPathRobot3, classRobot3, robot3);
 		}
 		
 		if (e.getSource() == bttLoad4) {
 			Class<?> classRobot4 = null;
 			Robot robot4 = null;
 			
-			try {
-				classRobot4 = Class.forName("zhrfrd.testjrobots.Test");
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			};
-			
-			loadRobot(labelPathRobot1, classRobot4, robot4);
+			loadRobot(labelPathRobot4, classRobot4, robot4);
 		}
 	}
 }
