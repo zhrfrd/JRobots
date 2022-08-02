@@ -30,8 +30,9 @@ public class JRobots extends JFrame implements ActionListener{
 	static JPanel panelSideMenu;
 	static JPanel panelRobot1, panelRobot2, panelRobot3, panelRobot4;
 	static JButton bttLoad1, bttLoad2, bttLoad3, bttLoad4;
-	static JLabel labelRobot1Path, labelRobot2Path, labelRobot3Path, labelRobot4Path;
-	static JLabel labelRobot1Life, labelRobot2Life, labelRobot3Life, labelRobot4Life;
+	static JButton bttStart;
+	static JLabel labelPathRobot1, labelPathRobot2, labelPathRobot3, labelPathRobot4;
+	static JLabel labelLifeRobot1, labelLifeRobot2, labelLifeRobot3, labelLifeRobot4;
 	static JScrollPane scrollPane;
 	static final int SCREEN_WIDTH = 900;
 	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 9;   // ASPECT RATIO 16:9
@@ -43,6 +44,9 @@ public class JRobots extends JFrame implements ActionListener{
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
 	
+	/*
+	 *  Constructor
+	 */
 	public JRobots() {
 		panel = new JPanel();
 		panelBattlefield = new JPanel();
@@ -51,14 +55,14 @@ public class JRobots extends JFrame implements ActionListener{
 		panelRobot2 = new JPanel();
 		panelRobot3 = new JPanel();
 		panelRobot4 = new JPanel();
-		labelRobot1Path = new JLabel("Path: ");
-		labelRobot2Path = new JLabel("Path: ");
-		labelRobot3Path = new JLabel("Path: ");
-		labelRobot4Path = new JLabel("Path: ");
-		labelRobot1Life = new JLabel("Life: ");
-		labelRobot2Life = new JLabel("Life: ");
-		labelRobot3Life = new JLabel("Life: ");
-		labelRobot4Life = new JLabel("Life: ");
+		labelPathRobot1 = new JLabel("Path: ");
+		labelPathRobot2 = new JLabel("Path: ");
+		labelPathRobot3 = new JLabel("Path: ");
+		labelPathRobot4 = new JLabel("Path: ");
+		labelLifeRobot1 = new JLabel("Life: ");
+		labelLifeRobot2 = new JLabel("Life: ");
+		labelLifeRobot3 = new JLabel("Life: ");
+		labelLifeRobot4 = new JLabel("Life: ");
 		bttLoad1 = new JButton("Load robot 1");
 		bttLoad2 = new JButton("Load robot 2");
 		bttLoad3 = new JButton("Load robot 3");
@@ -78,7 +82,7 @@ public class JRobots extends JFrame implements ActionListener{
 		panel.add(scrollPane);
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
+	public static void main(String[] args) {
 		JRobots frame = new JRobots();
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,64 +92,43 @@ public class JRobots extends JFrame implements ActionListener{
 		frame.setLocationRelativeTo(null);
 		
 		imageIcon = getIconRobot();
-		
-		Class<?> classRobot = Class.forName("zhrfrd.testjrobots.Test");   // Specify robot path
-		Class<?> classRobot2 = Class.forName("zhrfrd.testjrobots.Test2");
-		Constructor<?> constructorRobot = classRobot.getConstructor();   // Get the constructor of the class specified
-		Constructor<?> constructorRobot2 = classRobot2.getConstructor();
-//		Object objectRobot1 = constructorRobot.newInstance();   // Create a new instance of the object
-//		Object objectRobot2 = constructorRobot2.newInstance();
-//		Method method = classRobot.getDeclaredMethod("start", null);   // Get the method specified as parameter
-//		method.invoke(objectRobot1, null);   // Invoke the method specified above
-		
-		Robot robot1 = (Robot) constructorRobot.newInstance();
-		Robot robot2 = (Robot) constructorRobot2.newInstance();
-		robot1.getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-		robot2.getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-		robot1.setIcon(imageIcon);
-		robot2.setIcon(imageIcon);
- 		robot1.threadRobot.start();
-		robot2.threadRobot.start();
-		panelBattlefield.add(robot1);
-		panelBattlefield.add(robot2);
-		
-		String s = labelRobot1Path.toString();
-		System.out.println(s);
 	}
 	
-	// This function encloses the panels and their layout separately just for organisational purposes
+	/*
+	 *  This function encloses the panels and their layout separately just for organisational purposes
+	 */
 	private void organizeScreenLayout () {
 		panelRobot1.setLayout(new BoxLayout(panelRobot1, BoxLayout.Y_AXIS));
 		panelRobot1.setBackground(Color.gray);
 		panelRobot1.setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
 		panelRobot1.setBorder(BorderFactory.createLoweredBevelBorder());
 		panelRobot1.add(bttLoad1);
-		panelRobot1.add(labelRobot1Path);
-		panelRobot1.add(labelRobot1Life);
+		panelRobot1.add(labelPathRobot1);
+		panelRobot1.add(labelLifeRobot1);
 		
 		panelRobot2.setLayout(new BoxLayout(panelRobot2, BoxLayout.Y_AXIS));
 		panelRobot2.setBackground(Color.gray);
 		panelRobot2.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
 		panelRobot2.setBorder(BorderFactory.createLoweredBevelBorder());
 		panelRobot2.add(bttLoad2);
-		panelRobot2.add(labelRobot2Path);
-		panelRobot2.add(labelRobot2Life);
+		panelRobot2.add(labelPathRobot2);
+		panelRobot2.add(labelLifeRobot2);
 		
 		panelRobot3.setLayout(new BoxLayout(panelRobot3, BoxLayout.Y_AXIS));
 		panelRobot3.setBackground(Color.gray);
 		panelRobot3.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
 		panelRobot3.setBorder(BorderFactory.createLoweredBevelBorder());
 		panelRobot3.add(bttLoad3);
-		panelRobot3.add(labelRobot3Path);
-		panelRobot3.add(labelRobot3Life);
+		panelRobot3.add(labelPathRobot3);
+		panelRobot3.add(labelLifeRobot3);
 		
 		panelRobot4.setLayout(new BoxLayout(panelRobot4, BoxLayout.Y_AXIS));
 		panelRobot4.setBackground(Color.gray);
 		panelRobot4.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
 		panelRobot4.setBorder(BorderFactory.createLoweredBevelBorder());
 		panelRobot4.add(bttLoad4);
-		panelRobot4.add(labelRobot4Path);
-		panelRobot4.add(labelRobot4Life);
+		panelRobot4.add(labelPathRobot4);
+		panelRobot4.add(labelLifeRobot4);
 		
 		panelBattlefield.setBackground(Color.black);
 		panelBattlefield.setPreferredSize(new Dimension(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT));
@@ -161,9 +144,11 @@ public class JRobots extends JFrame implements ActionListener{
 		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT));
 	}
 	
-	// Retrieve the icon of the robot from the selected path
+	/*
+	 *  Retrieve the icon of the robot from the selected path
+	 */
 	private static ImageIcon getIconRobot() {
-		fileIconRobot = new File("/Users/faridzouheir/eclipse-workspace/JRobots/res/robot.png");
+		fileIconRobot = new File("res/robot.png");
 		try {
 			bufferedImage = ImageIO.read(fileIconRobot);
 		} catch (IOException e) {
@@ -172,51 +157,89 @@ public class JRobots extends JFrame implements ActionListener{
 		
 		return new ImageIcon(bufferedImage);
 	}
+	
+	/*
+	 *  Load Robot file and run it
+	 */
+	private void loadRobot(JLabel labelPathRobot, Class<?> classRobot, Robot robot) {
+		fileChooser = new JFileChooser();
+		int response = fileChooser.showOpenDialog(null);
+		Constructor<?> constructorRobot;
+		
+		if (response == JFileChooser.APPROVE_OPTION)
+			fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
+		
+		labelPathRobot.setText(fileRobot.toString());
+		
+		try {
+			constructorRobot = classRobot.getConstructor();
+			robot = (Robot) constructorRobot.newInstance();
+			robot.getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+			robot.setIcon(imageIcon);
+			robot.threadRobot.start();
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+			e1.printStackTrace();
+		}
+		
+		panelBattlefield.add(robot);
+	}
 
 	@Override
 	public void actionPerformed (ActionEvent e) {
 		if (e.getSource() == bttLoad1) {
-			fileChooser = new JFileChooser();
+			Class<?> classRobot1 = null;
+			Robot robot1 = null;
 			
-			int response = fileChooser.showOpenDialog(null);
+			try {
+				classRobot1 = Class.forName("zhrfrd.testjrobots.Test");
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			};
 			
-			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
-			
-			labelRobot1Path.setText(fileRobot.toString()); 
+			loadRobot(labelPathRobot1, classRobot1, robot1);
 		}
 		
 		if (e.getSource() == bttLoad2) {
-			fileChooser = new JFileChooser();
+			Class<?> classRobot2 = null;
+			Robot robot2 = null;
 			
-			int response = fileChooser.showOpenDialog(null);
+			try {
+				classRobot2 = Class.forName("zhrfrd.testjrobots.Test");
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			};
 			
-			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
-			
-			labelRobot2Path.setText(fileRobot.toString()); 
+			loadRobot(labelPathRobot1, classRobot2, robot2);
 		}
 		
 		if (e.getSource() == bttLoad3) {
-			fileChooser = new JFileChooser();
+			Class<?> classRobot3 = null;
+			Robot robot3 = null;
 			
-			int response = fileChooser.showOpenDialog(null);
+			try {
+				classRobot3 = Class.forName("zhrfrd.testjrobots.Test");
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			};
 			
-			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
-			
-			labelRobot3Path.setText(fileRobot.toString()); 
+			loadRobot(labelPathRobot1, classRobot3, robot3);
 		}
 		
 		if (e.getSource() == bttLoad4) {
-			fileChooser = new JFileChooser();
+			Class<?> classRobot4 = null;
+			Robot robot4 = null;
 			
-			int response = fileChooser.showOpenDialog(null);
+			try {
+				classRobot4 = Class.forName("zhrfrd.testjrobots.Test");
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			};
 			
-			if (response == JFileChooser.APPROVE_OPTION)
-				fileRobot = new File("Path: " + fileChooser.getSelectedFile().getAbsolutePath());
-			
-			labelRobot4Path.setText(fileRobot.toString()); 
+			loadRobot(labelPathRobot1, classRobot4, robot4);
 		}
 	}
 }
