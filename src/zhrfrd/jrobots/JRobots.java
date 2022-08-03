@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -154,6 +153,7 @@ public class JRobots extends JFrame implements ActionListener{
 	 */
 	private static ImageIcon getIconRobot() {
 		fileIconRobot = new File("res/robot.png");
+		
 		try {
 			bufferedImage = ImageIO.read(fileIconRobot);
 		} catch (IOException e) {

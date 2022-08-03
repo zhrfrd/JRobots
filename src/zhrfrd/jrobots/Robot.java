@@ -41,7 +41,7 @@ public class Robot extends JLabel implements Runnable{
 			case UP:
 				posY = this.getY() - 1;
 				this.setBounds(posX, posY, size.width, size.height);
-//				System.out.println("x: " + posX + " y: " + posY);
+				System.out.println("x: " + posX + " y: " + posY);
 				
 				try {
 					Thread.sleep(10);
