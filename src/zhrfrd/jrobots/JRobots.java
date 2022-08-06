@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-public class JRobots extends JFrame implements ActionListener{
+public class JRobots extends JFrame implements ActionListener, Runnable{
 	private static final long serialVersionUID = -3190346657795484951L;
 	static JPanel panel;
 	static JPanel panelBattleContainer, panelBattlefield,panelSideMenu, panelController;
@@ -50,6 +50,7 @@ public class JRobots extends JFrame implements ActionListener{
 	static String firstLineFile = "";
 	static Robot robot1;   // ???
 	static ArrayList<String> fullClassRobots;
+	static Thread threadMain;
 	
 	/*
 	 *  Constructor
@@ -104,6 +105,16 @@ public class JRobots extends JFrame implements ActionListener{
 		frame.setLocationRelativeTo(null);
 		
 		imageIcon = getIconRobot();
+		
+		frame.start();   // Go to start() function
+	}
+	
+	/*
+	 * Create and start the main thread
+	 */
+	public void start() {
+		threadMain = new Thread(this, "Thread main");
+		threadMain.start();   // Go to run()
 	}
 	
 	/*
@@ -222,6 +233,7 @@ public class JRobots extends JFrame implements ActionListener{
 				e1.printStackTrace();
 			}
 			
+			labelLifeRobot1.setText(String.valueOf(robot.life));
 			panelBattlefield.add(robot);
 		}
 	}
@@ -263,5 +275,10 @@ public class JRobots extends JFrame implements ActionListener{
 		if (e.getSource() == bttStart) {
 			startBattle();
 		}
+	}
+
+	@Override
+	public void run () {
+		
 	}
 }

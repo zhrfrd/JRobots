@@ -53,6 +53,8 @@ public class Robot extends JLabel implements Runnable{
 				if (posY <= 0)
 					life = 0;
 				
+				updateLife(life);
+				
 				break;
 				
 			case DOWN:
@@ -98,6 +100,10 @@ public class Robot extends JLabel implements Runnable{
 				
 				break;
 		}
+	}
+	
+	protected void updateLife(int life) {
+		this.life = life;
 	}
 	
 	protected void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
