@@ -30,10 +30,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	private static final long serialVersionUID = -3190346657795484951L;
 	static JPanel panel;
 	static JPanel panelBattleContainer, panelBattlefield,panelSideMenu, panelController;
-	static JPanel panelRobot1, panelRobot2, panelRobot3, panelRobot4;
-	static JButton bttLoad1, bttLoad2, bttLoad3, bttLoad4, bttStart;
-	static JLabel labelPathRobot1, labelPathRobot2, labelPathRobot3, labelPathRobot4;
-	static JLabel labelLifeRobot1, labelLifeRobot2, labelLifeRobot3, labelLifeRobot4;
+	static JButton bttStart;
+	static ArrayList<JPanel> panelRobot;
+	static ArrayList<JButton> bttLoad;
+	static ArrayList<JLabel> labelPathRobot;
+	static ArrayList<JLabel> labelLifeRobot;
 	static JScrollPane scrollPane;
 	static final int SCREEN_WIDTH = 900;
 	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 10;   // ASPECT RATIO 16:10
@@ -57,33 +58,25 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	 */
 	public JRobots() {
 		panel = new JPanel();
+		panelRobot = new ArrayList<JPanel>();
+		bttLoad = new ArrayList<JButton>();
+		labelPathRobot = new ArrayList<JLabel>();
+		labelLifeRobot = new ArrayList<JLabel>();
+		fullClassRobots = new ArrayList<String>();
 		panelBattleContainer = new JPanel();
 		panelBattlefield = new JPanel();
 		panelSideMenu = new JPanel();
 		panelController = new JPanel();
-		panelRobot1 = new JPanel();
-		panelRobot2 = new JPanel();
-		panelRobot3 = new JPanel();
-		panelRobot4 = new JPanel();
-		labelPathRobot1 = new JLabel("Path: ");
-		labelPathRobot2 = new JLabel("Path: ");
-		labelPathRobot3 = new JLabel("Path: ");
-		labelPathRobot4 = new JLabel("Path: ");
-		labelLifeRobot1 = new JLabel("Life: ");
-		labelLifeRobot2 = new JLabel("Life: ");
-		labelLifeRobot3 = new JLabel("Life: ");
-		labelLifeRobot4 = new JLabel("Life: ");
-		bttLoad1 = new JButton("Load robot 1");
-		bttLoad2 = new JButton("Load robot 2");
-		bttLoad3 = new JButton("Load robot 3");
-		bttLoad4 = new JButton("Load robot 4");
-		bttStart = new JButton("Start!");
-		fullClassRobots = new ArrayList<String>();
 		
-		bttLoad1.addActionListener(this);
-		bttLoad2.addActionListener(this);
-		bttLoad3.addActionListener(this);
-		bttLoad4.addActionListener(this);
+		for (int i = 0; i < 4; i ++) {
+			panelRobot.add(new JPanel());
+			labelPathRobot.add(new JLabel("Path: "));
+			labelLifeRobot.add(new JLabel("Life: "));
+			bttLoad.add(new JButton("Load robot " + (i + 1)));
+			bttLoad.get(i).addActionListener(this);
+		}
+		
+		bttStart = new JButton("Start!");
 		bttStart.addActionListener(this);
 		
 		organizeScreenLayout();
@@ -121,37 +114,15 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	 *  This function encloses the panels and their layout separately just for organisational purposes
 	 */
 	private void organizeScreenLayout() {
-		panelRobot1.setLayout(new BoxLayout(panelRobot1, BoxLayout.Y_AXIS));
-		panelRobot1.setBackground(Color.gray);
-		panelRobot1.setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot1.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot1.add(bttLoad1);
-		panelRobot1.add(labelPathRobot1);
-		panelRobot1.add(labelLifeRobot1);
-		
-		panelRobot2.setLayout(new BoxLayout(panelRobot2, BoxLayout.Y_AXIS));
-		panelRobot2.setBackground(Color.gray);
-		panelRobot2.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot2.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot2.add(bttLoad2);
-		panelRobot2.add(labelPathRobot2);
-		panelRobot2.add(labelLifeRobot2);
-		
-		panelRobot3.setLayout(new BoxLayout(panelRobot3, BoxLayout.Y_AXIS));
-		panelRobot3.setBackground(Color.gray);
-		panelRobot3.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot3.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot3.add(bttLoad3);
-		panelRobot3.add(labelPathRobot3);
-		panelRobot3.add(labelLifeRobot3);
-		
-		panelRobot4.setLayout(new BoxLayout(panelRobot4, BoxLayout.Y_AXIS));
-		panelRobot4.setBackground(Color.gray);
-		panelRobot4.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
-		panelRobot4.setBorder(BorderFactory.createLoweredBevelBorder());
-		panelRobot4.add(bttLoad4);
-		panelRobot4.add(labelPathRobot4);
-		panelRobot4.add(labelLifeRobot4);
+		for (int i = 0; i < 4; i ++) {
+			panelRobot.get(i).setLayout(new BoxLayout(panelRobot.get(i), BoxLayout.Y_AXIS));
+			panelRobot.get(i).setBackground(Color.gray);
+			panelRobot.get(i).setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
+			panelRobot.get(i).setBorder(BorderFactory.createLoweredBevelBorder());
+			panelRobot.get(i).add(bttLoad.get(i));
+			panelRobot.get(i).add(labelPathRobot.get(i));
+			panelRobot.get(i).add(labelLifeRobot.get(i));
+		}
 		
 		panelBattleContainer.setPreferredSize(new Dimension(BATTLECONTAINER_WIDTH, BATTLECONTAINER_HEIGHT));
 		panelBattleContainer.setLayout(new BoxLayout(panelBattleContainer, BoxLayout.Y_AXIS));
@@ -168,10 +139,10 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		
 		panelSideMenu.setLayout(new GridLayout(0,1));
 		panelSideMenu.setBackground(Color.gray);
-		panelSideMenu.add(panelRobot1);
-		panelSideMenu.add(panelRobot2);
-		panelSideMenu.add(panelRobot3);
-		panelSideMenu.add(panelRobot4);
+		
+		for (int i = 0; i < 4; i ++) {
+			panelSideMenu.add(panelRobot.get(i));
+		}
 		
 		scrollPane = new JScrollPane(panelSideMenu, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT));
@@ -233,7 +204,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 				e1.printStackTrace();
 			}
 			
-			labelLifeRobot1.setText(String.valueOf(robot.life));
+//			labelLifeRobot.setText(String.valueOf(robot.life));
 			panelBattlefield.add(robot);
 		}
 	}
@@ -260,17 +231,17 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == bttLoad1)
-			loadRobot(labelPathRobot1);
+		if (e.getSource() == bttLoad.get(0))
+			loadRobot(labelPathRobot.get(0));
 		
-		if (e.getSource() == bttLoad2)
-			loadRobot(labelPathRobot2);
+		if (e.getSource() == bttLoad.get(1))
+			loadRobot(labelPathRobot.get(1));
 		
-		if (e.getSource() == bttLoad3)
-			loadRobot(labelPathRobot3);
+		if (e.getSource() == bttLoad.get(2))
+			loadRobot(labelPathRobot.get(2));
 		
-		if (e.getSource() == bttLoad4)
-			loadRobot(labelPathRobot4);
+		if (e.getSource() == bttLoad.get(3))
+			loadRobot(labelPathRobot.get(3));
 		
 		if (e.getSource() == bttStart) {
 			startBattle();
@@ -279,6 +250,16 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 
 	@Override
 	public void run () {
-		
+		while (true) {
+			for (int i = 0; i < fullClassRobots.size(); i ++) {
+				
+			}
+			
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
