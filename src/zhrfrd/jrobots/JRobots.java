@@ -28,6 +28,7 @@ import javax.swing.JScrollPane;
 
 public class JRobots extends JFrame implements ActionListener, Runnable{
 	private static final long serialVersionUID = -3190346657795484951L;
+	private JFileChooser fileChooser;
 	static JPanel panel;
 	static JPanel panelBattleContainer, panelBattlefield,panelSideMenu, panelController;
 	static JButton bttStart;
@@ -35,6 +36,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static ArrayList<JButton> bttLoad;
 	static ArrayList<JLabel> labelPathRobot;
 	static ArrayList<JLabel> labelLifeRobot;
+	static ArrayList<String> fullClassRobots;
+	static ArrayList<Robot> robot;
 	static JScrollPane scrollPane;
 	static final int SCREEN_WIDTH = 900;
 	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 10;   // ASPECT RATIO 16:10
@@ -44,14 +47,13 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static final int BATTLEFIELD_HEIGHT = BATTLECONTAINER_HEIGHT - (BATTLECONTAINER_HEIGHT / 10);
 	static File fileRobot;
 	static File fileIconRobot;
-	private JFileChooser fileChooser;
 	static BufferedReader fileReader;
 	static BufferedImage bufferedImage;
 	static ImageIcon imageIcon;
 	static String firstLineFile = "";
-	static Robot robot1;   // ???
-	static ArrayList<String> fullClassRobots;
 	static Thread threadMain;
+	Robot rob[] = new Robot[3];
+	boolean started = false;
 	
 	/*
 	 *  Constructor
@@ -63,6 +65,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		labelPathRobot = new ArrayList<JLabel>();
 		labelLifeRobot = new ArrayList<JLabel>();
 		fullClassRobots = new ArrayList<String>();
+		robot = new ArrayList<Robot>();
 		panelBattleContainer = new JPanel();
 		panelBattlefield = new JPanel();
 		panelSideMenu = new JPanel();
@@ -185,7 +188,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	private void startBattle() {
 		Class<?> classRobot = null;
 		Constructor<?> constructorRobot;
-		Robot robot = null;
+//		Robot robot = null;
 		
 		for (int i = 0; i < fullClassRobots.size(); i ++) {
 			try {
@@ -196,17 +199,19 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 			
 			try {
 				constructorRobot = classRobot.getConstructor();
-				robot = (Robot) constructorRobot.newInstance();
-				robot.getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-				robot.setIcon(imageIcon);
-				robot.threadRobot.start();
+				rob[i] = (Robot) constructorRobot.newInstance();
+				rob[i].getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+				rob[i].setIcon(imageIcon);
+				rob[i].threadRobot.start();
 			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 			
-//			labelLifeRobot.setText(String.valueOf(robot.life));
-			panelBattlefield.add(robot);
+//			labelLifeRobot.get(i).setText(String.valueOf(rob[i].life()));
+			panelBattlefield.add(rob[i]);
 		}
+		
+		started = true;
 	}
 
 	/*
@@ -251,9 +256,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	@Override
 	public void run () {
 		while (true) {
-			for (int i = 0; i < fullClassRobots.size(); i ++) {
-				
-			}
+//			for (int i = 0; i < 4; i ++) {
+//				System.out.print("Kkjkl");
+			if (started)
+				labelLifeRobot.get(0).setText(String.valueOf(rob[0].life()));
+//			}
 			
 			try {
 				Thread.sleep(10);

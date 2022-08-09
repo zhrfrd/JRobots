@@ -50,10 +50,8 @@ public class Robot extends JLabel implements Runnable{
 				}
 				
 				// TEST 
-				if (posY <= 0)
-					life = 0;
-				
-				updateLife(life);
+				if (posY <= 10)
+					this.life = 0;
 				
 				break;
 				
@@ -102,8 +100,8 @@ public class Robot extends JLabel implements Runnable{
 		}
 	}
 	
-	protected void updateLife(int life) {
-		this.life = life;
+	protected int life() {
+		return this.life;
 	}
 	
 	protected void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
