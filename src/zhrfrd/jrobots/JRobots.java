@@ -142,9 +142,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		panelSideMenu.setLayout(new GridLayout(0,1));
 		panelSideMenu.setBackground(Color.gray);
 		
-		for (int i = 0; i < 4; i ++) {
+		for (int i = 0; i < 4; i ++)
 			panelSideMenu.add(panelRobot.get(i));
-		}
 		
 		scrollPane = new JScrollPane(panelSideMenu, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT));
@@ -253,10 +252,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	@Override
 	public void run () {
 		while (true) {
-			if (isBattleStarted) {
+			if (isBattleStarted)
 				for (int i = 0; i < robot.size(); i ++) 
 					labelLifeRobot.get(i).setText(String.valueOf(robot.get(i).life()));
-			}
 			
 			try {
 				Thread.sleep(10);
