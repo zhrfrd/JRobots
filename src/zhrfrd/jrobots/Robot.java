@@ -94,7 +94,7 @@ public class Robot extends JLabel implements Runnable{
 				
 				// TEST
 				if (posX >= battlefieldWidth - size.width)
-					life = 0;
+					this.life = 30;
 				
 				break;
 		}

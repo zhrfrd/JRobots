@@ -52,8 +52,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static ImageIcon imageIcon;
 	static String firstLineFile = "";
 	static Thread threadMain;
-	Robot rob[] = new Robot[3];
-	boolean started = false;
+	boolean isBattleStarted = false;
 	
 	/*
 	 *  Constructor
@@ -188,7 +187,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	private void startBattle() {
 		Class<?> classRobot = null;
 		Constructor<?> constructorRobot;
-//		Robot robot = null;
 		
 		for (int i = 0; i < fullClassRobots.size(); i ++) {
 			try {
@@ -199,19 +197,18 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 			
 			try {
 				constructorRobot = classRobot.getConstructor();
-				rob[i] = (Robot) constructorRobot.newInstance();
-				rob[i].getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-				rob[i].setIcon(imageIcon);
-				rob[i].threadRobot.start();
+				robot.add((Robot) constructorRobot.newInstance());
+				robot.get(i).getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+				robot.get(i).setIcon(imageIcon);
+				robot.get(i).threadRobot.start();
 			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 			
-//			labelLifeRobot.get(i).setText(String.valueOf(rob[i].life()));
-			panelBattlefield.add(rob[i]);
+			panelBattlefield.add(robot.get(i));
 		}
 		
-		started = true;
+		isBattleStarted = true;
 	}
 
 	/*
@@ -256,11 +253,10 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	@Override
 	public void run () {
 		while (true) {
-//			for (int i = 0; i < 4; i ++) {
-//				System.out.print("Kkjkl");
-			if (started)
-				labelLifeRobot.get(0).setText(String.valueOf(rob[0].life()));
-//			}
+			if (isBattleStarted) {
+				for (int i = 0; i < robot.size(); i ++) 
+					labelLifeRobot.get(i).setText(String.valueOf(robot.get(i).life()));
+			}
 			
 			try {
 				Thread.sleep(10);
