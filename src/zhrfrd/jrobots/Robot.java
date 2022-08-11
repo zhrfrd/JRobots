@@ -25,7 +25,10 @@ public class Robot extends JLabel implements Runnable{
 	}
 	
 	// Methods	
-	// Set robot position
+	
+	/*
+	 * Set robot position
+	 */
 	public void setStartingPosition() {
 		random = new Random();
 		posX = random.nextInt(500);
@@ -35,13 +38,15 @@ public class Robot extends JLabel implements Runnable{
 		this.setBounds(posX, posY, size.width, size.height);
 	}
 	
-	// Move the robot
+	/*
+	 * Move the robot
+	 */
 	public void move(String direction) {
 		switch (direction) {
 			case UP:
 				posY = this.getY() - 1;
 				this.setBounds(posX, posY, size.width, size.height);
-				System.out.println("x: " + posX + " y: " + posY);
+//				System.out.println("x: " + posX + " y: " + posY);
 				
 				try {
 					Thread.sleep(10);
@@ -58,7 +63,7 @@ public class Robot extends JLabel implements Runnable{
 			case DOWN:
 				posY = this.getY() + 1;
 				this.setBounds(posX, posY, size.width, size.height);
-				System.out.println("x: " + posX + " y: " + posY);
+//				System.out.println("x: " + posX + " y: " + posY);
 				
 				try {
 					Thread.sleep(10);
@@ -71,7 +76,7 @@ public class Robot extends JLabel implements Runnable{
 			case LEFT:
 				posX = this.getX() - 1;
 				this.setBounds(posX, posY, size.width, size.height);
-				System.out.println("x: " + posX + " y: " + posY);
+//				System.out.println("x: " + posX + " y: " + posY);
 				
 				try {
 					Thread.sleep(10);
@@ -84,7 +89,7 @@ public class Robot extends JLabel implements Runnable{
 			case RIGHT:
 				posX = this.getX() + 1;
 				this.setBounds(posX, posY, size.width, size.height);
-				System.out.println("x: " + posX + " y: " + posY);
+//				System.out.println("x: " + posX + " y: " + posY);
 				
 				try {
 					Thread.sleep(10);
@@ -100,7 +105,10 @@ public class Robot extends JLabel implements Runnable{
 		}
 	}
 	
-	protected int life() {
+	/*
+	 * Get the life status of the robot
+	 */
+	protected int getLife() {
 		return this.life;
 	}
 	
@@ -109,17 +117,23 @@ public class Robot extends JLabel implements Runnable{
 		this.battlefieldHeight = battlefieldHeight;
 	}
 
-	// Get the x position of the robot
+	/*
+	 * Get the x position of the robot
+	 */
 	public int getPosX() {
 		return this.posX;
 	}
 
-	// Get the y position of the robot
+	/*
+	 * Get the y position of the robot
+	 */
 	public int getPosY() {
 		return this.posY;
 	}
 	
-	// Check if the robot is still alive
+	/*
+	 * Check if the robot is still alive
+	 */
 	public boolean isAlive() {
 		if (life <= 0)
 			return false;
@@ -127,31 +141,52 @@ public class Robot extends JLabel implements Runnable{
 		return true;
 	}
 	
-	// Scan the battlefield and, if your robot finds another robot, return the direction
+	/*
+	 * Scan the battlefield towards a single line direction
+	 */
 	public int scan(int direction) {
+		int x = getPosX();
+		int y = getPosY();
+		
 		if (enemyFound())
 			return direction;
 
 		return 0;
 	}
 	
-	// Starting method of the robot
+	/*
+	 * Scan the battleground towards the specified direction +/- the resolution
+	 */
+	public int scan(int direction, int resolution) {
+		if (enemyFound())
+			return direction;
+
+		return 0;
+	}
+	
+	/*
+	 * Starting method of the robot
+	 */
 	public void start() {
 		// Leave empty
 	}
 
-	// Shoot the enemy
-	public void shoot(int direction) {
-		// Shoot bullet toward the direction
+	/*
+	 * Shoot a missile towards the direction specified that will land in the range specified
+	 */
+	public void shoot(int direction, int range) {
+		
 	}
 
-	// Check if there is an enemy along the direction your robot is pointing 
+	/*
+	 * Check if there is an enemy along the direction your robot is pointing 
+	 */
 	public boolean enemyFound() {
 		// If yes return true, else return false
 		return false;
 	}
 	
-	//TEST METHOD
+	// TEST
 	public void boom() {
 		System.out.println("BOOM BOOM!!");
 	}
