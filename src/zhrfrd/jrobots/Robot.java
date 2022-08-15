@@ -112,6 +112,9 @@ public class Robot extends JLabel implements Runnable{
 		return this.life;
 	}
 	
+	/*
+	 * Get the size of the battlefield
+	 */
 	protected void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
 		this.battlefieldWidth = battlefieldWidth;
 		this.battlefieldHeight = battlefieldHeight;
@@ -193,7 +196,7 @@ public class Robot extends JLabel implements Runnable{
 
 	@Override
 	// The run method contains the game loop responsible for the movements and animation in the battlefield
-	public void run () {
+	public void run() {
 		setStartingPosition();
 		
 		start();

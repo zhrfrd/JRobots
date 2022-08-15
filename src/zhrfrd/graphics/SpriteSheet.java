@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class SpriteSheet {
 	private String path;
 	public final int SIZE, WIDTH, HEIGHT;
-	public int [] pixels;
+	public int[] pixels;
 	public static SpriteSheet missile = new SpriteSheet("/res/sheets/missile.png", 48);
 	
 	public SpriteSheet(String path, int size) {
@@ -16,14 +16,14 @@ public class SpriteSheet {
 		SIZE = size;
 		WIDTH = size;
 		HEIGHT = size;
-		pixels = new int [SIZE * SIZE];
+		pixels = new int[SIZE * SIZE];
 		load();
 	}
 	
 	/*
 	 * Load sprite sheet
 	 */
-	private void load () {
+	private void load() {
 		try {
 			BufferedImage image = ImageIO.read(SpriteSheet.class.getResource(path));   // Load the image from path
 			int w = image.getWidth();

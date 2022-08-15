@@ -3,9 +3,12 @@ package zhrfrd.jrobots;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,9 +29,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import zhrfrd.graphics.Screen;
+import zhrfrd.graphics.SpriteSheet;
+
 public class JRobots extends JFrame implements ActionListener, Runnable{
 	private static final long serialVersionUID = -3190346657795484951L;
 	private JFileChooser fileChooser;
+	private Screen screen;
 	static JPanel panel;
 	static JPanel panelBattleContainer, panelBattlefield,panelSideMenu, panelController;
 	static JButton bttStart;
@@ -69,6 +76,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		panelBattlefield = new JPanel();
 		panelSideMenu = new JPanel();
 		panelController = new JPanel();
+		screen = new Screen(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
 		
 		for (int i = 0; i < 4; i ++) {
 			panelRobot.add(new JPanel());
@@ -230,6 +238,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		return fullClass;
 	}
 
+	public void render() {
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == bttLoad.get(0))
@@ -244,9 +255,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		if (e.getSource() == bttLoad.get(3))
 			loadRobot(labelPathRobot.get(3));
 		
-		if (e.getSource() == bttStart) {
+		if (e.getSource() == bttStart)
 			startBattle();
-		}
 	}
 
 	@Override
