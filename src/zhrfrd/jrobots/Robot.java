@@ -1,9 +1,15 @@
 package zhrfrd.jrobots;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Robot extends JLabel implements Runnable{
 	private static final long serialVersionUID = -2377133046121834448L;
@@ -17,15 +23,40 @@ public class Robot extends JLabel implements Runnable{
 	private Random random;
 	private Dimension size;
 	public static String title = "JRobots";
+	protected ImageIcon imageIcon;
+	protected File fileIconMissile;
+	protected BufferedImage bufferedImage;
+	protected Missile missile;
+	JPanel panelBattlefield;
 
 	// Constructor
 	public Robot() {
 		this.life = 100;
 		threadRobot = new Thread(this, "Robot thread");
+		missile = new Missile(this);
+		imageIcon = getIconMissile();
 	}
 	
 	// Methods	
 	
+	/*
+	 * Get ImageIcon of the missile through its path
+	 */
+	private ImageIcon getIconMissile () {
+		fileIconMissile = new File("res/missile.png");
+		
+		try {
+			bufferedImage = ImageIO.read(fileIconMissile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return new ImageIcon(bufferedImage);
+	}
+	
+	protected void getPanel() {
+	}
+
 	/*
 	 * Set robot position
 	 */
@@ -36,6 +67,8 @@ public class Robot extends JLabel implements Runnable{
 		size = this.getPreferredSize();
 		
 		this.setBounds(posX, posY, size.width, size.height);
+		
+		this.add(missile);
 	}
 	
 	/*
@@ -178,7 +211,7 @@ public class Robot extends JLabel implements Runnable{
 	 * Shoot a missile towards the direction specified that will land in the range specified
 	 */
 	public void shoot(int direction, int range) {
-		
+		missile.setIcon(imageIcon);
 	}
 
 	/*

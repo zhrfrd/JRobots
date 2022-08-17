@@ -3,12 +3,9 @@ package zhrfrd.jrobots;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -30,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import zhrfrd.graphics.Screen;
-import zhrfrd.graphics.SpriteSheet;
 
 public class JRobots extends JFrame implements ActionListener, Runnable{
 	private static final long serialVersionUID = -3190346657795484951L;
@@ -121,7 +118,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	}
 	
 	/*
-	 *  This function encloses the panels and their layout separately just for organisational purposes
+	 * This function encloses the panels and their layout separately just for organisational purposes
 	 */
 	private void organizeScreenLayout() {
 		for (int i = 0; i < 4; i ++) {
@@ -198,17 +195,13 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		for (int i = 0; i < fullClassRobots.size(); i ++) {
 			try {
 				classRobot = Class.forName(fullClassRobots.get(i));
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			};
-			
-			try {
 				constructorRobot = classRobot.getConstructor();
-				robot.add((Robot) constructorRobot.newInstance());
+				System.out.println(constructorRobot);
+				robot.add((Robot)constructorRobot.newInstance());
 				robot.get(i).getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
 				robot.get(i).setIcon(imageIcon);
 				robot.get(i).threadRobot.start();
-			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 			
@@ -243,8 +236,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == bttLoad.get(0))
-			loadRobot(labelPathRobot.get(0));
+		if (e.getSource() == bttLoad.get(0)) {
+//			loadRobot(labelPathRobot.get(0));
+			fullClassRobots.add("zhrfrd.testjrobots.Test");
+			labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
+		}
 		
 		if (e.getSource() == bttLoad.get(1))
 			loadRobot(labelPathRobot.get(1));

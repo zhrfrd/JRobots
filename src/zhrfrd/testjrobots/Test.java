@@ -7,7 +7,7 @@ public class Test extends Robot {
 		while (isAlive()) {
 			move(RIGHT);
 		
-			
+//			shoot(3, 5);
 		}
 	}
 	
