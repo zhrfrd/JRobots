@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
 
 public class JRobots extends JFrame implements ActionListener, Runnable{
