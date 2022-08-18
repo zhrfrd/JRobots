@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -27,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import zhrfrd.battle.Battle;
 import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
 
@@ -43,6 +43,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static ArrayList<JLabel> labelLifeRobot;
 	static ArrayList<String> fullClassRobots;
 	static ArrayList<Robot> robot;
+	static Robot[] robots;
+//	static Robot robot1, robot2, robot3, robot4;
 	static JScrollPane scrollPane;
 	static final int SCREEN_WIDTH = 900;
 	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 10;   // ASPECT RATIO 16:10
@@ -57,6 +59,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static ImageIcon imageIcon;
 	static String firstLineFile = "";
 	static Thread threadMain;
+	static Battle battle;
 	boolean isBattleStarted = false;
 	
 	/*
@@ -70,11 +73,14 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		labelLifeRobot = new ArrayList<JLabel>();
 		fullClassRobots = new ArrayList<String>();
 		robot = new ArrayList<Robot>();
+//		robot1 = robot2 = robot3 = robot4 = null;
+		robots = new Robot[4];   // Max 4 robots
 		panelBattleContainer = new JPanel();
 		panelBattlefield = new JPanel();
 		panelSideMenu = new JPanel();
 		panelController = new JPanel();
 		screen = new Screen(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+		battle = new Battle(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
 		
 		for (int i = 0; i < 4; i ++) {
 			panelRobot.add(new JPanel());
@@ -197,16 +203,26 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 			try {
 				classRobot = Class.forName(fullClassRobots.get(i));
 				constructorRobot = classRobot.getConstructor();
-				System.out.println(constructorRobot);
-				robot.add((Robot)constructorRobot.newInstance());
-				robot.get(i).getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-				robot.get(i).setIcon(imageIcon);
-				robot.get(i).threadRobot.start();
+//				System.out.println(constructorRobot);
+//				robot.add((Robot)constructorRobot.newInstance());
+//				robot.get(i).getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+//				robot.get(i).setIcon(imageIcon);
+				
+				robots[i] = (Robot)constructorRobot.newInstance();
+				robots[i].getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+				robots[i].setIcon(imageIcon);
+				robots[i].setPanel(panelBattlefield);
+				robots[i].threadRobot.start();
+				
+//				Robot r = robot.get(i);
+//				r.getPanel(panelBattlefield);
+//				robot.get(i).threadRobot.start();
 			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 			
-			panelBattlefield.add(robot.get(i));
+//			panelBattlefield.add(robot.get(i));
+			panelBattlefield.add(robots[i]);
 		}
 		
 		isBattleStarted = true;

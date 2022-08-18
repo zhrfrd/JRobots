@@ -9,7 +9,7 @@ public class Sprite {
 	public static Sprite missile = new Sprite(16, 0, 2, SpriteSheet.missile);
 	public static Sprite particle_explosion = new Sprite(3, 0xaaaaaa);
 	
-	// Constructor
+	// Constructors
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
 		this.width = size;
 		this.height = size;
@@ -24,7 +24,7 @@ public class Sprite {
 	public Sprite(int size, int colour) {
 		this.width = size;
 		this.height = size;
-		SIZE = size;
+		SIZE = - 1;
 		pixels = new int[SIZE * SIZE];
 		setColour(colour);
 	}
@@ -40,7 +40,7 @@ public class Sprite {
 	}
 	
 	/*
-	 * Load sprite
+	 * Load sprite from the sprite sheet pixel by pixel starting from the coordinate x,y specified
 	 */
 	private void load() {
 		for (int y = 0; y < SIZE; y++)

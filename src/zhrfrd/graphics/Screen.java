@@ -1,5 +1,7 @@
 package zhrfrd.graphics;
 
+import zhrfrd.entities.Missile;
+
 public class Screen {
 	public int width, height;
 	public int[] pixels;
@@ -16,7 +18,7 @@ public class Screen {
 	/*
 	 * Render missile sprite 
 	 */
-	public void renderMissile() {
+	public void renderMissile(int xp, int yp, Missile m) {
 		
 	}
 	

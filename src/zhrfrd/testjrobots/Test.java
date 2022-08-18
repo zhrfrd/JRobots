@@ -6,8 +6,8 @@ public class Test extends Robot {
 	public void start() {
 		while (isAlive()) {
 			move(RIGHT);
-		
-//			shoot(3, 5);
+			
+			shoot(3, 5);
 		}
 	}
 	

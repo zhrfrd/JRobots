@@ -21,7 +21,7 @@ public class Robot extends JLabel implements Runnable{
 	protected final String RIGHT = "right";
 	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
-	private Dimension size;
+	protected Dimension size;
 	public static String title = "JRobots";
 	protected ImageIcon imageIcon;
 	protected File fileIconMissile;
@@ -54,7 +54,8 @@ public class Robot extends JLabel implements Runnable{
 		return new ImageIcon(bufferedImage);
 	}
 	
-	protected void getPanel() {
+	public void setPanel(JPanel panelBattlefield) {
+		this.panelBattlefield = panelBattlefield;
 	}
 
 	/*
@@ -212,6 +213,8 @@ public class Robot extends JLabel implements Runnable{
 	 */
 	public void shoot(int direction, int range) {
 		missile.setIcon(imageIcon);
+		panelBattlefield.add(missile);
+//		System.out.println(missile.getX());
 	}
 
 	/*
