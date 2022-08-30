@@ -1,6 +1,7 @@
 package zhrfrd.graphics;
 
-import zhrfrd.entities.Missile;
+import zhrfrd.battle.tile.Tile;
+import zhrfrd.entity.Missile;
 
 public class Screen {
 	public int width, height;
@@ -27,6 +28,15 @@ public class Screen {
 	 */
 	public void renderRobot() {
 		
+	}
+	
+	/*
+	 * Render tiles
+	 */
+	public void renderTile (int xPos, int yPos, Tile tile) {   // xPos and yPos are individual positions of the tile
+		for (int y = 0; y < tile.sprite.SIZE; y++)
+			for (int x = 0; x < tile.sprite.SIZE; x++)
+				pixels [xPos + yPos * width] = tile.sprite.pixels [x + y * tile.sprite.SIZE];
 	}
 	
 	/*

@@ -1,4 +1,4 @@
-package zhrfrd.entities;
+package zhrfrd.entity;
 
 import java.util.Random;
 
@@ -43,6 +43,14 @@ public class Missile extends Entity{
 		return sprite.SIZE;
 	}
 	
+	@Override
+	public void update () {
+		// Add collision detection here 
+		// ...
+		
+		move();
+	}
+	
 	/*
 	 * Move missile towards the direction nx,ny
 	 */
@@ -66,6 +74,6 @@ public class Missile extends Entity{
 	 * Render missile on the screen specifying the origin of x and y of the missile
 	 */
 	public void render (Screen screen) {
-		screen.renderMissile((int)x, (int)y, this);   
+		screen.renderMissile((int)x, (int)y, this);   // Recalibrate to center origin of the missile to the robot
 	}
 }

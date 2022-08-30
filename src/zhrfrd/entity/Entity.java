@@ -1,4 +1,4 @@
-package zhrfrd.entities;
+package zhrfrd.entity;
 
 import java.util.Random;
 

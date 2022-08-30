@@ -1,4 +1,4 @@
-package zhrfrd.entities;
+package zhrfrd.entity;
 
 public class Particle extends Entity {
 
