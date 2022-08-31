@@ -11,10 +11,11 @@ import zhrfrd.graphics.Screen;
 
 public class Battle {
 	protected int width, height;
+	protected int [] tiles;   //Contains all the level tiles
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Missile> missiles = new ArrayList<Missile>();
 	private List<Particle> particles = new ArrayList<Particle>();
-	protected int [] tiles;   //Contains all the level tiles
+	public static Battle spawn = new SpawnBattle("res/battle/battleField1.png");
 	
 	// Constructor
 	public Battle(int width, int height) {
@@ -77,7 +78,7 @@ public class Battle {
 		return missiles;
 	}
 	
-	private void time () {
+	private void time() {
 	}
 	
 	public boolean tileCollision(int x, int y, int size) {
@@ -135,5 +136,12 @@ public class Battle {
 	 */
 	public void add (Entity e) {
 		e.init(this);
+		
+		if (e instanceof Particle) 
+			particles.add((Particle) e);
+		else if (e instanceof Missile) 
+			missiles.add((Missile) e);
+		else
+			entities.add(e);
 	}
 }

@@ -80,7 +80,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		panelSideMenu = new JPanel();
 		panelController = new JPanel();
 		screen = new Screen(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-		battle = new Battle(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
+		battle = Battle.spawn;
 		
 		for (int i = 0; i < 4; i ++) {
 			panelRobot.add(new JPanel());

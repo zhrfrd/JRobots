@@ -11,7 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Robot extends JLabel implements Runnable{
+import zhrfrd.battle.Battle;
+
+public class Robot extends Entity implements Runnable{
 	private static final long serialVersionUID = -2377133046121834448L;
 	protected int battlefieldWidth, battlefieldHeight;
 	protected int life, direction, speed, posX, posY;
@@ -223,6 +225,10 @@ public class Robot extends JLabel implements Runnable{
 	public boolean enemyFound() {
 		// If yes return true, else return false
 		return false;
+	}
+	
+	public void init (Battle battle) {
+		this.battle = battle;
 	}
 	
 	// TEST
