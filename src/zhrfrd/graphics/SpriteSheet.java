@@ -9,8 +9,7 @@ public class SpriteSheet {
 	private String path;
 	public final int SIZE, WIDTH, HEIGHT;
 	public int[] pixels;
-	public static SpriteSheet missile = new SpriteSheet("/res/missile.png", 16);
-	public static SpriteSheet robot = new SpriteSheet("/res/robot.png", 16);
+	public static SpriteSheet missile = new SpriteSheet("/res/sheets/missile.png", 48);
 	
 	public SpriteSheet(String path, int size) {
 		this.path = path;

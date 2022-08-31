@@ -1,4 +1,5 @@
-package zhrfrd.entity;
+package zhrfrd.jrobots;
+
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,27 +33,27 @@ public class Robot extends JLabel implements Runnable{
 	public Robot() {
 		this.life = 100;
 		threadRobot = new Thread(this, "Robot thread");
-//		missile = new Missile(this);
+		missile = new Missile(this);
 		imageIcon = getIconMissile();
 	}
-
+	
 	// Methods	
-
+	
 	/*
 	 * Get ImageIcon of the missile through its path
 	 */
 	private ImageIcon getIconMissile () {
 		fileIconMissile = new File("res/missile.png");
-
+		
 		try {
 			bufferedImage = ImageIO.read(fileIconMissile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		return new ImageIcon(bufferedImage);
 	}
-
+	
 	protected void getPanel() {
 	}
 
@@ -64,12 +65,12 @@ public class Robot extends JLabel implements Runnable{
 		posX = random.nextInt(500);
 		posY = random.nextInt(500);
 		size = this.getPreferredSize();
-
+		
 		this.setBounds(posX, posY, size.width, size.height);
-
-//		this.add(missile);
+		
+		this.add(missile);
 	}
-
+	
 	/*
 	 * Move the robot
 	 */
@@ -147,16 +148,18 @@ public class Robot extends JLabel implements Runnable{
 	/*
 	 * Get the size of the battlefield
 	 */
-	public void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
+	protected void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
 		this.battlefieldWidth = battlefieldWidth;
 		this.battlefieldHeight = battlefieldHeight;
 	}
+
 	/*
 	 * Get the x position of the robot
 	 */
 	public int getPosX() {
 		return this.posX;
 	}
+
 	/*
 	 * Get the y position of the robot
 	 */
@@ -183,6 +186,7 @@ public class Robot extends JLabel implements Runnable{
 		
 		if (enemyFound())
 			return direction;
+
 		return 0;
 	}
 	
@@ -192,6 +196,7 @@ public class Robot extends JLabel implements Runnable{
 	public int scan(int direction, int resolution) {
 		if (enemyFound())
 			return direction;
+
 		return 0;
 	}
 	
@@ -201,12 +206,12 @@ public class Robot extends JLabel implements Runnable{
 	public void start() {
 		// Leave empty
 	}
+
 	/*
 	 * Shoot a missile towards the direction specified that will land in the range specified
 	 */
 	public void shoot(int direction, int range) {
-
-//		missile.setIcon(imageIcon);
+		missile.setIcon(imageIcon);
 	}
 
 	/*
@@ -221,6 +226,7 @@ public class Robot extends JLabel implements Runnable{
 	public void boom() {
 		System.out.println("BOOM BOOM!!");
 	}
+
 	@Override
 	// The run method contains the game loop responsible for the movements and animation in the battlefield
 	public void run() {

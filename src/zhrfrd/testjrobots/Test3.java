@@ -1,6 +1,6 @@
 package zhrfrd.testjrobots;
 
-import zhrfrd.entity.Robot;
+import zhrfrd.jrobots.Robot;
 
 public class Test3 extends Robot {
 	public void start() {
