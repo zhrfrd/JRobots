@@ -85,8 +85,27 @@ public class Robot extends JLabel implements Runnable{
 		double x = Math.cos(radians) * speed;
 		double y = Math.sin(radians) * speed;
 		
-		posX += x;
-		posY += y;
+		System.out.println(Math.cos(radians) + "   " + Math.sin(radians));
+		
+		if (direction == 0 || direction == 180) {
+			posX += x;
+			posY += y;
+		}
+		
+		if (direction == 90 || direction == 270) {
+			posX -= x;
+			posY -= y;
+		}
+		
+		if ((direction < 90 && direction > 0) || (direction < 270 && direction > 180)) {
+			posX += x;
+			posY -= y;
+		}
+		
+		if ((direction < 180 && direction > 90) || (direction > 270 && direction != 0)) {
+			posX += x;
+			posY -= y;
+		}
 		
 		this.setBounds((int)posX, (int)posY, size.width, size.height);
 		
