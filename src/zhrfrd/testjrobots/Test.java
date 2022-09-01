@@ -5,7 +5,7 @@ import zhrfrd.entities.Robot;
 public class Test extends Robot {
 	public void start() {
 		while (isAlive()) {
-			move(RIGHT);
+			move(45, 4);
 		
 //			shoot(3, 5);
 		}

@@ -1,6 +1,5 @@
 package zhrfrd.entities;
 
-
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,11 +14,12 @@ import javax.swing.JPanel;
 public class Robot extends JLabel implements Runnable{
 	private static final long serialVersionUID = -2377133046121834448L;
 	protected int battlefieldWidth, battlefieldHeight;
-	protected int life, direction, speed, posX, posY;
-	protected final String UP = "up";
-	protected final String DOWN = "down";
-	protected final String LEFT = "left";
-	protected final String RIGHT = "right";
+	protected int life, direction, speed;
+	protected double posX, posY;
+//	protected final String UP = "up";
+//	protected final String DOWN = "down";
+//	protected final String LEFT = "left";
+//	protected final String RIGHT = "right";
 	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
 	private Dimension size;
@@ -67,7 +67,7 @@ public class Robot extends JLabel implements Runnable{
 		posY = random.nextInt(500);
 		size = this.getPreferredSize();
 		
-		this.setBounds(posX, posY, size.width, size.height);
+		this.setBounds((int)posX, (int)posY, size.width, size.height);
 		
 		this.add(missile);
 	}
@@ -75,67 +75,25 @@ public class Robot extends JLabel implements Runnable{
 	/*
 	 * Move the robot
 	 */
-	public void move(String direction) {
-		switch (direction) {
-			case UP:
-				posY = this.getY() - 1;
-				this.setBounds(posX, posY, size.width, size.height);
-//				System.out.println("x: " + posX + " y: " + posY);
-				
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				// TEST 
-				if (posY <= 10)
-					this.life = 0;
-				
-				break;
-				
-			case DOWN:
-				posY = this.getY() + 1;
-				this.setBounds(posX, posY, size.width, size.height);
-//				System.out.println("x: " + posX + " y: " + posY);
-				
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				break;
-				
-			case LEFT:
-				posX = this.getX() - 1;
-				this.setBounds(posX, posY, size.width, size.height);
-//				System.out.println("x: " + posX + " y: " + posY);
-				
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				break;
-				
-			case RIGHT:
-				posX = this.getX() + 1;
-				this.setBounds(posX, posY, size.width, size.height);
-//				System.out.println("x: " + posX + " y: " + posY);
-				
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				// TEST
-				if (posX >= battlefieldWidth - size.width)
-					this.life = 30;
-				
-				break;
+	public void move(int direction, int speed) {
+		this.direction = direction;
+		this.speed = speed;
+		posX = this.getPosX();
+		posY = this.getPosY();
+		
+		double radians = Math.toRadians(direction);
+		double x = Math.cos(radians) * speed;
+		double y = Math.sin(radians) * speed;
+		
+		posX += x;
+		posY += y;
+		
+		this.setBounds((int)posX, (int)posY, size.width, size.height);
+		
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -157,14 +115,14 @@ public class Robot extends JLabel implements Runnable{
 	/*
 	 * Get the x position of the robot
 	 */
-	public int getPosX() {
+	public double getPosX() {
 		return this.posX;
 	}
 
 	/*
 	 * Get the y position of the robot
 	 */
-	public int getPosY() {
+	public double getPosY() {
 		return this.posY;
 	}
 	
@@ -182,8 +140,8 @@ public class Robot extends JLabel implements Runnable{
 	 * Scan the battlefield towards a single line direction
 	 */
 	public int scan(int direction) {
-		int x = getPosX();
-		int y = getPosY();
+		double x = getPosX();
+		double y = getPosY();
 		
 		if (enemyFound())
 			return direction;
