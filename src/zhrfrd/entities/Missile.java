@@ -1,4 +1,4 @@
-package zhrfrd.jrobots;
+package zhrfrd.entities;
 
 import java.awt.Dimension;
 import javax.swing.JLabel;

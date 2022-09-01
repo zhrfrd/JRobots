@@ -1,4 +1,5 @@
-package zhrfrd.jrobots;
+package zhrfrd.entities;
+
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -141,14 +142,14 @@ public class Robot extends JLabel implements Runnable{
 	/*
 	 * Get the life status of the robot
 	 */
-	protected int getLife() {
+	public int getLife() {
 		return this.life;
 	}
 	
 	/*
 	 * Get the size of the battlefield
 	 */
-	protected void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
+	public void getWindowSize(int battlefieldWidth, int battlefieldHeight) {
 		this.battlefieldWidth = battlefieldWidth;
 		this.battlefieldHeight = battlefieldHeight;
 	}

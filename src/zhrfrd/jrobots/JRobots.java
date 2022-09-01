@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -27,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
 
 public class JRobots extends JFrame implements ActionListener, Runnable{
