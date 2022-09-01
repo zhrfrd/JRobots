@@ -16,10 +16,6 @@ public class Robot extends JLabel implements Runnable{
 	protected int battlefieldWidth, battlefieldHeight;
 	protected int life, direction, speed;
 	protected double posX, posY;
-//	protected final String UP = "up";
-//	protected final String DOWN = "down";
-//	protected final String LEFT = "left";
-//	protected final String RIGHT = "right";
 	public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 	private Random random;
 	private Dimension size;
@@ -77,16 +73,22 @@ public class Robot extends JLabel implements Runnable{
 	 */
 	public void move(int direction, int speed) {
 		this.direction = direction;
-		this.speed = speed;
 		posX = this.getPosX();
 		posY = this.getPosY();
 		
+		// Stop the movement when the robot hits the walls
+		if (posX <= 0 || posX >= battlefieldWidth - size.width || posY <= 0 || posY >= battlefieldHeight - size.height)
+			this.speed = 0;
+		
+		else
+			this.speed = speed;
+			
+		
 		double radians = Math.toRadians(direction);
-		double x = Math.cos(radians) * speed;
-		double y = Math.sin(radians) * speed;
+		double x = Math.cos(radians) * this.speed;
+		double y = Math.sin(radians) * this.speed;
 		
-		System.out.println(Math.cos(radians) + "   " + Math.sin(radians));
-		
+		// Adjust direction of the robot
 		if (direction == 0 || direction == 180) {
 			posX += x;
 			posY += y;
