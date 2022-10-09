@@ -119,7 +119,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	/*
 	 * This function encloses the panels and their layout separately just for
-	 * organisational purposes
+	 * organizational purposes
 	 */
 	private void organizeScreenLayout() {
 		for (int i = 0; i < 4; i++) {
