@@ -29,12 +29,12 @@ import javax.swing.JScrollPane;
 import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
 
-public class JRobots extends JFrame implements ActionListener, Runnable{
+public class JRobots extends JFrame implements ActionListener, Runnable {
 	private static final long serialVersionUID = -3190346657795484951L;
 	private JFileChooser fileChooser;
 	private Screen screen;
 	static JPanel panel;
-	static JPanel panelBattleContainer, panelBattlefield,panelSideMenu, panelController;
+	static JPanel panelBattleContainer, panelBattlefield, panelSideMenu, panelController;
 	static JButton bttStart;
 	static ArrayList<JPanel> panelRobot;
 	static ArrayList<JButton> bttLoad;
@@ -44,7 +44,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static ArrayList<Robot> robot;
 	static JScrollPane scrollPane;
 	static final int SCREEN_WIDTH = 900;
-	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 10;   // ASPECT RATIO 16:10
+	static final int SCREEN_HEIGHT = SCREEN_WIDTH / 16 * 9; // ASPECT RATIO 16:10
 	static final int BATTLECONTAINER_WIDTH = SCREEN_WIDTH - (SCREEN_WIDTH / 3);
 	static final int BATTLECONTAINER_HEIGHT = SCREEN_HEIGHT;
 	static final int BATTLEFIELD_WIDTH = BATTLECONTAINER_WIDTH;
@@ -57,9 +57,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 	static String firstLineFile = "";
 	static Thread threadMain;
 	boolean isBattleStarted = false;
-	
+
 	/*
-	 *  Constructor
+	 * Constructor
 	 */
 	public JRobots() {
 		panel = new JPanel();
@@ -74,20 +74,20 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		panelSideMenu = new JPanel();
 		panelController = new JPanel();
 		screen = new Screen(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
-		
-		for (int i = 0; i < 4; i ++) {
+
+		for (int i = 0; i < 4; i++) {
 			panelRobot.add(new JPanel());
 			labelPathRobot.add(new JLabel("Path: "));
 			labelLifeRobot.add(new JLabel("Life: "));
 			bttLoad.add(new JButton("Load robot " + (i + 1)));
 			bttLoad.get(i).addActionListener(this);
 		}
-		
+
 		bttStart = new JButton("Start!");
 		bttStart.addActionListener(this);
-		
+
 		organizeScreenLayout();
-		
+
 		panel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		panel.setFocusable(true);
@@ -103,25 +103,26 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 		frame.pack();
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-		
+
 		imageIcon = getIconRobot();
-		
-		frame.start();   // Go to start() function
+
+		frame.start(); // Go to start() function
 	}
-	
+
 	/*
 	 * Create and start the main thread
 	 */
 	public void start() {
 		threadMain = new Thread(this, "Thread main");
-		threadMain.start();   // Go to run()
+		threadMain.start(); // Go to run()
 	}
-	
+
 	/*
-	 * This function encloses the panels and their layout separately just for organisational purposes
+	 * This function encloses the panels and their layout separately just for
+	 * organisational purposes
 	 */
 	private void organizeScreenLayout() {
-		for (int i = 0; i < 4; i ++) {
+		for (int i = 0; i < 4; i++) {
 			panelRobot.get(i).setLayout(new BoxLayout(panelRobot.get(i), BoxLayout.Y_AXIS));
 			panelRobot.get(i).setBackground(Color.gray);
 			panelRobot.get(i).setMinimumSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT / 4));
@@ -130,110 +131,120 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 			panelRobot.get(i).add(labelPathRobot.get(i));
 			panelRobot.get(i).add(labelLifeRobot.get(i));
 		}
-		
+
 		panelBattleContainer.setPreferredSize(new Dimension(BATTLECONTAINER_WIDTH, BATTLECONTAINER_HEIGHT));
 		panelBattleContainer.setLayout(new BoxLayout(panelBattleContainer, BoxLayout.Y_AXIS));
 		panelBattleContainer.add(panelBattlefield);
 		panelBattleContainer.add(panelController);
-		
+
 		panelBattlefield.setBackground(Color.black);
 		panelBattlefield.setPreferredSize(new Dimension(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT));
-		
+
 		panelController.setPreferredSize(new Dimension(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT / 10));
 		panelController.setBackground(Color.black);
-		panelController.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.white));   // Add top white border
+		panelController.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.white)); // Add top white border
 		panelController.add(bttStart);
-		
-		panelSideMenu.setLayout(new GridLayout(0,1));
+
+		panelSideMenu.setLayout(new GridLayout(0, 1));
 		panelSideMenu.setBackground(Color.gray);
-		
-		for (int i = 0; i < 4; i ++)
+
+		for (int i = 0; i < 4; i++)
 			panelSideMenu.add(panelRobot.get(i));
-		
-		scrollPane = new JScrollPane(panelSideMenu, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane = new JScrollPane(panelSideMenu, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH - BATTLEFIELD_WIDTH, SCREEN_HEIGHT));
 	}
-	
+
 	/*
-	 *  Retrieve the icon of the robot from the selected path
+	 * Retrieve the icon of the robot from the selected path
 	 */
 	private static ImageIcon getIconRobot() {
 		fileIconRobot = new File("res/robot.png");
-		
+
 		try {
 			bufferedImage = ImageIO.read(fileIconRobot);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return new ImageIcon(bufferedImage);
 	}
-	
+
 	/*
-	 *  Load Robot file
+	 * Load Robot file
 	 */
 	private void loadRobot(JLabel labelPathRobot) {
 		fileChooser = new JFileChooser();
 		int response = fileChooser.showOpenDialog(null);
 		String fullClass = "";
-		
+
 		if (response == JFileChooser.APPROVE_OPTION)
 			fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
-		
+
 		fullClass = extractFullClassRobot();
 		fullClassRobots.add(fullClass);
 		labelPathRobot.setText(fullClass);
 	}
-	
+
 	/*
 	 * Start the battle by getting the full class of each robot
 	 */
 	private void startBattle() {
 		Class<?> classRobot = null;
 		Constructor<?> constructorRobot;
-		
-		for (int i = 0; i < fullClassRobots.size(); i ++) {
+
+		for (int i = 0; i < fullClassRobots.size(); i++) {
 			try {
 				classRobot = Class.forName(fullClassRobots.get(i));
 				constructorRobot = classRobot.getConstructor();
 				System.out.println(constructorRobot);
-				robot.add((Robot)constructorRobot.newInstance());
+				robot.add((Robot) constructorRobot.newInstance());
 				robot.get(i).getWindowSize(BATTLEFIELD_WIDTH, BATTLEFIELD_HEIGHT);
 				robot.get(i).setIcon(imageIcon);
 				robot.get(i).threadRobot.start();
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			panelBattlefield.add(robot.get(i));
 		}
-		
+
 		isBattleStarted = true;
 	}
 
 	/*
-	 * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
+	 * Get the full class name of the robot (eg:
+	 * packagefolder.subpackagefolder.Classname)
 	 */
 	private String extractFullClassRobot() {
-		// Read the first line of the file 
+		// Read the first line of the file
 		try {
 			fileReader = new BufferedReader(new FileReader(fileRobot));
 			firstLineFile = fileReader.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		int index = firstLineFile.indexOf(" ");
-		StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, "");   // Extract ONLY package name from the first line of the file
-		String className = fileRobot.getName().replace(".java", "");   // Get the class name removing the .java extension from the file name (for convention class name = to file name)
-		String fullClass = (strPackageRobot + "." + className).replace(";", "");   // Merge package name and class name to create the full class name necessary for loading the robot
-		
+		StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, ""); // Extract ONLY
+																									// package name from
+																									// the first line of
+																									// the file
+		String className = fileRobot.getName().replace(".java", ""); // Get the class name removing the .java extension
+																		// from the file name (for convention class name
+																		// = to file name)
+		String fullClass = (strPackageRobot + "." + className).replace(";", ""); // Merge package name and class name to
+																					// create the full class name
+																					// necessary for loading the robot
+
 		return fullClass;
 	}
 
 	public void render() {
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == bttLoad.get(0)) {
@@ -241,27 +252,27 @@ public class JRobots extends JFrame implements ActionListener, Runnable{
 			fullClassRobots.add("zhrfrd.testjrobots.Test");
 			labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 		}
-		
+
 		if (e.getSource() == bttLoad.get(1))
 			loadRobot(labelPathRobot.get(1));
-		
+
 		if (e.getSource() == bttLoad.get(2))
 			loadRobot(labelPathRobot.get(2));
-		
+
 		if (e.getSource() == bttLoad.get(3))
 			loadRobot(labelPathRobot.get(3));
-		
+
 		if (e.getSource() == bttStart)
 			startBattle();
 	}
 
 	@Override
-	public void run () {
+	public void run() {
 		while (true) {
 			if (isBattleStarted)
-				for (int i = 0; i < robot.size(); i ++) 
+				for (int i = 0; i < robot.size(); i++)
 					labelLifeRobot.get(i).setText(String.valueOf(robot.get(i).getLife()));
-			
+
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
