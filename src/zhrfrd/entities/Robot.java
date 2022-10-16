@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Robot extends JLabel implements Runnable {
+public abstract class Robot extends JLabel implements Runnable {
     private static final long serialVersionUID = -2377133046121834448L;
 
     /**
@@ -40,16 +40,18 @@ public class Robot extends JLabel implements Runnable {
     protected Missile missile;
     JPanel panelBattlefield;
 
+    /**
+     * Determine if the move action has been done in the current turn
+     */
+    private boolean hasMoved = false;
+
     // Constructor
     public Robot() {
-	this.life = 100;
 	threadRobot = new Thread(this, "Robot thread");
 	missile = new Missile(this);
 	imageIcon = getIconMissile();
 	this.size = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
     }
-
-    // Methods
 
     /*
      * Get ImageIcon of the missile through its path
@@ -74,8 +76,10 @@ public class Robot extends JLabel implements Runnable {
      */
     public void setStartingPosition() {
 	random = new Random();
-	this.posX = random.nextDouble(100);
-	this.posY = random.nextDouble(100);
+	// this.posX = random.nextDouble(100);
+	// this.posY = random.nextDouble(100);
+	this.posX = 1;
+	this.posY = 50;
 
 	this.add(missile);
     }
@@ -84,14 +88,17 @@ public class Robot extends JLabel implements Runnable {
      * Move the robot
      */
     public void move(int direction, int speed) {
-	this.direction = direction;
-	direction -= 90;
+	if (this.hasMoved)
+	    return;
 
-	// Stop the movement when the robot hits the walls
-	if (this.posX <= 0 || this.posX >= 100 || this.posY <= 0 || this.posY >= 100)
-	    this.speed = 0;
-	else
-	    this.speed = speed;
+	this.hasMoved = true;
+
+	speed = Math.max(0, Math.min(5, speed));
+
+	this.direction = direction;
+//	direction -= 90;
+
+	this.speed = speed;
 
 	double radians = Math.toRadians(direction);
 	double x = Math.cos(radians) * 0.1 * this.speed;
@@ -100,16 +107,26 @@ public class Robot extends JLabel implements Runnable {
 	// Adjust direction of the robot
 	// TODO: if the movement is limited by x then y should be limited as well but at
 	// the moment this is not taken into consideration
-	this.posX = Math.max(0, Math.min(100, posX + x));
-	this.posY = Math.max(0, Math.min(100, posY + y));
+	double newPosX = posX + x;
+	double newPosY = posY + y;
+
+	this.posX = Math.max(0, Math.min(100, newPosX));
+	this.posY = Math.max(0, Math.min(100, newPosY));
+
+	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100) {
+	    this.inflictWallsDamage();
+	    this.speed = 0;
+	}
 
 	this.draw();
+    }
 
-	try {
-	    Thread.sleep(10);
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	}
+    /**
+     * Inflict walls damage depending on the current speed of the robot
+     */
+    private void inflictWallsDamage() {
+	// Math.max to make sure life does not go below 0
+	this.life = Math.max(0, this.life - this.speed);
     }
 
     /**
@@ -205,8 +222,9 @@ public class Robot extends JLabel implements Runnable {
      * Starting method of the robot
      */
     public void start() {
-	// Leave empty
 	this.draw();
+	this.speed = 0;
+	this.life = 100;
     }
 
     /*
@@ -233,9 +251,22 @@ public class Robot extends JLabel implements Runnable {
     @Override
     // The run method contains the game loop responsible for the movements and
     // animation in the battlefield
-    public void run() {
-	setStartingPosition();
+    final public void run() {
+	this.setStartingPosition();
+	this.start();
 
-	start();
+	while (this.isAlive()) {
+	    this.hasMoved = false;
+	    this.runTurn();
+	    this.move(this.direction, this.speed);
+	    try {
+		Thread.sleep(10);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
     }
+
+    abstract protected void runTurn();
 }

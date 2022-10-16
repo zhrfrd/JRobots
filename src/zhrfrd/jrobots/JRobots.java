@@ -280,7 +280,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	while (true) {
 	    if (isBattleStarted) {
 		for (int i = 0; i < robot.size(); i++) {
-		    labelLifeRobot.get(i).setText(String.valueOf(robot.get(i).getLife()));
+		    labelLifeRobot.get(i).setText("Life: " + String.valueOf(robot.get(i).getLife()));
 		}
 	    }
 
