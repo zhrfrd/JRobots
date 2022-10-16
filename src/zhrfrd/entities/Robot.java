@@ -13,11 +13,24 @@ import javax.swing.JPanel;
 
 public class Robot extends JLabel implements Runnable {
     private static final long serialVersionUID = -2377133046121834448L;
+
+    /**
+     * Current status of the Robot
+     */
     protected int life, direction, speed;
-    protected double posPercentageX, posPercentageY;
-    private double posX, posY;
-    public Thread threadRobot; // Keep it public in order for the reflection of the class fields to work in the
-			       // class JRobots
+
+    /**
+     * Current Robot position in percentage to the width and height of the battle
+     * field
+     */
+    protected double posX, posY;
+
+    /*
+     * Keep it public in order for the reflection of the class fields to work in the
+     * class JRobots
+     */
+    public Thread threadRobot;
+
     private Random random;
     private Dimension size;
     public static String title = "JRobots";
@@ -33,6 +46,7 @@ public class Robot extends JLabel implements Runnable {
 	threadRobot = new Thread(this, "Robot thread");
 	missile = new Missile(this);
 	imageIcon = getIconMissile();
+	this.size = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
     }
 
     // Methods
@@ -60,11 +74,8 @@ public class Robot extends JLabel implements Runnable {
      */
     public void setStartingPosition() {
 	random = new Random();
-	posX = random.nextInt(500);
-	posY = random.nextInt(500);
-	size = this.getPreferredSize();
-
-	this.setBounds((int) posX, (int) posY, size.width, size.height);
+	this.posX = random.nextDouble(100);
+	this.posY = random.nextDouble(100);
 
 	this.add(missile);
     }
@@ -74,50 +85,38 @@ public class Robot extends JLabel implements Runnable {
      */
     public void move(int direction, int speed) {
 	this.direction = direction;
-	posX = this.getPosX();
-	posY = this.getPosY();
+	direction -= 90;
 
-	int battleFieldWidth = this.getBattleFieldWidth();
-	int battleFieldHeight = this.getBattleFieldHeight();
 	// Stop the movement when the robot hits the walls
-	if (posX <= 0 || posX >= battleFieldWidth - size.width || posY <= 0 || posY >= battleFieldHeight - size.height)
+	if (this.posX <= 0 || this.posX >= 100 || this.posY <= 0 || this.posY >= 100)
 	    this.speed = 0;
-
 	else
 	    this.speed = speed;
 
 	double radians = Math.toRadians(direction);
-	double x = Math.cos(radians) * this.speed;
-	double y = Math.sin(radians) * this.speed;
+	double x = Math.cos(radians) * 0.1 * this.speed;
+	double y = Math.sin(radians) * 0.1 * this.speed;
 
 	// Adjust direction of the robot
-	if (direction == 0 || direction == 180) {
-	    posX += x;
-	    posY += y;
-	}
+	// TODO: if the movement is limited by x then y should be limited as well but at
+	// the moment this is not taken into consideration
+	this.posX = Math.max(0, Math.min(100, posX + x));
+	this.posY = Math.max(0, Math.min(100, posY + y));
 
-	if (direction == 90 || direction == 270) {
-	    posX -= x;
-	    posY -= y;
-	}
-
-	if ((direction < 90 && direction > 0) || (direction < 270 && direction > 180)) {
-	    posX += x;
-	    posY -= y;
-	}
-
-	if ((direction < 180 && direction > 90) || (direction > 270 && direction != 0)) {
-	    posX += x;
-	    posY -= y;
-	}
-
-	this.setBounds((int) posX, (int) posY, size.width, size.height);
+	this.draw();
 
 	try {
 	    Thread.sleep(10);
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Draws the robot in the battle field in its current position
+     */
+    public void draw() {
+	this.setBounds(this.getAbsolutePosX(), this.getAbsolutePosY(), this.size.width, this.size.height);
     }
 
     /*
@@ -142,17 +141,31 @@ public class Robot extends JLabel implements Runnable {
     }
 
     /*
-     * Get the x position of the robot
+     * Get the X position of the robot in percentage to the field width
      */
     public double getPosX() {
 	return this.posX;
     }
 
     /*
-     * Get the y position of the robot
+     * Get the Y position of the robot in percentage to the field height
      */
     public double getPosY() {
 	return this.posY;
+    }
+
+    /**
+     * Get the X position of the robot
+     */
+    private int getAbsolutePosX() {
+	return (int) (this.posX * (this.getBattleFieldWidth() - this.size.width) / 100);
+    }
+
+    /**
+     * Get the Y position of the robot
+     */
+    private int getAbsolutePosY() {
+	return (int) (this.posY * (this.getBattleFieldHeight() - this.size.height) / 100);
     }
 
     /*
@@ -193,6 +206,7 @@ public class Robot extends JLabel implements Runnable {
      */
     public void start() {
 	// Leave empty
+	this.draw();
     }
 
     /*
