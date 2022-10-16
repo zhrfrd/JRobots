@@ -41,7 +41,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     private ArrayList<JLabel> labelLifeRobot;
     private ArrayList<String> fullClassRobots;
     private ArrayList<Robot> robot;
-    private int battleFieldWidth, battleFieldHeight;
     static File fileRobot;
     static BufferedReader fileReader;
     static BufferedImage bufferedImage;
