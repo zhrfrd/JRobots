@@ -139,9 +139,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	Dimension minimumSize = new Dimension(480, 270);
 	int screenResolution = Toolkit.getDefaultToolkit().getScreenResolution();
 
-	System.out.println(screenSize.toString());
-	System.out.println(screenResolution);
-
 	this.setMinimumSize(minimumSize);
 	this.setPreferredSize(new Dimension(screenSize.width * 8 / 10, screenSize.height * 8 / 10));
 	this.panelRightMenuContainer.setMinimumSize(new Dimension(screenSize.width / 5, minimumSize.height));
