@@ -24,6 +24,8 @@ public abstract class Robot extends JLabel implements Runnable {
      * field
      */
     protected double posX, posY;
+    
+    protected boolean wallHit = false;
 
     /*
      * Keep it public in order for the reflection of the class fields to work in the
@@ -50,7 +52,7 @@ public abstract class Robot extends JLabel implements Runnable {
 	threadRobot = new Thread(this, "Robot thread");
 	missile = new Missile(this);
 	imageIcon = getIconMissile();
-	this.size = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+	size = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
     }
 
     /*
@@ -71,23 +73,28 @@ public abstract class Robot extends JLabel implements Runnable {
     protected void getPanel() {
     }
 
-    /*
-     * Set robot position
+    /**
+     * Set robot starting position
      */
     public void setStartingPosition() {
 	random = new Random();
 	// this.posX = random.nextDouble(100);
 	// this.posY = random.nextDouble(100);
-	this.posX = 1;
+	this.posX = 75;
 	this.posY = 50;
 
 	this.add(missile);
     }
 
-    /*
+    /**
      * Move the robot
+     * 
+     * @param direction The direction in degrees where the robot is going to move
+     * @param speed The speed at which the robot travels
      */
     public void move(int direction, int speed) {
+	System.out.println(getPosX() + "; " + getPosY());
+	
 	if (this.hasMoved)
 	    return;
 
@@ -112,8 +119,9 @@ public abstract class Robot extends JLabel implements Runnable {
 
 	this.posX = Math.max(0, Math.min(100, newPosX));
 	this.posY = Math.max(0, Math.min(100, newPosY));
-
+	
 	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100) {
+	    wallHit = true;
 	    this.inflictWallsDamage();
 	    this.speed = 0;
 	}
@@ -185,8 +193,10 @@ public abstract class Robot extends JLabel implements Runnable {
 	return (int) (this.posY * (this.getBattleFieldHeight() - this.size.height) / 100);
     }
 
-    /*
+    /**
      * Check if the robot is still alive
+     * 
+     * @return True if the robot is alive, false otherwise
      */
     public boolean isAlive() {
 	if (life <= 0)
@@ -218,18 +228,19 @@ public abstract class Robot extends JLabel implements Runnable {
 	return 0;
     }
 
-    /*
-     * Starting method of the robot
+    /**
+     * Starting method of the robot and setting of the default values of the robot
      */
     public void start() {
+	this.setStartingPosition();
 	this.draw();
-	this.speed = 0;
+	this.speed = 1;
 	this.life = 100;
+	
     }
 
-    /*
-     * Shoot a missile towards the direction specified that will land in the range
-     * specified
+    /**
+     * Shoot a missile towards the direction specified that will land in the range specified
      */
     public void shoot(int direction, int range) {
 	missile.setIcon(imageIcon);
@@ -252,13 +263,12 @@ public abstract class Robot extends JLabel implements Runnable {
     // The run method contains the game loop responsible for the movements and
     // animation in the battlefield
     final public void run() {
-	this.setStartingPosition();
 	this.start();
 
 	while (this.isAlive()) {
 	    this.hasMoved = false;
 	    this.runTurn();
-	    this.move(this.direction, this.speed);
+	    
 	    try {
 		Thread.sleep(10);
 	    } catch (InterruptedException e) {

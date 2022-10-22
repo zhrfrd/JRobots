@@ -4,15 +4,11 @@ import zhrfrd.entities.Robot;
 
 public class Test extends Robot {
     public void runTurn() {
-	if (this.speed == 0) {
-	    this.move(0, 2);
-	} else {
-	    if (this.direction == 0 && this.posX > 90) {
-		this.move(180, 2);
-	    } else if (this.direction == 180 && this.posX < 10) {
-		this.move(0, 2);
-	    }
-	}
+	if (posX != 100)
+	    move(0, 2);
+	
+	if (posX == 100)
+	    move(90, 4);
     }
 
     @Override
