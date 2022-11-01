@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -55,7 +56,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      */
     public JRobots() {
 	if (iconRobot == null) {
-	    iconRobot = this.initializeRobotIcon();
+	    try {
+		iconRobot = this.initializeRobotIcon();
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
 	}
 
 	this.initializeLayout();
@@ -137,7 +142,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	Dimension minimumSize = new Dimension(480, 270);
-	int screenResolution = Toolkit.getDefaultToolkit().getScreenResolution();
 
 	this.setMinimumSize(minimumSize);
 	this.setPreferredSize(new Dimension(screenSize.width * 8 / 10, screenSize.height * 8 / 10));
@@ -168,16 +172,10 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     /*
      * Retrieve the icon of the robot from the selected path
      */
-    private ImageIcon initializeRobotIcon() {
-	File fileIconRobot = new File("res/robot.png");
+    private ImageIcon initializeRobotIcon() throws IOException {
+	InputStream robotIconStream = getClass().getClassLoader().getResourceAsStream("robot.png");
 
-	try {
-	    bufferedImage = ImageIO.read(fileIconRobot);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
-	return new ImageIcon(bufferedImage);
+	return new ImageIcon(ImageIO.read(robotIconStream));
     }
 
     /*
@@ -280,7 +278,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	while (true) {
 	    if (isBattleStarted) {
 		for (int i = 0; i < robot.size(); i++) {
-		    labelLifeRobot.get(i).setText(String.valueOf(robot.get(i).getLife()));
+		    labelLifeRobot.get(i).setText("Life: " + String.valueOf(robot.get(i).getLife()));
 		}
 	    }
 
