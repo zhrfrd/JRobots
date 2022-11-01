@@ -3,6 +3,8 @@ package zhrfrd.testjrobots;
 import zhrfrd.entities.Robot;
 
 public class Test extends Robot {
+    private static final long serialVersionUID = -3948041885212023909L;
+
     public void runTurn() {
 	if (this.speed == 0) {
 	    this.move(0, 2);
