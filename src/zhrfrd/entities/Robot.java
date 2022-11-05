@@ -2,8 +2,12 @@ package zhrfrd.entities;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import zhrfrd.jrobots.JRobots;
@@ -37,20 +41,28 @@ public abstract class Robot extends Entity implements Runnable {
     private JPanel panelBattlefield;
     public static String title = "JRobots";
     protected BufferedImage bufferedImage;
-
+    public ImageIcon iconRobot;
+    
     // Constructor
     public Robot(JRobots jrobots) {
 	this.jrobots = jrobots;
 	threadRobot = new Thread(this, "Robot thread");
-	size = new Dimension(jrobots.iconRobot.getIconWidth(), jrobots.iconRobot.getIconHeight());
+	
 	panelBattlefield = jrobots.panelBattleField;
+	
+	if (iconRobot == null) {
+	    iconRobot = this.initializeIcon();
+	}
+	
+	this.setIcon(iconRobot);
+	size = new Dimension(iconRobot.getIconWidth(), iconRobot.getIconHeight());
     }
-
+    
     /**
-     * Move the robot
+     * Move the robot.
      * 
-     * @param direction The direction in degrees where the robot is going to move
-     * @param speed The speed at which the robot travels
+     * @param direction The direction in degrees where the robot is going to move.
+     * @param speed The speed at which the robot travels.
      */
     public void move(int direction, int speed) {
 	System.out.println(getPosX() + "; " + getPosY());
@@ -87,11 +99,10 @@ public abstract class Robot extends Entity implements Runnable {
 	}
 
 	this.draw();
-	
     }
 
     /**
-     * Inflict walls damage depending on the current speed of the robot
+     * Inflict walls damage depending on the current speed of the robot.
      */
     private void inflictWallsDamage() {
 	// Math.max to make sure life does not go below 0
@@ -106,59 +117,59 @@ public abstract class Robot extends Entity implements Runnable {
 	this.setBounds(this.getAbsolutePosX(), this.getAbsolutePosY(), this.size.width, this.size.height);
     }
 
-    /*
-     * Get the life status of the robot
+    /**
+     * Get the life status of the robot.
      */
     public int getLife() {
 	return this.life;
     }
 
-    /*
-     * Get the width of the battlefield
+    /**
+     * Get the width of the battlefield.
      */
     private int getBattleFieldWidth() {
 	return this.getParent().getWidth();
     }
 
-    /*
-     * Get the height of the battlefield
+    /**
+     * Get the height of the battlefield.
      */
     private int getBattleFieldHeight() {
 	return this.getParent().getHeight();
     }
 
-    /*
-     * Get the X position of the robot in percentage to the field width
+    /**
+     * Get the X position of the robot in percentage to the field width.
      */
     public double getPosX() {
 	return this.posX;
     }
 
-    /*
-     * Get the Y position of the robot in percentage to the field height
+    /**
+     * Get the Y position of the robot in percentage to the field height.
      */
     public double getPosY() {
 	return this.posY;
     }
 
     /**
-     * Get the X position of the robot
+     * Get the X position of the robot.
      */
     private int getAbsolutePosX() {
 	return (int) (this.posX * (this.getBattleFieldWidth() - this.size.width) / 100);
     }
 
     /**
-     * Get the Y position of the robot
+     * Get the Y position of the robot.
      */
     private int getAbsolutePosY() {
 	return (int) (this.posY * (this.getBattleFieldHeight() - this.size.height) / 100);
     }
 
     /**
-     * Check if the robot is still alive
+     * Check if the robot is still alive.
      * 
-     * @return True if the robot is alive, false otherwise
+     * @return True if the robot is alive, false otherwise.
      */
     public boolean isAlive() {
 	if (life <= 0)
@@ -191,7 +202,7 @@ public abstract class Robot extends Entity implements Runnable {
     }
 
     /**
-     * Starting method of the robot and setting of the default values of the robot
+     * Starting method of the robot and setting of the default values of the robot.
      */
     public void start() {
 	this.setStartingPosition();
@@ -221,6 +232,24 @@ public abstract class Robot extends Entity implements Runnable {
     }
 
     abstract protected void runTurn();
+    
+    /**
+     * Get the icon of the robot from the res folder.
+     * 
+     * @return new ImageIcon(bufferedImage) The icon of the robot.
+     */
+    @Override
+    public ImageIcon initializeIcon() {
+	File fileIconRobot = new File("res/robot.png");
+
+	try {
+	    bufferedImage = ImageIO.read(fileIconRobot);
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+
+	return new ImageIcon(bufferedImage);
+    }
     
     /**
      * Set robot starting position.

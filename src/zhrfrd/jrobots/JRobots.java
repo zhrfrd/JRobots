@@ -49,15 +49,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
-    public ImageIcon iconRobot;
 
     /**
      * Creates the layout of the battlefield with all the related components
      */
     public JRobots() {
-	if (iconRobot == null) {
-	    iconRobot = this.initializeRobotIcon();
-	}
 
 	this.initializeLayout();
     }
@@ -167,21 +163,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     }
 
     /**
-     * Get the icon of the robot from the res folder.
-     */
-    private ImageIcon initializeRobotIcon() {
-	File fileIconRobot = new File("res/robot.png");
-
-	try {
-	    bufferedImage = ImageIO.read(fileIconRobot);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
-	return new ImageIcon(bufferedImage);
-    }
-
-    /**
      * Upload the robot from a folder and load it to the game by adding the class name of the robot to its specific JLabel.
      * 
      * @param labelPathRobot The JLabel that will contain the class name of the robot created by the user.
@@ -212,7 +193,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		constructorRobot = classRobot.getDeclaredConstructor(JRobots.class);
 		System.out.println(constructorRobot);
 		Robot newRobot = (Robot) constructorRobot.newInstance(this);
-		newRobot.setIcon(iconRobot);
 		newRobot.threadRobot.start();
 		robot.add(newRobot);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
