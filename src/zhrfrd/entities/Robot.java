@@ -2,17 +2,19 @@ package zhrfrd.entities;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class Robot extends JLabel implements Runnable {
+import zhrfrd.jrobots.JRobots;
+
+public abstract class Robot extends Entity implements Runnable {
     private static final long serialVersionUID = -2377133046121834448L;
+    
+    /**
+     * Determine if the move action has been done in the current turn
+     */
+    private boolean hasMoved = false;
 
     /**
      * Current status of the Robot
@@ -27,63 +29,21 @@ public abstract class Robot extends JLabel implements Runnable {
     
     protected boolean wallHit = false;
 
-    /*
-     * Keep it public in order for the reflection of the class fields to work in the
-     * class JRobots
-     */
-    public Thread threadRobot;
+    public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
 
     private Random random;
     private Dimension size;
+    private JRobots jrobots;
+    private JPanel panelBattlefield;
     public static String title = "JRobots";
-    protected ImageIcon imageIcon;
-    protected File fileIconMissile;
     protected BufferedImage bufferedImage;
-    protected Missile missile;
-    JPanel panelBattlefield;
-
-    /**
-     * Determine if the move action has been done in the current turn
-     */
-    private boolean hasMoved = false;
 
     // Constructor
-    public Robot() {
+    public Robot(JRobots jrobots) {
+	this.jrobots = jrobots;
 	threadRobot = new Thread(this, "Robot thread");
-	missile = new Missile(this);
-	imageIcon = getIconMissile();
-	size = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
-    }
-
-    /*
-     * Get ImageIcon of the missile through its path
-     */
-    private ImageIcon getIconMissile() {
-	fileIconMissile = new File("res/missile.png");
-
-	try {
-	    bufferedImage = ImageIO.read(fileIconMissile);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
-	return new ImageIcon(bufferedImage);
-    }
-
-    protected void getPanel() {
-    }
-
-    /**
-     * Set robot starting position
-     */
-    public void setStartingPosition() {
-	random = new Random();
-	// this.posX = random.nextDouble(100);
-	// this.posY = random.nextDouble(100);
-	this.posX = 75;
-	this.posY = 50;
-
-	this.add(missile);
+	size = new Dimension(jrobots.iconRobot.getIconWidth(), jrobots.iconRobot.getIconHeight());
+	panelBattlefield = jrobots.panelBattleField;
     }
 
     /**
@@ -127,6 +87,7 @@ public abstract class Robot extends JLabel implements Runnable {
 	}
 
 	this.draw();
+	
     }
 
     /**
@@ -138,9 +99,10 @@ public abstract class Robot extends JLabel implements Runnable {
     }
 
     /**
-     * Draws the robot in the battle field in its current position
+     * Handle drawing to the battlefield in its current position.
      */
     public void draw() {
+	this.panelBattlefield.add(this);
 	this.setBounds(this.getAbsolutePosX(), this.getAbsolutePosY(), this.size.width, this.size.height);
     }
 
@@ -239,15 +201,14 @@ public abstract class Robot extends JLabel implements Runnable {
 	
     }
 
-    /**
-     * Shoot a missile towards the direction specified that will land in the range specified
+    /*
+     * Shoot a missile towards the direction specified that will land in the range specified.
      */
     public void shoot(int direction, int range) {
-	missile.setIcon(imageIcon);
     }
 
-    /*
-     * Check if there is an enemy along the direction your robot is pointing
+    /**
+     * Check if there is an enemy along the direction your robot is pointing.
      */
     public boolean enemyFound() {
 	// If yes return true, else return false
@@ -259,9 +220,23 @@ public abstract class Robot extends JLabel implements Runnable {
 	System.out.println("BOOM BOOM!!");
     }
 
+    abstract protected void runTurn();
+    
+    /**
+     * Set robot starting position.
+     */
     @Override
+    public void setStartingPosition() {
+	random = new Random();
+	// this.posX = random.nextDouble(100);
+	// this.posY = random.nextDouble(100);
+	this.posX = 75;
+	this.posY = 50;
+    }
+    
     // The run method contains the game loop responsible for the movements and
     // animation in the battlefield
+    @Override
     final public void run() {
 	this.start();
 
@@ -277,6 +252,4 @@ public abstract class Robot extends JLabel implements Runnable {
 	    }
 	}
     }
-
-    abstract protected void runTurn();
 }

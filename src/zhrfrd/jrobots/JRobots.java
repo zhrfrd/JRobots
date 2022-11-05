@@ -33,7 +33,8 @@ import zhrfrd.entities.Robot;
 public class JRobots extends JFrame implements ActionListener, Runnable {
     private static final long serialVersionUID = -3190346657795484951L;
     private JFileChooser fileChooser;
-    private JPanel panelMain, panelBattleField, panelRightMenuContainer, panelStartController, panelRobotsContainer;
+    private JPanel panelMain, panelRightMenuContainer, panelStartController, panelRobotsContainer;
+    public JPanel panelBattleField;
     private JButton buttonStart;
     private ArrayList<JPanel> panelRobot;
     private ArrayList<JButton> buttonsLoad;
@@ -48,7 +49,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
-    private static ImageIcon iconRobot;
+    public ImageIcon iconRobot;
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -165,8 +166,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	threadMain.start(); // Go to run()
     }
 
-    /*
-     * Retrieve the icon of the robot from the selected path
+    /**
+     * Get the icon of the robot from the res folder.
      */
     private ImageIcon initializeRobotIcon() {
 	File fileIconRobot = new File("res/robot.png");
@@ -180,8 +181,10 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	return new ImageIcon(bufferedImage);
     }
 
-    /*
-     * Load Robot file
+    /**
+     * Upload the robot from a folder and load it to the game by adding the class name of the robot to its specific JLabel.
+     * 
+     * @param labelPathRobot The JLabel that will contain the class name of the robot created by the user.
      */
     private void loadRobot(JLabel labelPathRobot) {
 	fileChooser = new JFileChooser();
@@ -196,8 +199,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	labelPathRobot.setText(fullClass);
     }
 
-    /*
-     * Start the battle by getting the full class of each robot
+    /**
+     * Start the battle by getting the full class of each robot and creating a new instance of Robot passing JRobots as parameter.
      */
     private void startBattle() {
 	Class<?> classRobot = null;
@@ -206,9 +209,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	for (int i = 0; i < fullClassRobots.size(); i++) {
 	    try {
 		classRobot = Class.forName(fullClassRobots.get(i));
-		constructorRobot = classRobot.getConstructor();
+		constructorRobot = classRobot.getDeclaredConstructor(JRobots.class);
 		System.out.println(constructorRobot);
-		Robot newRobot = (Robot) constructorRobot.newInstance();
+		Robot newRobot = (Robot) constructorRobot.newInstance(this);
 		newRobot.setIcon(iconRobot);
 		newRobot.threadRobot.start();
 		robot.add(newRobot);
@@ -217,7 +220,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		e1.printStackTrace();
 	    }
 
-	    panelBattleField.add(robot.get(i));
+//	    panelBattleField.add(robot.get(i));
 	}
 
 	isBattleStarted = true;
