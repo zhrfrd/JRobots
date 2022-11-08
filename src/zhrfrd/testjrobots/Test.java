@@ -13,12 +13,9 @@ public class Test extends Robot {
 	if (posX != 100)
 	    move(0, 2);
 	
-	if (posX == 100)
-	    move(90, 4);
-    }
-
-    @Override
-    public void boom() {
-	System.out.println("FAI BOOOOOOOOOOOM!!!");
+	if (posX >= 75 && posX <= 80)
+	    shoot(180, 60);
+//	if (posX == 100)
+//	    move(90, 4);
     }
 }

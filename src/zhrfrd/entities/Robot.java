@@ -24,23 +24,12 @@ public abstract class Robot extends Entity implements Runnable {
      * Current status of the Robot
      */
     protected int life, direction, speed;
-
-    /**
-     * Current Robot position in percentage to the width and height of the battle
-     * field
-     */
-    protected double posX, posY;
     
-    protected boolean wallHit = false;
-
     public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
-
     private Random random;
-    private Dimension size;
-    private JRobots jrobots;
-    private JPanel panelBattlefield;
+    protected JRobots jrobots;
+    protected Missile missile;
     public static String title = "JRobots";
-    protected BufferedImage bufferedImage;
     public ImageIcon iconRobot;
     
     // Constructor
@@ -110,60 +99,10 @@ public abstract class Robot extends Entity implements Runnable {
     }
 
     /**
-     * Handle drawing to the battlefield in its current position.
-     */
-    public void draw() {
-	this.panelBattlefield.add(this);
-	this.setBounds(this.getAbsolutePosX(), this.getAbsolutePosY(), this.size.width, this.size.height);
-    }
-
-    /**
      * Get the life status of the robot.
      */
     public int getLife() {
 	return this.life;
-    }
-
-    /**
-     * Get the width of the battlefield.
-     */
-    private int getBattleFieldWidth() {
-	return this.getParent().getWidth();
-    }
-
-    /**
-     * Get the height of the battlefield.
-     */
-    private int getBattleFieldHeight() {
-	return this.getParent().getHeight();
-    }
-
-    /**
-     * Get the X position of the robot in percentage to the field width.
-     */
-    public double getPosX() {
-	return this.posX;
-    }
-
-    /**
-     * Get the Y position of the robot in percentage to the field height.
-     */
-    public double getPosY() {
-	return this.posY;
-    }
-
-    /**
-     * Get the X position of the robot.
-     */
-    private int getAbsolutePosX() {
-	return (int) (this.posX * (this.getBattleFieldWidth() - this.size.width) / 100);
-    }
-
-    /**
-     * Get the Y position of the robot.
-     */
-    private int getAbsolutePosY() {
-	return (int) (this.posY * (this.getBattleFieldHeight() - this.size.height) / 100);
     }
 
     /**
@@ -182,9 +121,6 @@ public abstract class Robot extends Entity implements Runnable {
      * Scan the battlefield towards a single line direction
      */
     public int scan(int direction) {
-	double x = getPosX();
-	double y = getPosY();
-
 	if (enemyFound())
 	    return direction;
 
@@ -216,6 +152,10 @@ public abstract class Robot extends Entity implements Runnable {
      * Shoot a missile towards the direction specified that will land in the range specified.
      */
     public void shoot(int direction, int range) {
+	missile = new Missile(this);
+	missile.setStartingPosition();
+	missile.draw();
+	
     }
 
     /**
@@ -226,12 +166,15 @@ public abstract class Robot extends Entity implements Runnable {
 	return false;
     }
 
-    // TEST
-    public void boom() {
-	System.out.println("BOOM BOOM!!");
-    }
-
     abstract protected void runTurn();
+    
+    /**
+     * Handle drawing of the robot to the battlefield in its current position.
+     */
+    public void draw() {
+	this.panelBattlefield.add(this);
+	this.setBounds(this.getAbsolutePosX(), this.getAbsolutePosY(), this.size.width, this.size.height);
+    }
     
     /**
      * Get the icon of the robot from the res folder.
