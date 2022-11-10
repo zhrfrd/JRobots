@@ -14,12 +14,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -34,7 +32,8 @@ import zhrfrd.entities.Robot;
 public class JRobots extends JFrame implements ActionListener, Runnable {
     private static final long serialVersionUID = -3190346657795484951L;
     private JFileChooser fileChooser;
-    private JPanel panelMain, panelBattleField, panelRightMenuContainer, panelStartController, panelRobotsContainer;
+    private JPanel panelMain, panelRightMenuContainer, panelStartController, panelRobotsContainer;
+    public JPanel panelBattleField;
     private JButton buttonStart;
     private ArrayList<JPanel> panelRobot;
     private ArrayList<JButton> buttonsLoad;
@@ -49,20 +48,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
-    private static ImageIcon iconRobot;
 
     /**
      * Creates the layout of the battlefield with all the related components
      */
     public JRobots() {
-	if (iconRobot == null) {
-	    try {
-		iconRobot = this.initializeRobotIcon();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	}
-
 	this.initializeLayout();
     }
 
@@ -169,17 +159,10 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	threadMain.start(); // Go to run()
     }
 
-    /*
-     * Retrieve the icon of the robot from the selected path
-     */
-    private ImageIcon initializeRobotIcon() throws IOException {
-	InputStream robotIconStream = getClass().getClassLoader().getResourceAsStream("robot.png");
-
-	return new ImageIcon(ImageIO.read(robotIconStream));
-    }
-
-    /*
-     * Load Robot file
+    /**
+     * Upload the robot from a folder and load it to the game by adding the class name of the robot to its specific JLabel.
+     * 
+     * @param labelPathRobot The JLabel that will contain the class name of the robot created by the user.
      */
     private void loadRobot(JLabel labelPathRobot) {
 	fileChooser = new JFileChooser();
@@ -194,8 +177,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	labelPathRobot.setText(fullClass);
     }
 
-    /*
-     * Start the battle by getting the full class of each robot
+    /**
+     * Start the battle by getting the full class of each robot and creating a new instance of Robot passing JRobots as parameter.
      */
     private void startBattle() {
 	Class<?> classRobot = null;
@@ -204,10 +187,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	for (int i = 0; i < fullClassRobots.size(); i++) {
 	    try {
 		classRobot = Class.forName(fullClassRobots.get(i));
-		constructorRobot = classRobot.getConstructor();
+		constructorRobot = classRobot.getDeclaredConstructor(JRobots.class);
 		System.out.println(constructorRobot);
-		Robot newRobot = (Robot) constructorRobot.newInstance();
-		newRobot.setIcon(iconRobot);
+		Robot newRobot = (Robot) constructorRobot.newInstance(this);
 		newRobot.threadRobot.start();
 		robot.add(newRobot);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
@@ -215,7 +197,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		e1.printStackTrace();
 	    }
 
-	    panelBattleField.add(robot.get(i));
+//	    panelBattleField.add(robot.get(i));
 	}
 
 	isBattleStarted = true;
@@ -260,8 +242,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 	}
 
-	if (e.getSource() == buttonsLoad.get(1))
-	    loadRobot(labelPathRobot.get(1));
+	if ( e.getSource() == buttonsLoad.get(1)) {
+	    fullClassRobots.add("zhrfrd.testjrobots.Test");
+	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
+//	    loadRobot(labelPathRobot.get(1));
+	}
 
 	if (e.getSource() == buttonsLoad.get(2))
 	    loadRobot(labelPathRobot.get(2));
