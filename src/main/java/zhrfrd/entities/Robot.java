@@ -4,11 +4,11 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 import zhrfrd.jrobots.JRobots;
 
@@ -19,24 +19,23 @@ public abstract class Robot extends Entity implements Runnable {
      * Determine if the move action has been done in the current turn
      */
     private boolean hasMoved = false;
-
+    public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
+    protected JRobots jrobots;
     /**
      * Current status of the Robot
      */
     protected int life, direction, speed;
-    
-    public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
-    private Random random;
-    protected JRobots jrobots;
+    protected ImageIcon imageIcon;
+    protected File fileIconMissile;
+    protected BufferedImage bufferedImage;
     protected Missile missile;
     public static String title = "JRobots";
     public ImageIcon iconRobot;
     
     // Constructor
-    public Robot(JRobots jrobots) {
+    public Robot(JRobots jrobots) throws IOException {
 	this.jrobots = jrobots;
-	threadRobot = new Thread(this, "Robot thread");
-	
+	this.threadRobot = new Thread(this, "Robot thread");
 	panelBattlefield = jrobots.panelBattleField;
 	
 	if (iconRobot == null) {
@@ -45,6 +44,27 @@ public abstract class Robot extends Entity implements Runnable {
 	
 	this.setIcon(iconRobot);
 	size = new Dimension(iconRobot.getIconWidth(), iconRobot.getIconHeight());
+    
+//	try {
+//	    this.imageIcon = this.getIconMissile();
+//	    this.size = new Dimension(this.imageIcon.getIconWidth(), this.imageIcon.getIconHeight());
+//	} catch (IOException e) {
+//	    e.printStackTrace();
+//	}
+    }
+
+    protected void getPanel() {
+    }
+
+    /*
+     * Set robot position
+     */
+    public void setStartingPosition() {
+	Random random = new Random();
+	this.posX = random.nextDouble(100);
+	this.posY = random.nextDouble(100);
+
+//	this.add(missile);
     }
     
     /**
@@ -82,7 +102,6 @@ public abstract class Robot extends Entity implements Runnable {
 	this.posY = Math.max(0, Math.min(100, newPosY));
 	
 	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100) {
-	    wallHit = true;
 	    this.inflictWallsDamage();
 	    this.speed = 0;
 	}
@@ -111,7 +130,7 @@ public abstract class Robot extends Entity implements Runnable {
      * @return True if the robot is alive, false otherwise.
      */
     public boolean isAlive() {
-	if (life <= 0)
+	if (this.life <= 0)
 	    return false;
 
 	return true;
@@ -143,7 +162,7 @@ public abstract class Robot extends Entity implements Runnable {
     public void start() {
 	this.setStartingPosition();
 	this.draw();
-	this.speed = 1;
+	this.speed = 0;
 	this.life = 100;
 	
     }
@@ -151,7 +170,7 @@ public abstract class Robot extends Entity implements Runnable {
     /*
      * Shoot a missile towards the direction specified that will land in the range specified.
      */
-    public void shoot(int direction, int range) {
+    public void shoot(int direction, int range) throws IOException {
 	missile = new Missile(this);
 	missile.setStartingPosition();
 	missile.draw();
@@ -180,30 +199,12 @@ public abstract class Robot extends Entity implements Runnable {
      * Get the icon of the robot from the res folder.
      * 
      * @return new ImageIcon(bufferedImage) The icon of the robot.
+     * @throws IOException 
      */
     @Override
-    public ImageIcon initializeIcon() {
-	File fileIconRobot = new File("res/robot.png");
-
-	try {
-	    bufferedImage = ImageIO.read(fileIconRobot);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
-	return new ImageIcon(bufferedImage);
-    }
-    
-    /**
-     * Set robot starting position.
-     */
-    @Override
-    public void setStartingPosition() {
-	random = new Random();
-	// this.posX = random.nextDouble(100);
-	// this.posY = random.nextDouble(100);
-	this.posX = 75;
-	this.posY = 50;
+    public ImageIcon initializeIcon() throws IOException {
+	InputStream stream = getClass().getClassLoader().getResourceAsStream("robot.png");
+	return new ImageIcon(ImageIO.read(stream));
     }
     
     // The run method contains the game loop responsible for the movements and
@@ -215,6 +216,7 @@ public abstract class Robot extends Entity implements Runnable {
 	while (this.isAlive()) {
 	    this.hasMoved = false;
 	    this.runTurn();
+	    this.move(this.direction, this.speed);
 	    
 	    try {
 		Thread.sleep(10);

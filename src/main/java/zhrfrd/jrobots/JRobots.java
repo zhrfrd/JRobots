@@ -18,7 +18,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -54,7 +53,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      * Creates the layout of the battlefield with all the related components
      */
     public JRobots() {
-
 	this.initializeLayout();
     }
 
@@ -134,7 +132,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	Dimension minimumSize = new Dimension(480, 270);
-	int screenResolution = Toolkit.getDefaultToolkit().getScreenResolution();
 
 	this.setMinimumSize(minimumSize);
 	this.setPreferredSize(new Dimension(screenSize.width * 8 / 10, screenSize.height * 8 / 10));
@@ -245,8 +242,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 	}
 
-	if (e.getSource() == buttonsLoad.get(1))
-	    loadRobot(labelPathRobot.get(1));
+	if ( e.getSource() == buttonsLoad.get(1)) {
+	    fullClassRobots.add("zhrfrd.testjrobots.Test");
+	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
+//	    loadRobot(labelPathRobot.get(1));
+	}
 
 	if (e.getSource() == buttonsLoad.get(2))
 	    loadRobot(labelPathRobot.get(2));

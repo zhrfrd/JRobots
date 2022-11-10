@@ -2,6 +2,7 @@ package zhrfrd.entities;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -14,8 +15,8 @@ public class Entity extends JLabel {
     protected BufferedImage bufferedImage;
     protected JPanel panelBattlefield;
     protected Dimension size;
-    protected boolean wallHit = false;
     
+ 
     /**
      * Set the entity's starting position.
      */
@@ -23,8 +24,9 @@ public class Entity extends JLabel {
     
     /**
      * Get the icon of the entity from the res folder.
+     * @throws IOException 
      */
-    public ImageIcon initializeIcon() {
+    public ImageIcon initializeIcon() throws IOException {
 	return this.entityIcon;
     }
     
