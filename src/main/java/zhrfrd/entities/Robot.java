@@ -1,81 +1,48 @@
 package zhrfrd.entities;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import zhrfrd.jrobots.JRobots;
-
-public abstract class Robot extends Entity implements Runnable {
+public abstract class Robot extends Entity {
     private static final long serialVersionUID = -2377133046121834448L;
-    
+
     /**
-     * Determine if the move action has been done in the current turn
+     * Determine if the move action has been done in the current turn.
      */
     private boolean hasMoved = false;
-    public Thread threadRobot;   // Keep it public in order for the reflection of the class fields to work in the class JRobots
-    protected JRobots jrobots;
-    /**
-     * Current status of the Robot
-     */
-    protected int life, direction, speed;
     protected ImageIcon imageIcon;
     protected File fileIconMissile;
     protected BufferedImage bufferedImage;
     protected Missile missile;
     public static String title = "JRobots";
     public ImageIcon iconRobot;
-    
-    // Constructor
-    public Robot(JRobots jrobots) throws IOException {
-	this.jrobots = jrobots;
-	this.threadRobot = new Thread(this, "Robot thread");
-	panelBattlefield = jrobots.panelBattleField;
-	
-	if (iconRobot == null) {
-	    iconRobot = this.initializeIcon();
-	}
-	
-	this.setIcon(iconRobot);
-	size = new Dimension(iconRobot.getIconWidth(), iconRobot.getIconHeight());
-    
-//	try {
-//	    this.imageIcon = this.getIconMissile();
-//	    this.size = new Dimension(this.imageIcon.getIconWidth(), this.imageIcon.getIconHeight());
-//	} catch (IOException e) {
-//	    e.printStackTrace();
-//	}
+
+    public Robot() throws IOException {
+	super(ENTITY_ICON.ROBOT);
     }
 
-    protected void getPanel() {
-    }
-
-    /*
-     * Set robot position
+    /**
+     * Set robot starting position.
      */
-    public void setStartingPosition() {
+    protected final void setStartingPosition() {
 	Random random = new Random();
 	this.posX = random.nextDouble(100);
 	this.posY = random.nextDouble(100);
-
-//	this.add(missile);
     }
-    
+
     /**
      * Move the robot.
      * 
      * @param direction The direction in degrees where the robot is going to move.
-     * @param speed The speed at which the robot travels.
+     * @param speed     The speed at which the robot travels.
      */
     public void move(int direction, int speed) {
 	System.out.println(getPosX() + "; " + getPosY());
-	
+
 	if (this.hasMoved)
 	    return;
 
@@ -100,7 +67,7 @@ public abstract class Robot extends Entity implements Runnable {
 
 	this.posX = Math.max(0, Math.min(100, newPosX));
 	this.posY = Math.max(0, Math.min(100, newPosY));
-	
+
 	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100) {
 	    this.inflictWallsDamage();
 	    this.speed = 0;
@@ -113,33 +80,22 @@ public abstract class Robot extends Entity implements Runnable {
      * Inflict walls damage depending on the current speed of the robot.
      */
     private void inflictWallsDamage() {
-	// Math.max to make sure life does not go below 0
-	this.life = Math.max(0, this.life - this.speed);
+	this.inflictDamage(this.speed);
     }
 
     /**
-     * Get the life status of the robot.
-     */
-    public int getLife() {
-	return this.life;
-    }
-
-    /**
-     * Check if the robot is still alive.
+     * Inflicts the amount of damage specified to the robot
      * 
-     * @return True if the robot is alive, false otherwise.
+     * @param value the amount of damage to inflict. Absolute value is used
      */
-    public boolean isAlive() {
-	if (this.life <= 0)
-	    return false;
-
-	return true;
+    private void inflictDamage(int value) {
+	this.life = Math.max(0, Math.min(100, this.life - Math.abs(value)));
     }
 
     /*
      * Scan the battlefield towards a single line direction
      */
-    public int scan(int direction) {
+    public final int scan(int direction) {
 	if (enemyFound())
 	    return direction;
 
@@ -149,32 +105,23 @@ public abstract class Robot extends Entity implements Runnable {
     /*
      * Scan the battleground towards the specified direction +/- the resolution
      */
-    public int scan(int direction, int resolution) {
+    public final int scan(int direction, int resolution) {
 	if (enemyFound())
 	    return direction;
 
 	return 0;
     }
 
-    /**
-     * Starting method of the robot and setting of the default values of the robot.
-     */
-    public void start() {
-	this.setStartingPosition();
-	this.draw();
-	this.speed = 0;
-	this.life = 100;
-	
-    }
-
     /*
-     * Shoot a missile towards the direction specified that will land in the range specified.
+     * Shoot a missile towards the direction specified that will land in the range
+     * specified.
      */
-    public void shoot(int direction, int range) throws IOException {
+    public final void shoot(int direction, int range) throws IOException {
 	missile = new Missile(this);
+	this.getParent().add(missile);
 	missile.setStartingPosition();
 	missile.draw();
-	
+
     }
 
     /**
@@ -186,27 +133,7 @@ public abstract class Robot extends Entity implements Runnable {
     }
 
     abstract protected void runTurn();
-    
-    /**
-     * Handle drawing of the robot to the battlefield in its current position.
-     */
-    public void draw() {
-	this.panelBattlefield.add(this);
-	this.setBounds(this.getAbsolutePosX(), this.getAbsolutePosY(), this.size.width, this.size.height);
-    }
-    
-    /**
-     * Get the icon of the robot from the res folder.
-     * 
-     * @return new ImageIcon(bufferedImage) The icon of the robot.
-     * @throws IOException 
-     */
-    @Override
-    public ImageIcon initializeIcon() throws IOException {
-	InputStream stream = getClass().getClassLoader().getResourceAsStream("robot.png");
-	return new ImageIcon(ImageIO.read(stream));
-    }
-    
+
     // The run method contains the game loop responsible for the movements and
     // animation in the battlefield
     @Override
@@ -217,7 +144,7 @@ public abstract class Robot extends Entity implements Runnable {
 	    this.hasMoved = false;
 	    this.runTurn();
 	    this.move(this.direction, this.speed);
-	    
+
 	    try {
 		Thread.sleep(10);
 	    } catch (InterruptedException e) {

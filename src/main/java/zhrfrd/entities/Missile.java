@@ -42,50 +42,30 @@
 
 package zhrfrd.entities;
 
-import java.awt.Dimension;
 import java.io.IOException;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Missile extends Entity {
     private static final long serialVersionUID = -8959188412014341019L;
     Robot robot;
     public ImageIcon iconMissile;
-    
+
     public Missile(Robot robot) throws IOException {
+	super(ENTITY_ICON.MISSILE);
 	this.robot = robot;
-	setStartingPosition();
-	
-	panelBattlefield = robot.jrobots.panelBattleField;
-	
-	if (iconMissile == null) {
-	    iconMissile = this.initializeIcon();
-	}
-	
-	this.setIcon(iconMissile);
-	size = new Dimension(iconMissile.getIconWidth(), iconMissile.getIconHeight());
+	this.direction = robot.getDirection();
     }
-    
+
     /**
      * Set missile's starting position by getting the current robot's position.
      */
-    @Override
-    public void setStartingPosition() {
+    protected final void setStartingPosition() {
 	posX = robot.getPosX();
 	posY = robot.getPosY();
     }
-    
-    /**
-     * Get the icon of the missile from the res folder.
-     * 
-     * @return new ImageIcon(bufferedImage) The icon of the missile.
-     * @throws IOException 
-     */
+
     @Override
-    public ImageIcon initializeIcon() throws IOException {
-	InputStream stream = getClass().getClassLoader().getResourceAsStream("missile.png");
-	return new ImageIcon(ImageIO.read(stream));
+    public void run() {
     }
 }

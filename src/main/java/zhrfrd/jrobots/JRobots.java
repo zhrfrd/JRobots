@@ -48,6 +48,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
+    private Thread[] threadRobots; 
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -183,29 +184,32 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     private void startBattle() {
 	Class<?> classRobot = null;
 	Constructor<?> constructorRobot;
+	this.threadRobots = new Thread[fullClassRobots.size()];
 
 	for (int i = 0; i < fullClassRobots.size(); i++) {
 	    try {
 		classRobot = Class.forName(fullClassRobots.get(i));
-		constructorRobot = classRobot.getDeclaredConstructor(JRobots.class);
+		constructorRobot = classRobot.getDeclaredConstructor();
 		System.out.println(constructorRobot);
-		Robot newRobot = (Robot) constructorRobot.newInstance(this);
-		newRobot.threadRobot.start();
-		robot.add(newRobot);
+		Robot newRobot = (Robot) constructorRobot.newInstance();
+		this.threadRobots[i] = new Thread(newRobot);
+		this.robot.add(newRobot);
+		this.panelBattleField.add(newRobot);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 		    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 		e1.printStackTrace();
 	    }
-
-//	    panelBattleField.add(robot.get(i));
+	}
+	
+	for (Thread robot : this.threadRobots) {
+	    robot.start();
 	}
 
 	isBattleStarted = true;
     }
 
     /*
-     * Get the full class name of the robot (eg:
-     * packagefolder.subpackagefolder.Classname)
+     * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
      */
     private String extractFullClassRobot() {
 	// Read the first line of the file
@@ -217,16 +221,12 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	}
 
 	int index = firstLineFile.indexOf(" ");
-	StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, ""); // Extract ONLY
-												  // package name from
-												  // the first line of
-												  // the file
-	String className = fileRobot.getName().replace(".java", ""); // Get the class name removing the .java extension
-								     // from the file name (for convention class name
-								     // = to file name)
-	String fullClass = (strPackageRobot + "." + className).replace(";", ""); // Merge package name and class name to
-										 // create the full class name
-										 // necessary for loading the robot
+	// Extract ONLY package name from the first line of  the file
+	StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, "");
+	// Get the class name removing the .java extension from the file name (for convention class name = to file name)
+	String className = fileRobot.getName().replace(".java", ""); 
+	// Merge package name and class name to create the full class name necessary for loading the robot
+	String fullClass = (strPackageRobot + "." + className).replace(";", ""); 
 
 	return fullClass;
     }
