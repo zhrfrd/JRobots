@@ -48,7 +48,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
-    private Thread[] threadRobots; 
+    private Thread[] threadRobots;
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -76,7 +76,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	this.panelMain.setFont(font);
 
 	this.panelBattleField = new JPanel();
-	this.panelBattleField.setBackground(Color.black);
+	this.panelBattleField.setBackground(new Color(153, 102, 51));
 
 	this.panelRightMenuContainer = new JPanel();
 	this.panelRightMenuContainer.setLayout(new BoxLayout(this.panelRightMenuContainer, BoxLayout.Y_AXIS));
@@ -161,9 +161,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     }
 
     /**
-     * Upload the robot from a folder and load it to the game by adding the class name of the robot to its specific JLabel.
+     * Upload the robot from a folder and load it to the game by adding the class
+     * name of the robot to its specific JLabel.
      * 
-     * @param labelPathRobot The JLabel that will contain the class name of the robot created by the user.
+     * @param labelPathRobot The JLabel that will contain the class name of the
+     *                       robot created by the user.
      */
     private void loadRobot(JLabel labelPathRobot) {
 	fileChooser = new JFileChooser();
@@ -179,7 +181,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     }
 
     /**
-     * Start the battle by getting the full class of each robot and creating a new instance of Robot passing JRobots as parameter.
+     * Start the battle by getting the full class of each robot and creating a new
+     * instance of Robot passing JRobots as parameter.
      */
     private void startBattle() {
 	Class<?> classRobot = null;
@@ -200,7 +203,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		e1.printStackTrace();
 	    }
 	}
-	
+
 	for (Thread robot : this.threadRobots) {
 	    robot.start();
 	}
@@ -209,7 +212,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     }
 
     /*
-     * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
+     * Get the full class name of the robot (eg:
+     * packagefolder.subpackagefolder.Classname)
      */
     private String extractFullClassRobot() {
 	// Read the first line of the file
@@ -221,12 +225,14 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	}
 
 	int index = firstLineFile.indexOf(" ");
-	// Extract ONLY package name from the first line of  the file
+	// Extract ONLY package name from the first line of the file
 	StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, "");
-	// Get the class name removing the .java extension from the file name (for convention class name = to file name)
-	String className = fileRobot.getName().replace(".java", ""); 
-	// Merge package name and class name to create the full class name necessary for loading the robot
-	String fullClass = (strPackageRobot + "." + className).replace(";", ""); 
+	// Get the class name removing the .java extension from the file name (for
+	// convention class name = to file name)
+	String className = fileRobot.getName().replace(".java", "");
+	// Merge package name and class name to create the full class name necessary for
+	// loading the robot
+	String fullClass = (strPackageRobot + "." + className).replace(";", "");
 
 	return fullClass;
     }
@@ -242,7 +248,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 	}
 
-	if ( e.getSource() == buttonsLoad.get(1)) {
+	if (e.getSource() == buttonsLoad.get(1)) {
 	    fullClassRobots.add("zhrfrd.testjrobots.Test");
 	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 //	    loadRobot(labelPathRobot.get(1));

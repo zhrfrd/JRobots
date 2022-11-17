@@ -3,6 +3,8 @@ package zhrfrd.entities;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -17,9 +19,10 @@ public abstract class Robot extends Entity {
     protected ImageIcon imageIcon;
     protected File fileIconMissile;
     protected BufferedImage bufferedImage;
-    protected Missile missile;
     public static String title = "JRobots";
     public ImageIcon iconRobot;
+    private List<Missile> missiles;
+    private List<Thread> missilesThreads;
 
     public Robot() throws IOException {
 	super(ENTITY_ICON.ROBOT);
@@ -41,8 +44,6 @@ public abstract class Robot extends Entity {
      * @param speed     The speed at which the robot travels.
      */
     public void move(int direction, int speed) {
-	System.out.println(getPosX() + "; " + getPosY());
-
 	if (this.hasMoved)
 	    return;
 
@@ -72,8 +73,6 @@ public abstract class Robot extends Entity {
 	    this.inflictWallsDamage();
 	    this.speed = 0;
 	}
-
-	this.draw();
     }
 
     /**
@@ -114,14 +113,27 @@ public abstract class Robot extends Entity {
 
     /*
      * Shoot a missile towards the direction specified that will land in the range
-     * specified.
+     * specified. Only one missiles can be shot at one time per robot.
      */
-    public final void shoot(int direction, int range) throws IOException {
-	missile = new Missile(this);
-	this.getParent().add(missile);
-	missile.setStartingPosition();
-	missile.draw();
+    public final void shoot(int direction) throws IOException {
+	if (missiles != null && missiles.size() > 0)
+	    return;
 
+	Missile missile = new Missile(this, direction);
+	this.getParent().add(missile);
+
+	Thread missileThread = new Thread(missile, "Missile");
+	missileThread.start();
+
+	if (missiles == null) {
+	    missiles = new ArrayList<Missile>();
+	}
+	if (missilesThreads == null) {
+	    missilesThreads = new ArrayList<Thread>();
+	}
+
+	missiles.add(missile);
+	missilesThreads.add(missileThread);
     }
 
     /**
@@ -134,16 +146,50 @@ public abstract class Robot extends Entity {
 
     abstract protected void runTurn();
 
+    /**
+     * Start the robot in the battlefield.
+     */
+    public final void start() {
+	super.start();
+    }
+
+    /**
+     * Checks if some missile is dead and removes it from the battlefield.
+     */
+    private void cleanMissiles() {
+	if (this.missiles == null || this.missiles.size() == 0)
+	    return;
+
+	int i = 0;
+
+	while (i < this.missiles.size()) {
+	    Missile missile = this.missiles.get(i);
+	    Thread missileThread = this.missilesThreads.get(i);
+
+	    if (!missileThread.isAlive()) {
+		this.getParent().remove(missile);
+		this.getParent().validate();
+		this.getParent().repaint();
+		this.missiles.remove(i);
+		this.missilesThreads.remove(i);
+	    } else
+		i++;
+	}
+    }
+
     // The run method contains the game loop responsible for the movements and
     // animation in the battlefield
     @Override
-    final public void run() {
+    public final void run() {
 	this.start();
 
 	while (this.isAlive()) {
 	    this.hasMoved = false;
 	    this.runTurn();
 	    this.move(this.direction, this.speed);
+	    this.draw();
+
+	    this.cleanMissiles();
 
 	    try {
 		Thread.sleep(10);
