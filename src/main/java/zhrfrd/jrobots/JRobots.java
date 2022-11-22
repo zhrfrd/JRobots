@@ -246,17 +246,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      */
     public void update() {
 	for (int i = 0; i < robot.length; i ++) 
-	    if (robot[i] != null) {
+	    if (robot[i] != null)
 		robot[i].update();
-		
-		for (int j = 0; j < robot[i].missiles.size(); j ++) {
-		    System.out.println("ciao");
-		    
-		    if (robot[i].missiles.get(i) != null) {
-			robot[i].missiles.get(i).update();
-		    }
-		}
-	    }
     }
 
     public void render() {
@@ -265,7 +256,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     @Override
     public void actionPerformed(ActionEvent e) {
 	if (e.getSource() == buttonsLoad.get(0)) {
-//			loadRobot(labelPathRobot.get(0));
+//	    loadRobot(labelPathRobot.get(0));
 	    fullClassRobots.add("zhrfrd.testjrobots.Test");
 	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 	}
@@ -307,20 +298,5 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		delta--;
 	    }
 	}
-	
-	
-//	while (true) {
-//	    if (isBattleStarted) {
-//		for (int i = 0; i < robot.size(); i++) {
-//		    labelLifeRobot.get(i).setText("Life: " + String.valueOf(robot.get(i).getLife()));
-//		}
-//	    }
-//
-//	    try {
-//		Thread.sleep(10);
-//	    } catch (InterruptedException e) {
-//		e.printStackTrace();
-//	    }
-//	}
     }
 }

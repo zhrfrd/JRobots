@@ -140,8 +140,7 @@ public abstract class Entity extends JLabel {
 
 	this.icon = this.loadIcon(iconString);
 //	this.icon = this.scaleImageToSize(this.icon);
-	this.icon = this.icon.getScaledInstance((int) this.size.getWidth(), (int) this.size.getHeight(),
-		Image.SCALE_SMOOTH);
+	this.icon = this.icon.getScaledInstance((int) this.size.getWidth(), (int) this.size.getHeight(), Image.SCALE_SMOOTH);
 
 	this.setIcon(new ImageIcon(this.icon));
     }
@@ -212,10 +211,9 @@ public abstract class Entity extends JLabel {
     /**
      * Starting method of the entity and setting of its default values.
      */
-    public void start() {
+    public void begin() {
 	this.setStartingPosition();
 	this.draw();
-//	System.out.println(this.getPosX());
 	this.speed = 0;
 	this.life = 100;
     }

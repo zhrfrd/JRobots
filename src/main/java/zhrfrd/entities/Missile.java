@@ -21,7 +21,6 @@ public class Missile extends Entity {
      * Set missile's starting position by getting the current robot's position.
      */
     protected final void setStartingPosition() {
-	System.out.println("CIOAPSDSFLSDLKJLFSDJLDFSL");
 	this.posX = this.robot.getPosX();
 	this.posY = this.robot.getPosY();
     }
@@ -30,26 +29,22 @@ public class Missile extends Entity {
      * Update missile information in the game
      */
     public void update() {
-	System.out.println("khkjh");
-	this.start();
-
-	while (this.robot.isAlive() && this.isAlive() && !Thread.interrupted()) {
+//	while (this.robot.isAlive() && this.isAlive()) {
 	    this.move();
 	    this.draw();
-
-	    if (this.startingTimestamp < System.currentTimeMillis() - 1200) {
+	    
+	    if (this.startingTimestamp < System.currentTimeMillis() - 1200)
 		this.explode();
-	    }
 
-	    if (!Thread.interrupted()) {
-		try {
-		    Thread.sleep(10);
-		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	}
+//	    if (!Thread.interrupted()) {
+//		try {
+//		    Thread.sleep(10);
+//		} catch (InterruptedException e) {
+//		    // TODO Auto-generated catch block
+//		    e.printStackTrace();
+//		}
+//	    }
+//	}
     }
 
     protected void move() {
@@ -66,9 +61,8 @@ public class Missile extends Entity {
 	this.posX = Math.max(0, Math.min(100, newPosX));
 	this.posY = Math.max(0, Math.min(100, newPosY));
 
-	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100) {
+	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100)
 	    this.explode();
-	}
     }
 
     private void explode() {
@@ -80,18 +74,16 @@ public class Missile extends Entity {
 //	    // TODO Auto-generated catch block
 //	    e.printStackTrace();
 //	}
-
 	this.commitSuicide();
 	Thread.currentThread().interrupt();
     }
 
     @Override
-    public void start() {
+    public void begin() {
 	System.out.println("start()");
 	this.setStartingPosition();
-	this.draw();
 
-	this.speed = 6;
+	this.speed = 3;
 	this.life = 100;
 	this.startingTimestamp = System.currentTimeMillis();
     }
