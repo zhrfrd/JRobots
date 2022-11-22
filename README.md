@@ -1,7 +1,7 @@
 # JRobots
 JRobots is a programming game based on [CRobots](https://crobots.deepthought.it/home.php) by Tom Poindexter. The objective of the game is to code your own robot and fight against other robots.
 
-## JRobots syntax
+## 1. How to use JRobots
 The syntaxt of JRobots is very simple and intuitive. You can use the conditional operators, loops and call functions.
 ...
 
@@ -11,9 +11,9 @@ The syntaxt of JRobots is very simple and intuitive. You can use the conditional
 
 The following are in-build JRobots functions that you can use to control the behaviour of your robot.
   
-## start()
+## runTurn()
 
-This is the main function that gets called when the robot get launched. In here you must include the `isAlive()` cycle in which you'll write all the movements and behaviours of your robot.
+This is the main function that gets called when the robot get launched. In here you'll write all the robot's instructions.
 
 ## scan(direction, resolution) and scan(direction)
 
@@ -60,12 +60,3 @@ Get the current Y position of the robot.
 ## isAlive()
 This function returns *true* if the current robot is still alive, *false* if it's destroyed.
 You must enclose the logic of your robot inside a loop that checks its vital conditions each cycle.
-  
-Example:
-```
-public void start() {
-    while (isAlive()) {
-        move(UP);
-    }
-}
-```
