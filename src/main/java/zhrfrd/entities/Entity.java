@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public abstract class Entity extends JLabel implements Runnable {
+public abstract class Entity extends JLabel {
     private static final long serialVersionUID = -2678484620304652158L;
 
     public static enum ENTITY_ICON {
@@ -62,14 +62,14 @@ public abstract class Entity extends JLabel implements Runnable {
     }
 
     /**
-     * Get the X position of the entity
+     * Get the X position of the entity.
      */
     private int getAbsolutePosX() {
 	return (int) (this.posX * (this.getBattleFieldWidth() - this.size.width) / 100);
     }
 
     /**
-     * Get the Y position of the entity
+     * Get the Y position of the entity.
      */
     private int getAbsolutePosY() {
 	return (int) (this.posY * (this.getBattleFieldHeight() - this.size.height) / 100);
@@ -90,21 +90,21 @@ public abstract class Entity extends JLabel implements Runnable {
     }
 
     /**
-     * Get the current entity life
+     * Get the current entity life.
      */
     public int getLife() {
 	return this.life;
     }
 
     /**
-     * Get the current entity direction
+     * Get the current entity direction.
      */
     public int getDirection() {
 	return this.direction;
     }
 
     /**
-     * Get the current entity speed
+     * Get the current entity speed.
      */
     public int getSpeed() {
 	return this.speed;
@@ -210,11 +210,12 @@ public abstract class Entity extends JLabel implements Runnable {
     }
 
     /**
-     * Starting method of the robot and setting of the default values of the robot.
+     * Starting method of the entity and setting of its default values.
      */
     public void start() {
 	this.setStartingPosition();
 	this.draw();
+//	System.out.println(this.getPosX());
 	this.speed = 0;
 	this.life = 100;
     }

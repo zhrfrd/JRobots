@@ -1,45 +1,3 @@
-//package zhrfrd.entities;
-//
-//import java.awt.Dimension;
-//
-//import javax.swing.JLabel;
-//
-//public class Missile extends JLabel {
-//    private static final long serialVersionUID = 9015341697123990586L;
-//    private Robot robot;
-//    private int xStart, yStart;
-//
-//    // Constructor
-//    public Missile(Robot robot) {
-//	this.robot = robot;
-//    }
-//
-//    // Methods
-//
-//    /*
-//     * Set staring point from where the missile is shot
-//     */
-//    public void setStartingPosition() {
-//	xStart = robot.getX();
-//	yStart = robot.getY();
-//	Dimension size = this.getPreferredSize();
-//
-//	this.setBounds(xStart, yStart, size.width, size.height);
-//    }
-//
-//    /*
-//     * Move missile towards the direction stated
-//     */
-//    public void move(int direction) {
-//
-//    }
-//
-//    public void draw() {
-//	// TODO Auto-generated method stub
-//	
-//    }
-//}
-
 package zhrfrd.entities;
 
 import java.io.IOException;
@@ -63,8 +21,35 @@ public class Missile extends Entity {
      * Set missile's starting position by getting the current robot's position.
      */
     protected final void setStartingPosition() {
+	System.out.println("CIOAPSDSFLSDLKJLFSDJLDFSL");
 	this.posX = this.robot.getPosX();
 	this.posY = this.robot.getPosY();
+    }
+    
+    /**
+     * Update missile information in the game
+     */
+    public void update() {
+	System.out.println("khkjh");
+	this.start();
+
+	while (this.robot.isAlive() && this.isAlive() && !Thread.interrupted()) {
+	    this.move();
+	    this.draw();
+
+	    if (this.startingTimestamp < System.currentTimeMillis() - 1200) {
+		this.explode();
+	    }
+
+	    if (!Thread.interrupted()) {
+		try {
+		    Thread.sleep(10);
+		} catch (InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+	}
     }
 
     protected void move() {
@@ -102,6 +87,7 @@ public class Missile extends Entity {
 
     @Override
     public void start() {
+	System.out.println("start()");
 	this.setStartingPosition();
 	this.draw();
 
@@ -110,26 +96,68 @@ public class Missile extends Entity {
 	this.startingTimestamp = System.currentTimeMillis();
     }
 
-    @Override
-    public void run() {
-	this.start();
-
-	while (this.robot.isAlive() && this.isAlive() && !Thread.interrupted()) {
-	    this.move();
-	    this.draw();
-
-	    if (this.startingTimestamp < System.currentTimeMillis() - 1200) {
-		this.explode();
-	    }
-
-	    if (!Thread.interrupted()) {
-		try {
-		    Thread.sleep(10);
-		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	}
-    }
+//    @Override
+//    public void run() {
+//	this.start();
+//
+//	while (this.robot.isAlive() && this.isAlive() && !Thread.interrupted()) {
+//	    this.move();
+//	    this.draw();
+//
+//	    if (this.startingTimestamp < System.currentTimeMillis() - 1200) {
+//		this.explode();
+//	    }
+//
+//	    if (!Thread.interrupted()) {
+//		try {
+//		    Thread.sleep(10);
+//		} catch (InterruptedException e) {
+//		    // TODO Auto-generated catch block
+//		    e.printStackTrace();
+//		}
+//	    }
+//	}
+//    }
 }
+
+//package zhrfrd.entities;
+//
+//import java.awt.Dimension;
+//
+//import javax.swing.JLabel;
+//
+//public class Missile extends JLabel {
+//  private static final long serialVersionUID = 9015341697123990586L;
+//  private Robot robot;
+//  private int xStart, yStart;
+//
+//  // Constructor
+//  public Missile(Robot robot) {
+//	this.robot = robot;
+//  }
+//
+//  // Methods
+//
+//  /*
+//   * Set staring point from where the missile is shot
+//   */
+//  public void setStartingPosition() {
+//	xStart = robot.getX();
+//	yStart = robot.getY();
+//	Dimension size = this.getPreferredSize();
+//
+//	this.setBounds(xStart, yStart, size.width, size.height);
+//  }
+//
+//  /*
+//   * Move missile towards the direction stated
+//   */
+//  public void move(int direction) {
+//
+//  }
+//
+//  public void draw() {
+//	// TODO Auto-generated method stub
+//	
+//  }
+//}

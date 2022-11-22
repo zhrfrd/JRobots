@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import zhrfrd.entities.Missile;
 import zhrfrd.entities.Robot;
 
 public class JRobots extends JFrame implements ActionListener, Runnable {
@@ -40,7 +41,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     private ArrayList<JLabel> labelPathRobot;
     private ArrayList<JLabel> labelLifeRobot;
     private ArrayList<String> fullClassRobots;
-    private ArrayList<Robot> robot;
+//    private ArrayList<Robot> robot;
+    private Robot robot[] = new Robot[4];
+    private ArrayList<Missile> missileList = new ArrayList<>();
     static File fileRobot;
     static BufferedReader fileReader;
     static BufferedImage bufferedImage;
@@ -48,7 +51,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
-    private Thread[] threadRobots;
+//    private Thread[] threadRobots;
+    final int FPS = 60;
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -99,7 +103,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	this.labelPathRobot = new ArrayList<JLabel>();
 	this.labelLifeRobot = new ArrayList<JLabel>();
 	this.fullClassRobots = new ArrayList<String>();
-	this.robot = new ArrayList<Robot>();
+//	this.robot = new ArrayList<Robot>();
 
 	for (int i = 0; i < 4; i++) {
 	    JButton buttonLoad = new JButton("Load robot " + (i + 1));
@@ -187,7 +191,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     private void startBattle() {
 	Class<?> classRobot = null;
 	Constructor<?> constructorRobot;
-	this.threadRobots = new Thread[fullClassRobots.size()];
+//	this.threadRobots = new Thread[fullClassRobots.size()];
 
 	for (int i = 0; i < fullClassRobots.size(); i++) {
 	    try {
@@ -195,25 +199,25 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		constructorRobot = classRobot.getDeclaredConstructor();
 		System.out.println(constructorRobot);
 		Robot newRobot = (Robot) constructorRobot.newInstance();
-		this.threadRobots[i] = new Thread(newRobot);
-		this.robot.add(newRobot);
-		this.panelBattleField.add(newRobot);
+//		this.threadRobots[i] = new Thread(newRobot);
+//		this.robot.add(newRobot);
+		this.robot[i] = newRobot;
+		this.panelBattleField.add(robot[i]);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 		    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 		e1.printStackTrace();
 	    }
 	}
 
-	for (Thread robot : this.threadRobots) {
-	    robot.start();
-	}
+//	for (Thread robot : this.threadRobots) {
+//	    robot.start();
+//	}
 
 	isBattleStarted = true;
     }
 
     /*
-     * Get the full class name of the robot (eg:
-     * packagefolder.subpackagefolder.Classname)
+     * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
      */
     private String extractFullClassRobot() {
 	// Read the first line of the file
@@ -235,6 +239,24 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	String fullClass = (strPackageRobot + "." + className).replace(";", "");
 
 	return fullClass;
+    }
+    
+    /**
+     * Update game's information every 0.01666 seconds (60fps).
+     */
+    public void update() {
+	for (int i = 0; i < robot.length; i ++) 
+	    if (robot[i] != null) {
+		robot[i].update();
+		
+		for (int j = 0; j < robot[i].missiles.size(); j ++) {
+		    System.out.println("ciao");
+		    
+		    if (robot[i].missiles.get(i) != null) {
+			robot[i].missiles.get(i).update();
+		    }
+		}
+	    }
     }
 
     public void render() {
@@ -266,18 +288,39 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
     @Override
     public void run() {
-	while (true) {
-	    if (isBattleStarted) {
-		for (int i = 0; i < robot.size(); i++) {
-		    labelLifeRobot.get(i).setText("Life: " + String.valueOf(robot.get(i).getLife()));
-		}
-	    }
+	double drawInterval = 1000000000 / FPS; // Draw every 0.01666 seconds
+	double delta = 0;
+	long lastTime = System.nanoTime();
+	long currentTime;
 
-	    try {
-		Thread.sleep(10);
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
+	// Game loop
+	while (true) {
+	    currentTime = System.nanoTime();
+	    delta += (currentTime - lastTime) / drawInterval;
+	    lastTime = currentTime;
+
+	    // Every 0.01666 seconds (60 FPS)
+	    if (delta >= 1) {
+		update(); // Update information such as character position
+//		repaint(); // Call paintComponent() to draw the screen with the updated information
+
+		delta--;
 	    }
 	}
+	
+	
+//	while (true) {
+//	    if (isBattleStarted) {
+//		for (int i = 0; i < robot.size(); i++) {
+//		    labelLifeRobot.get(i).setText("Life: " + String.valueOf(robot.get(i).getLife()));
+//		}
+//	    }
+//
+//	    try {
+//		Thread.sleep(10);
+//	    } catch (InterruptedException e) {
+//		e.printStackTrace();
+//	    }
+//	}
     }
 }
