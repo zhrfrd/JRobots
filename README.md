@@ -6,7 +6,7 @@ The syntaxt of JRobots is based on Java and, in order to create your own robot, 
 
 <br/>
 
-**void runTurn()**
+### void runTurn()
 
 This is the main function that gets called when the robot get launched. In here you'll write all the robot's instructions.
 
@@ -21,7 +21,7 @@ public void runTurn() {
 
 <br/>
 
-**double scan(int direction, int resolution)**
+### double scan(int direction, int resolution)
 
 This function scans the battlefield in a particular direction +/- the resolution specified (which it can be a number between 0 and 10 included); in this way the robot is able to scan a wider area but the scanning range is decreased.
 
@@ -35,7 +35,7 @@ public void runTurn() {
 
 <br/>
 
-**double scan(int direction)**
+### double scan(int direction)
 
 This function scan only the specified direction. Despite in this case the area scanned is just a simple line (instead of an wider area), the range in length is maximum.
 
@@ -49,13 +49,24 @@ public void runTurn() {
 
 <br/>
 
-**void shoot(int direction)**
+### void shoot(int direction)
 
-This is the function that allows your robot to attack other robots. It fires a missile towards the direction specified.
+This is the function that allows your robot to attack other robots by firing a missile towards the direction specified.
+
+*Example*: Move the robot towards the left wall and when it hits it, shoot one missile to the opposite direction.
+
+```
+public void runTurn() {
+    move(180, 3)
+
+    if (getPosX() == 0)
+        shoot(0);
+}
+```
 
 <br/>
 
-**void move(int direction, int speed);**
+### void move(int direction, int speed);
 
 Move the robot towards the direction specified at the speed specified. The direction is specified in degreese between 0 and 359 included, and the speed can be between 0 and 5 included.
 
@@ -69,7 +80,7 @@ public void runTurn() {
 
 <br/>
 
-**double getPosX()**
+### double getPosX()
 
 Get the current X position of the robot.
 
@@ -86,7 +97,7 @@ public void runTurn () {
 
 <br/>
 
-**getPosY()**
+### double getPosY()
 
 Get the current Y position of the robot.
 
@@ -103,7 +114,7 @@ public void runTurn() {
 
 <br/>
 
-**isAlive()**
+### boolean isAlive()
 
 Check if the robot is alive or not.
 
