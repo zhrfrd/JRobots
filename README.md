@@ -4,83 +4,99 @@ JRobots is a programming game based on [CRobots](https://crobots.deepthought.it/
 ## 1. How to use JRobots
 The syntaxt of JRobots is based on Java and, in order to create your own robot, you can use the different methods of the JRobots API listed below:
 
-**runTurn()**
+**void runTurn()**
 
 This is the main function that gets called when the robot get launched. In here you'll write all the robot's instructions.
 
 *Example*
 
 ```
-runTurn() {
+public void runTurn() {
     // Write all you code in here
     // ....
 }
 ```
 
-**scan(int direction, int resolution)**
+**double scan(int direction, int resolution)**
 
 This function scans the battlefield in a particular direction +/- the resolution specified (which it can be a number between 0 and 10 included); in this way the robot is able to scan a wider area but the scanning range is decreased.
 
 *Example*: Turn the scanner to the position of 180 degrees and scan an area of angle 10 degrees. 
 
 ```
-runTurn() {
+public void runTurn() {
     scan(180, 10);
 }
 ```
 
-**scan(int direction)**
+**double scan(int direction)**
 
 This function scan only the specified direction. Despite in this case the area scanned is just a simple line (instead of an wider area), the range in length is maximum.
 
 *Example*: Turn the scanner to the position of 180 degrees without specifying the resolution. 
 
 ```
-runTurn() {
+public void runTurn() {
     scan(180);
 }
 ```
 
-**shoot(int direction, int range)**
+**void shoot(int direction)**
 
-This is the function that allows your robot to attack other robots. It fires a missile towards the direction specified, that will land in the point calculated from the range. 
+This is the function that allows your robot to attack other robots. It fires a missile towards the direction specified.
 
-*Note:* The range is not the point where the enemy is located, whilst the distance between it and your robot.
+**void move(int direction, int speed);**
 
-**move(int direction, int speed);**
+Move the robot towards the direction specified at the speed specified. The direction is specified in degreese between 0 and 359 included, and the speed can be between 0 and 5 included.
 
-Move the robot towards the direction specified at the speed specified.
+*Example*: Move the robot to the position of 90 degreese at the maximum speed of 5.
 
-**Parameters**
+```
+public void runTurn() {
+    move(90, 5);
+}
+```
 
-`int direction`: The direction in degreed towards where you want the robot to move. The range value is between 0 and 359 included.
-
-`int speed`: The speed at which the robot travels. The range value is between 0 and 5 included.
-
-**Return**
-
-`void`
-
-**getPosX()**
+**double getPosX()**
 
 Get the current X position of the robot.
 
-**Return**
+*Example*: If the current X position of the robot is 75, change its direction of 90 degreese and move it towards that direction decreasing the speed by one point.
 
-`double` The X coordinate of the robot. 
+```
+public void runTurn () {
+    move(0, 5);
+
+    if (getPosX() == 75)
+        move (90, 4);
+}
+```
 
 **getPosY()**
 
 Get the current Y position of the robot.
 
-**Return**
+*Example*: If the current Y position of the robot is 50, change its direction of 90 degreese and move it towards that direction at the same speed.
 
-`double` The Y coordinate of the robot.
+```
+public void runTurn() {
+    move(90, 2);
+
+    if (getPosY() == 50)
+        move(90, 2);
+}
+```
 
 **isAlive()**
 
 Check if the robot is alive or not.
 
-**Return**
+*Example*: Keep the robot in the same position while it's alive.
 
-`boolean` True if the robot is still alive, false otherwise.
+```
+public void runTurn() {
+    while(isAlive()) {
+        move(40, 0);
+    }
+}
+```
