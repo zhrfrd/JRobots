@@ -4,6 +4,8 @@ JRobots is a programming game based on [CRobots](https://crobots.deepthought.it/
 ## 1. How to use JRobots
 The syntaxt of JRobots is based on Java and, in order to create your own robot, you can use the different methods of the JRobots API listed below:
 
+<br/>
+
 **void runTurn()**
 
 This is the main function that gets called when the robot get launched. In here you'll write all the robot's instructions.
@@ -17,6 +19,8 @@ public void runTurn() {
 }
 ```
 
+<br/>
+
 **double scan(int direction, int resolution)**
 
 This function scans the battlefield in a particular direction +/- the resolution specified (which it can be a number between 0 and 10 included); in this way the robot is able to scan a wider area but the scanning range is decreased.
@@ -28,6 +32,8 @@ public void runTurn() {
     scan(180, 10);
 }
 ```
+
+<br/>
 
 **double scan(int direction)**
 
@@ -41,9 +47,13 @@ public void runTurn() {
 }
 ```
 
+<br/>
+
 **void shoot(int direction)**
 
 This is the function that allows your robot to attack other robots. It fires a missile towards the direction specified.
+
+<br/>
 
 **void move(int direction, int speed);**
 
@@ -56,6 +66,8 @@ public void runTurn() {
     move(90, 5);
 }
 ```
+
+<br/>
 
 **double getPosX()**
 
@@ -72,6 +84,8 @@ public void runTurn () {
 }
 ```
 
+<br/>
+
 **getPosY()**
 
 Get the current Y position of the robot.
@@ -86,6 +100,8 @@ public void runTurn() {
         move(90, 2);
 }
 ```
+
+<br/>
 
 **isAlive()**
 
