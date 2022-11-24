@@ -4,10 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+
+import zhrfrd.jrobots.JRobots;
 
 public abstract class Robot extends Entity {
     private static final long serialVersionUID = -2377133046121834448L;
@@ -22,10 +23,11 @@ public abstract class Robot extends Entity {
     public static String title = "JRobots";
     public ImageIcon iconRobot;
     public Missile missile;
-    public ArrayList<Missile> missileList = new ArrayList<>();
-//    private List<Thread> missilesThreads;
+    public ArrayList<Missile> missileList;
     private boolean isRobotStarted = false;
     protected boolean isMissileShot = false;
+    int missileLifeCounter = 0;
+    int missileLifeSpan = 120;
 
     public Robot() throws IOException {
 	super(ENTITY_ICON.ROBOT);
@@ -51,14 +53,9 @@ public abstract class Robot extends Entity {
 	    return;
 
 	this.hasMoved = true;
-
 	speed = Math.max(0, Math.min(5, speed));
-
 	this.direction = direction;
-//	direction -= 90;
-
 	this.speed = speed;
-
 	double radians = Math.toRadians(direction);
 	double x = Math.cos(radians) * 0.1 * this.speed;
 	double y = Math.sin(radians) * 0.1 * this.speed;
@@ -91,17 +88,12 @@ public abstract class Robot extends Entity {
     	this.draw();
     	
     	if (isMissileShot) {
-    	    missile.update();
+    	    this.missileLifeCounter ++;
+    	    this.missile.update();
+    	    
+    	    if (missileLifeCounter >= missileLifeSpan)   
+    	    	this.cleanMissiles();
     	}
-    	
-    	// Handle missile update
-//    	for (int i = 0; i < missileList.size(); i ++) {
-//    	    System.out.println("Number of missileList: " + missileList.size());
-//    	    if (missileList.get(i) != null)
-//    		missileList.get(i).update();
-//    	}
-
-    	this.cleanMissiles();
     }
 
     /**
@@ -148,30 +140,16 @@ public abstract class Robot extends Entity {
 	if (missileList != null && missileList.size() > 0)
 	    return;
 	
-//	System.out.println("shoot()");
 	isMissileShot = true;
 	missile = new Missile(this, direction);
 	missile.begin();
 	
-	
-	System.out.println(this.getSize());
-//	this.getParent().add(missile);
-//	Thread missileThread = new Thread(missile, "Missile");
-//	missileThread.start();
+	this.getParent().add(missile);
 
-//	if (missileList == null) {
-//	    missileList = new ArrayList<Missile>();
-//	}
-//	if (missilesThreads == null) {
-//	    missilesThreads = new ArrayList<Thread>();
-//	}
-	System.out.println("Number of missiles " + missileList.size());
-	
+	if (missileList == null)
+	    missileList = new ArrayList<Missile>();
+
 	missileList.add(missile);
-	
-	System.out.println("Number of missiles " + missileList.size());
-	System.out.println("X " + missile.getPosX());
-	//	missilesThreads.add(missileThread);
     }
 
     /**

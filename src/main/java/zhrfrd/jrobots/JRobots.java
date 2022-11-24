@@ -245,9 +245,16 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      * Update game's information every 0.01666 seconds (60fps).
      */
     public void update() {
+	// Robots
 	for (int i = 0; i < robot.length; i ++) 
-	    if (robot[i] != null)
+	    if (robot[i] != null) {
 		robot[i].update();
+	    }
+	
+//	// Missiles
+//	for (int i = 0; i < missileList.size(); i ++)
+//	    if (missileList.get(i) != null)
+//		missileList.get(i).update();
     }
 
     public void render() {

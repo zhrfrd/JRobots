@@ -35,15 +35,6 @@ public class Missile extends Entity {
 	    
 	    if (this.startingTimestamp < System.currentTimeMillis() - 1200)
 		this.explode();
-
-//	    if (!Thread.interrupted()) {
-//		try {
-//		    Thread.sleep(10);
-//		} catch (InterruptedException e) {
-//		    // TODO Auto-generated catch block
-//		    e.printStackTrace();
-//		}
-//	    }
 //	}
     }
 
@@ -66,16 +57,8 @@ public class Missile extends Entity {
     }
 
     private void explode() {
-	System.out.println("Missile exploded!");
-
-//	try {
-//	    Thread.sleep(10);
-//	} catch (InterruptedException e) {
-//	    // TODO Auto-generated catch block
-//	    e.printStackTrace();
-//	}
 	this.commitSuicide();
-	Thread.currentThread().interrupt();
+//	Thread.currentThread().interrupt();
     }
 
     @Override
