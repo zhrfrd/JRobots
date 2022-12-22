@@ -33,8 +33,8 @@ public class Missile extends Entity {
 	    this.move();
 	    this.draw();
 	    
-	    if (this.startingTimestamp < System.currentTimeMillis() - 1200)
-		this.explode();
+//	    if (this.startingTimestamp < System.currentTimeMillis() - 1200)
+//		this.explode();
 //	}
     }
 
@@ -56,7 +56,7 @@ public class Missile extends Entity {
 	    this.explode();
     }
 
-    private void explode() {
+    protected void explode() {
 	this.commitSuicide();
 //	Thread.currentThread().interrupt();
     }

@@ -75,9 +75,11 @@ public abstract class Robot extends Entity {
 	}
     }
     
+    /**
+     * Update robot status
+     */
     public void update() {
 	if (!isRobotStarted) {
-	    System.out.println("STARTED");
 	    this.setStartingPosition();
 	    isRobotStarted = true;
 	}
@@ -87,13 +89,46 @@ public abstract class Robot extends Entity {
     	this.move(this.direction, this.speed);
     	this.draw();
     	
-    	if (isMissileShot) {
+    	if (missileList != null && missileList.size() > 0) {
     	    this.missileLifeCounter ++;
     	    this.missile.update();
     	    
-    	    if (missileLifeCounter >= missileLifeSpan)   
+    	    if (missileLifeCounter >= missileLifeSpan) {
+    		this.missile.explode();
     	    	this.cleanMissiles();
+    	    	isMissileShot = false;
+    	    }
     	}
+    }
+    
+    /*
+     * Shoot a missile towards the direction specified that will land in the range
+     * specified. Only one missileList can be shot at one time per robot.
+     */
+    public final void shoot(int direction) throws IOException {
+	if (missileList != null && missileList.size() > 0)
+	    return;
+	
+//	if (isMissileShot)
+//	    return;
+	
+	if (!isMissileShot) {
+	    isMissileShot = true;
+	
+            missileList = new ArrayList<Missile>();
+            missile = new Missile(this, direction);
+        	
+            missileList.add(missile);
+            missile.begin();
+        	
+            this.getParent().add(missile);
+//            isMissileShot = false;
+	}
+
+//	if (missileList == null)
+//	    missileList = new ArrayList<Missile>();
+
+//	missileList.add(missile);
     }
 
     /**
@@ -130,26 +165,6 @@ public abstract class Robot extends Entity {
 	    return direction;
 
 	return 0;
-    }
-
-    /*
-     * Shoot a missile towards the direction specified that will land in the range
-     * specified. Only one missileList can be shot at one time per robot.
-     */
-    public final void shoot(int direction) throws IOException {
-	if (missileList != null && missileList.size() > 0)
-	    return;
-	
-	isMissileShot = true;
-	missile = new Missile(this, direction);
-	missile.begin();
-	
-	this.getParent().add(missile);
-
-	if (missileList == null)
-	    missileList = new ArrayList<Missile>();
-
-	missileList.add(missile);
     }
 
     /**
