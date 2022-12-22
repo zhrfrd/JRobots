@@ -2,9 +2,9 @@
 JRobots is a programming game based on [CRobots](https://crobots.deepthought.it/home.php) by Tom Poindexter. The objective of the game is to code your own robot and fight against other robots.
 
 ## 1. How to use JRobots
-The syntaxt of JRobots is based on Java and, in order to create your own robot, you can use the different methods of the JRobots API listed below:
+The syntaxt of JRobots is based on Java and, in order to create your own robot, you can use the different methods of the JRobots API listed below.
 
-<br/>
+---
 
 ### void runTurn()
 
@@ -19,7 +19,7 @@ public void runTurn() {
 }
 ```
 
-<br/>
+---
 
 ### double scan(int direction, int resolution)
 
@@ -33,7 +33,7 @@ public void runTurn() {
 }
 ```
 
-<br/>
+---
 
 ### double scan(int direction)
 
@@ -47,7 +47,7 @@ public void runTurn() {
 }
 ```
 
-<br/>
+---
 
 ### void shoot(int direction)
 
@@ -64,9 +64,9 @@ public void runTurn() {
 }
 ```
 
-<br/>
+---
 
-### void move(int direction, int speed);
+### void move(int direction, int speed)
 
 Move the robot towards the direction specified at the speed specified. The direction is specified in degreese between 0 and 359 included, and the speed can be between 0 and 5 included.
 
@@ -78,7 +78,7 @@ public void runTurn() {
 }
 ```
 
-<br/>
+---
 
 ### double getPosX()
 
@@ -95,7 +95,7 @@ public void runTurn () {
 }
 ```
 
-<br/>
+---
 
 ### double getPosY()
 
@@ -112,7 +112,7 @@ public void runTurn() {
 }
 ```
 
-<br/>
+---
 
 ### boolean isAlive()
 
