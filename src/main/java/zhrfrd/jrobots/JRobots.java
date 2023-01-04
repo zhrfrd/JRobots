@@ -18,7 +18,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -28,19 +27,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import zhrfrd.entities.Missile;
 import zhrfrd.entities.Robot;
 
 public class JRobots extends JFrame implements ActionListener, Runnable {
     private static final long serialVersionUID = -3190346657795484951L;
     private JFileChooser fileChooser;
-    private JPanel panelMain, panelBattleField, panelRightMenuContainer, panelStartController, panelRobotsContainer;
+    private JPanel panelMain, panelRightMenuContainer, panelStartController, panelRobotsContainer;
+    public JPanel panelBattleField;
     private JButton buttonStart;
     private ArrayList<JPanel> panelRobot;
     private ArrayList<JButton> buttonsLoad;
     private ArrayList<JLabel> labelPathRobot;
     private ArrayList<JLabel> labelLifeRobot;
     private ArrayList<String> fullClassRobots;
-    private ArrayList<Robot> robot;
+//    private ArrayList<Robot> robot;
+    private Robot robot[] = new Robot[4];
+    private ArrayList<Missile> missileList = new ArrayList<>();
     static File fileRobot;
     static BufferedReader fileReader;
     static BufferedImage bufferedImage;
@@ -48,16 +51,13 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     boolean isBattleStarted = false;
-    private static ImageIcon iconRobot;
+//    private Thread[] threadRobots;
+    final int FPS = 60;
 
     /**
      * Creates the layout of the battlefield with all the related components
      */
     public JRobots() {
-	if (iconRobot == null) {
-	    iconRobot = this.initializeRobotIcon();
-	}
-
 	this.initializeLayout();
     }
 
@@ -80,7 +80,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	this.panelMain.setFont(font);
 
 	this.panelBattleField = new JPanel();
-	this.panelBattleField.setBackground(Color.black);
+	this.panelBattleField.setBackground(new Color(153, 102, 51));
 
 	this.panelRightMenuContainer = new JPanel();
 	this.panelRightMenuContainer.setLayout(new BoxLayout(this.panelRightMenuContainer, BoxLayout.Y_AXIS));
@@ -103,7 +103,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	this.labelPathRobot = new ArrayList<JLabel>();
 	this.labelLifeRobot = new ArrayList<JLabel>();
 	this.fullClassRobots = new ArrayList<String>();
-	this.robot = new ArrayList<Robot>();
+//	this.robot = new ArrayList<Robot>();
 
 	for (int i = 0; i < 4; i++) {
 	    JButton buttonLoad = new JButton("Load robot " + (i + 1));
@@ -137,7 +137,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	Dimension minimumSize = new Dimension(480, 270);
-	int screenResolution = Toolkit.getDefaultToolkit().getScreenResolution();
 
 	this.setMinimumSize(minimumSize);
 	this.setPreferredSize(new Dimension(screenSize.width * 8 / 10, screenSize.height * 8 / 10));
@@ -165,23 +164,12 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	threadMain.start(); // Go to run()
     }
 
-    /*
-     * Retrieve the icon of the robot from the selected path
-     */
-    private ImageIcon initializeRobotIcon() {
-	File fileIconRobot = new File("res/robot.png");
-
-	try {
-	    bufferedImage = ImageIO.read(fileIconRobot);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-
-	return new ImageIcon(bufferedImage);
-    }
-
-    /*
-     * Load Robot file
+    /**
+     * Upload the robot from a folder and load it to the game by adding the class
+     * name of the robot to its specific JLabel.
+     * 
+     * @param labelPathRobot The JLabel that will contain the class name of the
+     *                       robot created by the user.
      */
     private void loadRobot(JLabel labelPathRobot) {
 	fileChooser = new JFileChooser();
@@ -196,36 +184,40 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	labelPathRobot.setText(fullClass);
     }
 
-    /*
-     * Start the battle by getting the full class of each robot
+    /**
+     * Start the battle by getting the full class of each robot and creating a new
+     * instance of Robot passing JRobots as parameter.
      */
     private void startBattle() {
 	Class<?> classRobot = null;
 	Constructor<?> constructorRobot;
+//	this.threadRobots = new Thread[fullClassRobots.size()];
 
 	for (int i = 0; i < fullClassRobots.size(); i++) {
 	    try {
 		classRobot = Class.forName(fullClassRobots.get(i));
-		constructorRobot = classRobot.getConstructor();
+		constructorRobot = classRobot.getDeclaredConstructor();
 		System.out.println(constructorRobot);
 		Robot newRobot = (Robot) constructorRobot.newInstance();
-		newRobot.setIcon(iconRobot);
-		newRobot.threadRobot.start();
-		robot.add(newRobot);
+//		this.threadRobots[i] = new Thread(newRobot);
+//		this.robot.add(newRobot);
+		this.robot[i] = newRobot;
+		this.panelBattleField.add(robot[i]);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 		    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 		e1.printStackTrace();
 	    }
-
-	    panelBattleField.add(robot.get(i));
 	}
+
+//	for (Thread robot : this.threadRobots) {
+//	    robot.start();
+//	}
 
 	isBattleStarted = true;
     }
 
     /*
-     * Get the full class name of the robot (eg:
-     * packagefolder.subpackagefolder.Classname)
+     * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
      */
     private String extractFullClassRobot() {
 	// Read the first line of the file
@@ -237,18 +229,26 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	}
 
 	int index = firstLineFile.indexOf(" ");
-	StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, ""); // Extract ONLY
-												  // package name from
-												  // the first line of
-												  // the file
-	String className = fileRobot.getName().replace(".java", ""); // Get the class name removing the .java extension
-								     // from the file name (for convention class name
-								     // = to file name)
-	String fullClass = (strPackageRobot + "." + className).replace(";", ""); // Merge package name and class name to
-										 // create the full class name
-										 // necessary for loading the robot
+	// Extract ONLY package name from the first line of the file
+	StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, "");
+	// Get the class name removing the .java extension from the file name (for
+	// convention class name = to file name)
+	String className = fileRobot.getName().replace(".java", "");
+	// Merge package name and class name to create the full class name necessary for
+	// loading the robot
+	String fullClass = (strPackageRobot + "." + className).replace(";", "");
 
 	return fullClass;
+    }
+    
+    /**
+     * Update game's information every 0.01666 seconds (60fps).
+     */
+    public void update() {
+	// Update robots status
+	for (int i = 0; i < robot.length; i ++) 
+	    if (robot[i] != null)
+		robot[i].update();
     }
 
     public void render() {
@@ -257,13 +257,16 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     @Override
     public void actionPerformed(ActionEvent e) {
 	if (e.getSource() == buttonsLoad.get(0)) {
-//			loadRobot(labelPathRobot.get(0));
+//	    loadRobot(labelPathRobot.get(0));
 	    fullClassRobots.add("zhrfrd.testjrobots.Test");
 	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
 	}
 
-	if (e.getSource() == buttonsLoad.get(1))
-	    loadRobot(labelPathRobot.get(1));
+	if (e.getSource() == buttonsLoad.get(1)) {
+	    fullClassRobots.add("zhrfrd.testjrobots.Test");
+	    labelPathRobot.get(0).setText("zhrfrd.testjrobots.Test");
+//	    loadRobot(labelPathRobot.get(1));
+	}
 
 	if (e.getSource() == buttonsLoad.get(2))
 	    loadRobot(labelPathRobot.get(2));
@@ -277,17 +280,23 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
     @Override
     public void run() {
-	while (true) {
-	    if (isBattleStarted) {
-		for (int i = 0; i < robot.size(); i++) {
-		    labelLifeRobot.get(i).setText("Life: " + String.valueOf(robot.get(i).getLife()));
-		}
-	    }
+	double drawInterval = 1000000000 / FPS; // Draw every 0.01666 seconds
+	double delta = 0;
+	long lastTime = System.nanoTime();
+	long currentTime;
 
-	    try {
-		Thread.sleep(10);
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
+	// Game loop
+	while (true) {
+	    currentTime = System.nanoTime();
+	    delta += (currentTime - lastTime) / drawInterval;
+	    lastTime = currentTime;
+
+	    // Every 0.01666 seconds (60 FPS)
+	    if (delta >= 1) {
+		update(); // Update information such as character position
+//		repaint(); // Call paintComponent() to draw the screen with the updated information
+
+		delta--;
 	    }
 	}
     }
