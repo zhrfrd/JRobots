@@ -1,71 +1,129 @@
 # JRobots
 JRobots is a programming game based on [CRobots](https://crobots.deepthought.it/home.php) by Tom Poindexter. The objective of the game is to code your own robot and fight against other robots.
 
-## JRobots syntax
-The syntaxt of JRobots is very simple and intuitive. You can use the conditional operators, loops and call functions.
-...
+## 1. How to use JRobots
+The syntaxt of JRobots is based on Java and, in order to create your own robot, you can use the different methods of the JRobots API listed below.
 
-**if** Conditional operator  
-**for** Loop   
-...
+---
 
-The following are in-build JRobots functions that you can use to control the behaviour of your robot.
-  
-## start()
+### void runTurn()
 
-This is the main function that gets called when the robot get launched. In here you must include the `isAlive()` cycle in which you'll write all the movements and behaviours of your robot.
+This is the main function that gets called when the robot get launched. In here you'll write all the robot's instructions.
 
-## scan(direction, resolution) and scan(direction)
+*Example*
 
-Each robot is equipped with a radar that can scan the battlefield in a particolar direction. If there are no robots within the scan range the *scan()* function will return 0, otherwize it will return the *direction* where the enemy is positioned. You can invoke two types of scan() function:  
+```
+public void runTurn() {
+    // Write all you code in here
+    // ....
+}
+```
 
-## scan(direction, resolution)
+---
+
+### double scan(int direction, int resolution)
 
 This function scans the battlefield in a particular direction +/- the resolution specified (which it can be a number between 0 and 10 included); in this way the robot is able to scan a wider area but the scanning range is decreased.
 
-Example:  
-`scan(98, 5);` - Scans the battleground in an area included between 93 and 103 degrees.
+*Example*: Turn the scanner to the position of 180 degrees and scan an area of angle 10 degrees. 
 
-## scan(direction)
+```
+public void runTurn() {
+    scan(180, 10);
+}
+```
+
+---
+
+### double scan(int direction)
 
 This function scan only the specified direction. Despite in this case the area scanned is just a simple line (instead of an wider area), the range in length is maximum.
 
-Example:  
-`scan(45);` - Scan the line from the robot to the wall in a direction of 45 degrees.
-  
-## shoot(direction, range)
+*Example*: Turn the scanner to the position of 180 degrees without specifying the resolution. 
 
-This is the function that allows your robot to attack other robots. It fires a missile towards the direction specified, that will land in the point calculated from the range. 
+```
+public void runTurn() {
+    scan(180);
+}
+```
 
-*Note:* The range is not the point where the enemy is located, whilst the distance between it and your robot.
+---
 
-Example:  
-`shoot(180, 50);` - Shoot a missile towards the direction of 180 degrees with a range of 50.
-  
-## move(direction)
+### void shoot(int direction)
 
-Move the robot in a specific direction. The parameter **direction** is a String and can be one of these constant values: *UP*, *DOWN*, *LEFT* or *RIGHT*.  
-  
-Example:  
-`move(RIGHT);` - Move the robot to the right.
-  
-## getPosX()
+This is the function that allows your robot to attack other robots by firing a missile towards the direction specified.
+
+*Example*: Move the robot towards the left wall and when it hits it, shoot one missile to the opposite direction.
+
+```
+public void runTurn() {
+    move(180, 3)
+
+    if (getPosX() == 0)
+        shoot(0);
+}
+```
+
+---
+
+### void move(int direction, int speed)
+
+Move the robot towards the direction specified at the speed specified. The direction is specified in degreese between 0 and 359 included, and the speed can be between 0 and 5 included.
+
+*Example*: Move the robot to the position of 90 degreese at the maximum speed of 5.
+
+```
+public void runTurn() {
+    move(90, 5);
+}
+```
+
+---
+
+### double getPosX()
 
 Get the current X position of the robot.
-  
-## getPosY()
+
+*Example*: If the current X position of the robot is 75, change its direction of 90 degreese and move it towards that direction decreasing the speed by one point.
+
+```
+public void runTurn () {
+    move(0, 5);
+
+    if (getPosX() == 75)
+        move (90, 4);
+}
+```
+
+---
+
+### double getPosY()
 
 Get the current Y position of the robot.
-  
-## isAlive()
-This function returns *true* if the current robot is still alive, *false* if it's destroyed.
-You must enclose the logic of your robot inside a loop that checks its vital conditions each cycle.
-  
-Example:
+
+*Example*: If the current Y position of the robot is 50, change its direction of 90 degreese and move it towards that direction at the same speed.
+
 ```
-public void start() {
-    while (isAlive()) {
-        move(UP);
+public void runTurn() {
+    move(90, 2);
+
+    if (getPosY() == 50)
+        move(90, 2);
+}
+```
+
+---
+
+### boolean isAlive()
+
+Check if the robot is alive or not.
+
+*Example*: Keep the robot in the same position while it's alive.
+
+```
+public void runTurn() {
+    while(isAlive()) {
+        move(40, 0);
     }
 }
 ```
