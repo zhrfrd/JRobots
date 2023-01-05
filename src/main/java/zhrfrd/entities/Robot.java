@@ -89,13 +89,16 @@ public abstract class Robot extends Entity {
     	this.move(this.direction, this.speed);
     	this.draw();
     	
+    	// Update missile status only if it exists in the current cycle until its life cycle terminates
     	if (missileList != null && missileList.size() > 0) {
     	    this.missileLifeCounter ++;
     	    this.missile.update();
     	    
     	    if (missileLifeCounter >= missileLifeSpan) {
+    		System.out.println("EXPOLDED");   // This keeps running despite the missile is dead. It should run only once.
     		this.missile.explode();
     	    	this.cleanMissiles();
+    	    	missileLifeCounter = 0;
     	    	isMissileShot = false;
     	    }
     	}
@@ -113,6 +116,7 @@ public abstract class Robot extends Entity {
 //	    return;
 	
 	if (!isMissileShot) {
+	    System.out.println("Missile shot");   // This keeps running even when the missile should be dead
 	    isMissileShot = true;
 	
             missileList = new ArrayList<Missile>();
@@ -121,6 +125,7 @@ public abstract class Robot extends Entity {
             missileList.add(missile);
             missile.begin();
         	
+            System.out.println(this.missileList.size());
             this.getParent().add(missile);
 //            isMissileShot = false;
 	}
@@ -185,7 +190,7 @@ public abstract class Robot extends Entity {
 //    }
 
     /**
-     * Checks if some missile is dead and removes it from the battlefield.
+     * Check if some missile is dead and, if yes, remove it from the battlefield.
      */
     private void cleanMissiles() {
 	if (this.missileList == null || this.missileList.size() == 0)
@@ -194,7 +199,7 @@ public abstract class Robot extends Entity {
 	int i = 0;
 
 	while (i < this.missileList.size()) {
-	    Missile missile = this.missileList.get(i);
+//	    Missile missile = this.missileList.get(i);
 //	    Thread missileThread = this.missilesThreads.get(i);
 
 	    if (missile != null) {
@@ -202,6 +207,7 @@ public abstract class Robot extends Entity {
 		this.getParent().validate();
 		this.getParent().repaint();
 		this.missileList.remove(i);
+		System.out.println(this.missileList.size());
 //		this.missilesThreads.remove(i);
 	    } else
 		i++;
