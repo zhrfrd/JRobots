@@ -42,11 +42,7 @@ public abstract class Entity extends JLabel {
     public Entity(ENTITY_ICON icon) throws IOException {
 	this.initializeEntityIcon(icon);
     }
-
-    /**
-     * getters and setters
-     */
-
+    
     /**
      * Get the width of the battlefield.
      */
@@ -111,10 +107,6 @@ public abstract class Entity extends JLabel {
     }
 
     /**
-     * Methods
-     */
-
-    /**
      * Set the entity's starting position.
      */
     protected abstract void setStartingPosition();
@@ -123,7 +115,6 @@ public abstract class Entity extends JLabel {
      * Load the main entity icon.
      * 
      * @param icon The type of icon to load.
-     * 
      * @throws IOException When the icon is not found.
      */
     protected void initializeEntityIcon(ENTITY_ICON icon) throws IOException {
@@ -149,9 +140,7 @@ public abstract class Entity extends JLabel {
      * Loads an icon to be used by the entity.
      * 
      * @param icon The icon to load.
-     * 
      * @return The icon file as ImageIcon.
-     * 
      * @throws IOException Then the file cannot be loaded properly.
      */
     private BufferedImage loadIcon(String icon) throws IOException {
