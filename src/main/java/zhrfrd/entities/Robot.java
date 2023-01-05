@@ -8,8 +8,6 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
-import zhrfrd.jrobots.JRobots;
-
 public abstract class Robot extends Entity {
     private static final long serialVersionUID = -2377133046121834448L;
 
@@ -95,7 +93,7 @@ public abstract class Robot extends Entity {
     	    this.missile.update();
     	    
     	    if (missileLifeCounter >= missileLifeSpan) {
-    		System.out.println("EXPOLDED");   // This keeps running despite the missile is dead. It should run only once.
+    		System.out.println("EXPOLDED");
     		this.missile.explode();
     	    	this.cleanMissiles();
     	    	missileLifeCounter = 0;
@@ -104,19 +102,16 @@ public abstract class Robot extends Entity {
     	}
     }
     
-    /*
-     * Shoot a missile towards the direction specified that will land in the range
-     * specified. Only one missileList can be shot at one time per robot.
+    /**
+     * Shot a missile towards the direction specified
+     * @param direction The direction towards where the missile is shot
+     * @throws IOException
      */
     public final void shoot(int direction) throws IOException {
 	if (missileList != null && missileList.size() > 0)
 	    return;
 	
-//	if (isMissileShot)
-//	    return;
-	
 	if (!isMissileShot) {
-	    System.out.println("Missile shot");   // This keeps running even when the missile should be dead
 	    isMissileShot = true;
 	
             missileList = new ArrayList<Missile>();
@@ -127,13 +122,7 @@ public abstract class Robot extends Entity {
         	
             System.out.println(this.missileList.size());
             this.getParent().add(missile);
-//            isMissileShot = false;
 	}
-
-//	if (missileList == null)
-//	    missileList = new ArrayList<Missile>();
-
-//	missileList.add(missile);
     }
 
     /**
@@ -180,15 +169,6 @@ public abstract class Robot extends Entity {
 	return false;
     }
 
-    abstract protected void runTurn();
-
-    /**
-     * Start the robot in the battlefield.
-     */
-//    public final void start() {
-//	super.start();
-//    }
-
     /**
      * Check if some missile is dead and, if yes, remove it from the battlefield.
      */
@@ -199,42 +179,16 @@ public abstract class Robot extends Entity {
 	int i = 0;
 
 	while (i < this.missileList.size()) {
-//	    Missile missile = this.missileList.get(i);
-//	    Thread missileThread = this.missilesThreads.get(i);
-
 	    if (missile != null) {
 		this.getParent().remove(missile);
 		this.getParent().validate();
 		this.getParent().repaint();
 		this.missileList.remove(i);
 		System.out.println(this.missileList.size());
-//		this.missilesThreads.remove(i);
 	    } else
 		i++;
 	}
     }
     
-    // The run method contains the game loop responsible for the movements and
-    // animation in the battlefield
-//    @Override
-//    public final void run() {
-//	this.start();
-//
-//	while (this.isAlive()) {
-//	    this.update();
-////	    this.hasMoved = false;
-////	    this.runTurn();
-////	    this.move(this.direction, this.speed);
-////	    this.draw();
-////
-////	    this.cleanMissiles();
-//
-////	    try {
-////		Thread.sleep(10);
-////	    } catch (InterruptedException e) {
-////		// TODO Auto-generated catch block
-////		e.printStackTrace();
-////	    }
-//	}
-//    }
+    abstract protected void runTurn();
 }
