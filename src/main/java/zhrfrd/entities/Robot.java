@@ -92,9 +92,9 @@ public abstract class Robot extends Entity {
     	    this.missileLifeCounter ++;
     	    this.missile.update();
     	    
-    	    if (missileLifeCounter >= missileLifeSpan) {
-    		System.out.println("EXPOLDED");
-    		this.missile.explode();
+    	    System.out.println(missile.getPosX() + " " + missile.getPosY());
+    	    
+    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
     	    	this.cleanMissiles();
     	    	missileLifeCounter = 0;
     	    	isMissileShot = false;
@@ -119,8 +119,7 @@ public abstract class Robot extends Entity {
         	
             missileList.add(missile);
             missile.begin();
-        	
-            System.out.println(this.missileList.size());
+            
             this.getParent().add(missile);
 	}
     }
@@ -172,7 +171,7 @@ public abstract class Robot extends Entity {
     /**
      * Check if some missile is dead and, if yes, remove it from the battlefield.
      */
-    private void cleanMissiles() {
+    protected void cleanMissiles() {
 	if (this.missileList == null || this.missileList.size() == 0)
 	    return;
 
@@ -180,11 +179,11 @@ public abstract class Robot extends Entity {
 
 	while (i < this.missileList.size()) {
 	    if (missile != null) {
+		System.out.println(this.getParent());
 		this.getParent().remove(missile);
 		this.getParent().validate();
 		this.getParent().repaint();
 		this.missileList.remove(i);
-		System.out.println(this.missileList.size());
 	    } else
 		i++;
 	}

@@ -210,7 +210,7 @@ public abstract class Entity extends JLabel {
     /**
      * Kills the entity instantly.
      */
-    public void commitSuicide() {
+    public void die() {
 	this.life = 0;
     }
 

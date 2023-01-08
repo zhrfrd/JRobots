@@ -45,21 +45,11 @@ public class Missile extends Entity {
 
 	this.posX = Math.max(0, Math.min(100, newPosX));
 	this.posY = Math.max(0, Math.min(100, newPosY));
-
-	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100)
-	    this.explode();
     }
 
-    /**
-     * Explode missile.
-     */
-    protected void explode() {
-	this.commitSuicide();
-    }
 
     @Override
     public void begin() {
-	System.out.println("start()");
 	this.setStartingPosition();
 
 	this.speed = 3;

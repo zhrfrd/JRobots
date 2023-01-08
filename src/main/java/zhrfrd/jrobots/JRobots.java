@@ -231,11 +231,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	int index = firstLineFile.indexOf(" ");
 	// Extract ONLY package name from the first line of the file
 	StringBuffer strPackageRobot = new StringBuffer(firstLineFile).replace(0, index + 1, "");
-	// Get the class name removing the .java extension from the file name (for
-	// convention class name = to file name)
+	// Get the class name removing the .java extension from the file name (for convention class name = to file name)
 	String className = fileRobot.getName().replace(".java", "");
-	// Merge package name and class name to create the full class name necessary for
-	// loading the robot
+	// Merge package name and class name to create the full class name necessary for loading the robot
 	String fullClass = (strPackageRobot + "." + className).replace(";", "");
 
 	return fullClass;
