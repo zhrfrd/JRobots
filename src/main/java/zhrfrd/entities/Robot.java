@@ -92,8 +92,6 @@ public abstract class Robot extends Entity {
     	    this.missileLifeCounter ++;
     	    this.missile.update();
     	    
-    	    System.out.println(missile.getPosX() + " " + missile.getPosY());
-    	    
     	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
     	    	this.cleanMissiles();
     	    	missileLifeCounter = 0;

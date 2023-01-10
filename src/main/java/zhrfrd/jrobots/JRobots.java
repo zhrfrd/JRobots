@@ -36,6 +36,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     private JPanel panelMain, panelRightMenuContainer, panelStartController, panelRobotsContainer;
     public JPanel panelBattleField;
     private JButton buttonStart;
+    private JButton buttonPause;
+    private JButton buttonReset;
+    private JButton buttonRestart;
     private ArrayList<JPanel> panelRobot;
     private ArrayList<JButton> buttonsLoad;
     private ArrayList<JLabel> labelPathRobot;
@@ -50,8 +53,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static ImageIcon imageIcon;
     static String firstLineFile = "";
     private Thread threadMain;
-    boolean isBattleStarted = false;
-//    private Thread[] threadRobots;
+    private boolean isBattleStopped = false;
     final int FPS = 60;
 
     /**
@@ -92,18 +94,26 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	this.buttonStart = new JButton("Start!");
 	this.buttonStart.addActionListener(this);
+	this.buttonPause = new JButton("Pause");
+	this.buttonPause.addActionListener(this);
+	this.buttonReset = new JButton("Reset");
+	this.buttonReset.addActionListener(this);
+	this.buttonRestart = new JButton("Restart");
+	this.buttonRestart.addActionListener(this);
 
 	this.panelStartController = new JPanel();
 	this.panelStartController.setBackground(Color.black);
-	this.panelStartController.setLayout(new GridBagLayout());
+	this.panelStartController.setLayout(new GridLayout(4, 0));
 	this.panelStartController.add(this.buttonStart);
+	this.panelStartController.add(this.buttonPause);
+	this.panelStartController.add(this.buttonReset);
+	this.panelStartController.add(this.buttonRestart);
 
 	this.panelRobot = new ArrayList<JPanel>();
 	this.buttonsLoad = new ArrayList<JButton>();
 	this.labelPathRobot = new ArrayList<JLabel>();
 	this.labelLifeRobot = new ArrayList<JLabel>();
 	this.fullClassRobots = new ArrayList<String>();
-//	this.robot = new ArrayList<Robot>();
 
 	for (int i = 0; i < 4; i++) {
 	    JButton buttonLoad = new JButton("Load robot " + (i + 1));
@@ -208,12 +218,6 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		e1.printStackTrace();
 	    }
 	}
-
-//	for (Thread robot : this.threadRobots) {
-//	    robot.start();
-//	}
-
-	isBattleStarted = true;
     }
 
     /*
@@ -241,15 +245,21 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     
     /**
      * Update game's information every 0.01666 seconds (60fps).
+     * 
+     * @throws IOException 
      */
-    public void update() {
-	// Update robots status
-	for (int i = 0; i < robot.length; i ++) 
-	    if (robot[i] != null)
-		robot[i].update();
-    }
-
-    public void render() {
+    public void update() throws IOException {
+	if (isBattleStopped) {
+	    this.threadMain.interrupt();
+	    panelBattleField.removeAll();
+	    panelBattleField.revalidate();
+	    panelBattleField.repaint();
+	}
+	
+	else if (!isBattleStopped)
+	    for (int i = 0; i < robot.length; i ++) 
+		if (robot[i] != null)
+		    robot[i].update();
     }
 
     @Override
@@ -272,8 +282,15 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	if (e.getSource() == buttonsLoad.get(3))
 	    loadRobot(labelPathRobot.get(3));
 
-	if (e.getSource() == buttonStart)
+	if (e.getSource() == buttonStart) {
 	    startBattle();
+	    buttonStart.setEnabled(false);
+	}
+	
+	if (e.getSource() == buttonReset) {
+	    isBattleStopped = true;
+	    buttonStart.setEnabled(true);
+	}
     }
 
     @Override
@@ -291,8 +308,12 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	    // Every 0.01666 seconds (60 FPS)
 	    if (delta >= 1) {
-		update(); // Update information such as character position
-//		repaint(); // Call paintComponent() to draw the screen with the updated information
+		try {
+		    update();
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		} // Update information such as robot position
 
 		delta--;
 	    }
