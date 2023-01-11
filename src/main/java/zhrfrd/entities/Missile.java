@@ -1,5 +1,6 @@
 package zhrfrd.entities;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
@@ -47,6 +48,15 @@ public class Missile extends Entity {
 	this.posY = Math.max(0, Math.min(100, newPosY));
     }
 
+    /**
+     * Retrieve the specific color of the particles.
+     * 
+     * @return The RGB color code of the particle.
+     */
+    protected Color getParticleColor() {
+	Color color = new Color(65, 50, 30);
+	return color;
+    }
 
     @Override
     public void begin() {

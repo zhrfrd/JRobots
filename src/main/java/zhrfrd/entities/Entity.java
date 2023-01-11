@@ -30,6 +30,8 @@ public abstract class Entity extends JLabel {
      * Current entity status
      */
     protected int life, direction, speed;
+    
+    protected int maxLife;
 
     /**
      * The icon will rotate depending on the current entity direction

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -32,17 +31,23 @@ import zhrfrd.entities.Robot;
 
 public class JRobots extends JFrame implements ActionListener, Runnable {
     private static final long serialVersionUID = -3190346657795484951L;
+    private static JRobots frame;
     private JFileChooser fileChooser;
     private JPanel panelMain, panelRightMenuContainer, panelStartController, panelRobotsContainer;
     public JPanel panelBattleField;
     private JButton buttonStart;
+    private JButton buttonPause;
+    private JButton buttonReset;
+    private JButton buttonRestart;
     private ArrayList<JPanel> panelRobot;
     private ArrayList<JButton> buttonsLoad;
     private ArrayList<JLabel> labelPathRobot;
     private ArrayList<JLabel> labelLifeRobot;
     private ArrayList<String> fullClassRobots;
 //    private ArrayList<Robot> robot;
-    private Robot robot[] = new Robot[4];
+    final int FPS = 60;
+    final int MAX_ROBOTS = 4;
+    private Robot robot[] = new Robot[MAX_ROBOTS];
     private ArrayList<Missile> missileList = new ArrayList<>();
     static File fileRobot;
     static BufferedReader fileReader;
@@ -50,9 +55,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static ImageIcon imageIcon;
     static String firstLineFile = "";
     private Thread threadMain;
-    boolean isBattleStarted = false;
-//    private Thread[] threadRobots;
-    final int FPS = 60;
+    private boolean isBattleStopped = false;
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -67,12 +70,11 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      * @param args
      */
     public static void main(String[] args) {
-	JRobots frame = new JRobots();
-	frame.start();
+	frame = new JRobots();
     }
 
     /**
-     * Creates the layout with all depending objects
+     * Create the layout of the game's window by positioning all the components in their position
      */
     private void initializeLayout() {
 	this.panelMain = new JPanel();
@@ -92,20 +94,28 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	this.buttonStart = new JButton("Start!");
 	this.buttonStart.addActionListener(this);
+	this.buttonPause = new JButton("Pause");
+	this.buttonPause.addActionListener(this);
+	this.buttonReset = new JButton("Reset");
+	this.buttonReset.addActionListener(this);
+	this.buttonRestart = new JButton("Restart");
+	this.buttonRestart.addActionListener(this);
 
 	this.panelStartController = new JPanel();
 	this.panelStartController.setBackground(Color.black);
-	this.panelStartController.setLayout(new GridBagLayout());
+	this.panelStartController.setLayout(new GridLayout(4, 0));
 	this.panelStartController.add(this.buttonStart);
+	this.panelStartController.add(this.buttonPause);
+	this.panelStartController.add(this.buttonReset);
+	this.panelStartController.add(this.buttonRestart);
 
 	this.panelRobot = new ArrayList<JPanel>();
 	this.buttonsLoad = new ArrayList<JButton>();
 	this.labelPathRobot = new ArrayList<JLabel>();
 	this.labelLifeRobot = new ArrayList<JLabel>();
 	this.fullClassRobots = new ArrayList<String>();
-//	this.robot = new ArrayList<Robot>();
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < MAX_ROBOTS; i++) {
 	    JButton buttonLoad = new JButton("Load robot " + (i + 1));
 	    buttonLoad.addActionListener(this);
 	    JLabel labelPathRobot = new JLabel("Path: ");
@@ -156,8 +166,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	this.setLocationRelativeTo(null);
     }
 
-    /*
-     * Create and start the main thread
+    /**
+     * Create and start the main thread when the user presses the Start! button.
      */
     public void start() {
 	threadMain = new Thread(this, "Thread main");
@@ -208,16 +218,14 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 		e1.printStackTrace();
 	    }
 	}
-
-//	for (Thread robot : this.threadRobots) {
-//	    robot.start();
-//	}
-
-	isBattleStarted = true;
+	
+	frame.start();
     }
 
-    /*
-     * Get the full class name of the robot (eg: packagefolder.subpackagefolder.Classname)
+    /**
+     * Get the full class name of the robot to be used to locate the robot's file.
+     * 
+     * @return The class name of the robot in this format: packagefolder.subpackagefolder.Classname
      */
     private String extractFullClassRobot() {
 	// Read the first line of the file
@@ -241,15 +249,28 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     
     /**
      * Update game's information every 0.01666 seconds (60fps).
+     * 
+     * @throws IOException 
      */
-    public void update() {
-	// Update robots status
-	for (int i = 0; i < robot.length; i ++) 
-	    if (robot[i] != null)
-		robot[i].update();
+    public void update() throws IOException {
+	if (isBattleStopped)
+	    resetGame();
+	
+	else if (!isBattleStopped)
+	    for (int i = 0; i < robot.length; i ++) 
+		if (robot[i] != null)
+		    robot[i].update();
     }
-
-    public void render() {
+    
+    /**
+     * Reset game by interrupting the main thread and clearing out the battlefield's JPanel.
+     */
+    private void resetGame() {
+	System.out.println("Reset game");
+	this.threadMain.interrupt();
+	this.panelBattleField.removeAll();
+	this.panelBattleField.revalidate();
+	this.panelBattleField.repaint();
     }
 
     @Override
@@ -272,8 +293,15 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	if (e.getSource() == buttonsLoad.get(3))
 	    loadRobot(labelPathRobot.get(3));
 
-	if (e.getSource() == buttonStart)
+	if (e.getSource() == buttonStart) {
 	    startBattle();
+	    buttonStart.setEnabled(false);
+	}
+	
+	if (e.getSource() == buttonReset) {
+	    isBattleStopped = true;
+	    buttonStart.setEnabled(true);
+	}
     }
 
     @Override
@@ -285,14 +313,22 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	// Game loop
 	while (true) {
+	    System.out.println("Running gameloop");
 	    currentTime = System.nanoTime();
 	    delta += (currentTime - lastTime) / drawInterval;
 	    lastTime = currentTime;
 
 	    // Every 0.01666 seconds (60 FPS)
 	    if (delta >= 1) {
-		update(); // Update information such as character position
-//		repaint(); // Call paintComponent() to draw the screen with the updated information
+		try {
+		    update();
+		    
+		    if (isBattleStopped) 
+			break;
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
 
 		delta--;
 	    }
