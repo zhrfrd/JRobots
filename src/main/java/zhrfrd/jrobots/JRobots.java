@@ -47,7 +47,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 //    private ArrayList<Robot> robot;
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
-    private Robot robot[] = new Robot[MAX_ROBOTS];
+    private Robot robot[];
     private ArrayList<Missile> missileList = new ArrayList<>();
     static File fileRobot;
     static BufferedReader fileReader;
@@ -182,6 +182,8 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      *                       robot created by the user.
      */
     private void loadRobot(JLabel labelPathRobot) {
+	resetFullClassRobots();
+	
 	fileChooser = new JFileChooser();
 	int response = fileChooser.showOpenDialog(null);
 	String fullClass = "";
@@ -193,12 +195,23 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	fullClassRobots.add(fullClass);
 	labelPathRobot.setText(fullClass);
     }
+    
+    /**
+     * Remove all the classed saved inside the fullClassRobots array list.
+     */
+    private void resetFullClassRobots() {
+	for (int i = 0; i < this.fullClassRobots.size(); i ++)
+	    this.fullClassRobots.remove(i);
+    }
 
     /**
      * Start the battle by getting the full class of each robot and creating a new
      * instance of Robot passing JRobots as parameter.
      */
     private void startBattle() {
+	robot = new Robot[MAX_ROBOTS];
+	System.out.println(robot.length);
+	
 	Class<?> classRobot = null;
 	Constructor<?> constructorRobot;
 //	this.threadRobots = new Thread[fullClassRobots.size()];
@@ -267,6 +280,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      */
     private void resetGame() {
 	System.out.println("Reset game");
+	this.isBattleStopped = false;
 	this.threadMain.interrupt();
 	this.panelBattleField.removeAll();
 	this.panelBattleField.revalidate();
@@ -313,7 +327,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	// Game loop
 	while (true) {
-	    System.out.println("Running gameloop");
+//	    System.out.println("Running gameloop");
 	    currentTime = System.nanoTime();
 	    delta += (currentTime - lastTime) / drawInterval;
 	    lastTime = currentTime;
