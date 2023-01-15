@@ -56,6 +56,7 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     static String firstLineFile = "";
     private Thread threadMain;
     private boolean isBattleStopped = false;
+    private boolean isBattlePaused = false;
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -267,9 +268,9 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
      */
     public void update() throws IOException {
 	if (isBattleStopped)
-	    resetGame();
+	    resetBattle();
 	
-	else if (!isBattleStopped)
+	else if (!isBattleStopped && !isBattlePaused)
 	    for (int i = 0; i < robot.length; i ++) 
 		if (robot[i] != null)
 		    robot[i].update();
@@ -278,13 +279,28 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
     /**
      * Reset game by interrupting the main thread and clearing out the battlefield's JPanel.
      */
-    private void resetGame() {
+    private void resetBattle() {
 	System.out.println("Reset game");
 	this.isBattleStopped = false;
 	this.threadMain.interrupt();
 	this.panelBattleField.removeAll();
 	this.panelBattleField.revalidate();
 	this.panelBattleField.repaint();
+    }
+    
+    /**
+     * Pause the battle thread.
+     */
+    private void pauseBattle() {
+	if (!this.isBattlePaused) {
+//	    this.threadMain.interrupt();
+	    this.isBattlePaused = true;
+	}
+	
+	else if (this.isBattlePaused) {
+//	    this.threadMain.notify();
+	    this.isBattlePaused = false;
+	}
     }
 
     @Override
@@ -312,7 +328,18 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 	    buttonStart.setEnabled(false);
 	}
 	
+	if (e.getSource() == buttonPause) {
+	    pauseBattle();
+	    buttonStart.setEnabled(false);
+	}
+	
+	
 	if (e.getSource() == buttonReset) {
+	    isBattleStopped = true;
+	    buttonStart.setEnabled(true);
+	}
+	
+	if (e.getSource() == buttonRestart) {
 	    isBattleStopped = true;
 	    buttonStart.setEnabled(true);
 	}
@@ -327,6 +354,13 @@ public class JRobots extends JFrame implements ActionListener, Runnable {
 
 	// Game loop
 	while (true) {
+	    if (this.isBattlePaused)
+		try {
+		    this.threadMain.wait();
+		} catch (InterruptedException e1) {
+		    // TODO Auto-generated catch block
+		    e1.printStackTrace();
+		}
 //	    System.out.println("Running gameloop");
 	    currentTime = System.nanoTime();
 	    delta += (currentTime - lastTime) / drawInterval;
