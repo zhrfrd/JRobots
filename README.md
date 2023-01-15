@@ -27,7 +27,7 @@ Clone this repository inside your workspace:
 If you don't have Maven installed in your machine:
 
 - Go to [Maven's download page]()
-- Go to the [download page](https://maven.apache.org/download.cgi) and, under the **Files** section, select the link relative to the **Binary zip archive**.
+- Under the **Files** section, select the link relative to the **Binary zip archive**.
 
 ### MacOS and Linux
 
