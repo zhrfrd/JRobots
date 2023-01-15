@@ -14,6 +14,7 @@ This is a Java project that uses unit testing with [Maven](https://maven.apache.
 Recommended IDE's:
 
 - [Eclipse](https://www.eclipse.org/downloads/).
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/).
 - [VS Code](https://code.visualstudio.com/).
 
 ## 2. Clone
