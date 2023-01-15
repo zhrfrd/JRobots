@@ -45,6 +45,10 @@ public abstract class Entity extends JLabel {
 	this.initializeEntityIcon(icon);
     }
     
+    public Entity() {
+	
+    }
+    
     /**
      * Get the width of the battlefield.
      */

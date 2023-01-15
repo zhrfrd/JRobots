@@ -1,9 +1,74 @@
 # JRobots
+
 JRobots is a programming game similar to [CRobots](https://crobots.deepthought.it/home.php). The objective of the game is to code your own robot and fight against other robots.
 
 **JRobots is still in development**, which means that it's still not fully functional so, if you want to contribute to the code base you are more than welcome ;) Just read the [CONTRIBUTING.md](CONTRIBUTING.md) file to understand how to set up the project and our guidelines. 
 
-## 1. How to use JRobots
+## 1. Requirements
+
+This is a Java project that uses unit testing with [Maven](https://maven.apache.org/).
+
+- [Java](https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-macos.htm#JSJIG-GUID-577CEA7C-E51C-416D-B9C6-B1469F45AC78) (Java 19 recommended).
+- [Maven](https://maven.apache.org/).
+
+Recommended IDE's:
+
+- [Eclipse](https://www.eclipse.org/downloads/).
+- [VS Code](https://code.visualstudio.com/).
+
+## 2. Clone
+
+Clone this repository inside your workspace:
+
+`git clone git@github.com:zhrfrd/JRobots.git`
+
+## 3. Install Maven
+
+If you don't have Maven installed in your machine:
+
+- Go to [Maven's download page]()
+- Go to the [download page](https://maven.apache.org/download.cgi) and, under the **Files** section, select the link relative to the **Binary zip archive**.
+
+### MacOS and Linux
+
+- Extract the downloaded content inside any chosen folder. In my case I decided to extract it inside the Library folder.
+- Open your terminal and go to HOME by typing:
+
+`cd $HOME`
+
+- and open the .zshrc file
+
+`cat > .zshrc`
+
+- Add Maven to the PATH environment variable by typing the two lines below, press **control** + **D** to save the file (If you saved correctly you should be able to see the new PATH by typing `car .zshrc`) and close the terminal:
+
+```
+export MAVEN_HOME=$HOME/Library/apache-maven-3.8.6
+export PATH=$MAVEN_HOME/bin:$PATH
+```
+
+### Windows
+
+- Extract the downloaded content inside any chosen folder. In my case I decided to extract it inside the Program Files folder.
+- Open the System Properties by pressing **WinKey** + **Pause**.
+- Go to **Advanced** tab.
+- Select **Environment Variables**.
+- Add the **PATH** to the user variables i.e. `C:\Program Files\apache-maven-3.8.7\bin`.
+
+If the installation has been completed correctly, you should be able to verify the Maven version by typing:
+
+`mvn -v`
+
+## 4. Configure Maven (Eclipse)
+
+To configure Maven make sure first to add the cloned project to the Project Explorer section.
+
+- Right click on the JRobots repository.
+- Select **Maven**.
+- Select **Update Project..**.
+
+## 5. Build your JRobot
+
 The syntax of JRobots is based on Java and, in order to create your own robot, you can use the different methods of the JRobots API listed below.
 
 ---
