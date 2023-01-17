@@ -7,7 +7,11 @@ public class Particle extends Entity {
     Color color;
     int size;
 
+<<<<<<< HEAD
     public Particle(double startX, double startY, Color color) {
+=======
+    public Particle(double startX, double startY, Color color, int directionParticle) {
+>>>>>>> d9215388247c8214d9b1637491408cac8726ba29
 	this.color = color;
     }
     

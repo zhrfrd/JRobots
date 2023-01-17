@@ -78,8 +78,9 @@ public abstract class Robot extends Entity {
     
     /**
      * Update robot status
+     * @throws IOException 
      */
-    public void update() {
+    public void update() throws IOException {
 	if (!isRobotStarted) {
 	    this.setStartingPosition();
 	    isRobotStarted = true;
@@ -99,8 +100,15 @@ public abstract class Robot extends Entity {
     	    	this.cleanMissiles();
     	    	
     	    	//TODO Add and improve particles generation
+<<<<<<< HEAD
     	    	for (int i = 0; i < 10; i ++)
     	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle));
+=======
+    	    	for (int i = 0; i < 10; i ++) {
+    	    	    int directionParticle = 0;
+    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle));
+    	    	}
+>>>>>>> d9215388247c8214d9b1637491408cac8726ba29
     	    	
     	    	missileLifeCounter = 0;
     	    	isMissileShot = false;
