@@ -13,8 +13,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -243,12 +241,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 	
 	if (e.getSource() == buttonReset) {
-	    isBattleStopped = true;
+	    battlefield.isBattleStopped = true;
 	    buttonStart.setEnabled(true);
 	}
 	
 	if (e.getSource() == buttonRestart) {
-	    isBattleStopped = true;
+	    battlefield.isBattleStopped = true;
 	    buttonStart.setEnabled(true);
 	}
     }

@@ -3,16 +3,13 @@ package zhrfrd.jrobots;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import zhrfrd.entities.Missile;
@@ -32,8 +29,8 @@ public class Battlefield extends JPanel implements Runnable {
     static ImageIcon imageIcon;
     static String firstLineFile = "";
     private Thread threadBattle;
-    private boolean isBattleStopped = false;
-    private boolean isBattlePaused = false;
+    protected boolean isBattleStopped = false;
+    protected boolean isBattlePaused = false;
     protected JFileChooser fileChooser;
     
     /**
@@ -86,8 +83,6 @@ public class Battlefield extends JPanel implements Runnable {
 	}
     }
     
-    
-
     /**
      * Start the battle by getting the full class of each robot and creating a new
      * instance of Robot passing JRobots as parameter.
@@ -118,8 +113,6 @@ public class Battlefield extends JPanel implements Runnable {
 	
 	start();
     }
-
-    
 
     @Override
     public void run() {
