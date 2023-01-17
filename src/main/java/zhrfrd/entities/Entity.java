@@ -41,6 +41,9 @@ public abstract class Entity extends JLabel {
     protected Image icon;
     protected Dimension size;
 
+    public Entity() {
+    }
+    
     public Entity(ENTITY_ICON icon) throws IOException {
 	this.initializeEntityIcon(icon);
     }
