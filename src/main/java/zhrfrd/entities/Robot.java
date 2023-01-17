@@ -1,5 +1,6 @@
 package zhrfrd.entities;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,8 @@ public abstract class Robot extends Entity {
     protected boolean isMissileShot = false;
     int missileLifeCounter = 0;
     int missileLifeSpan = 120;
+    Color colorMissileParticle;
+    Color colorRobotParticle;
 
     public Robot() throws IOException {
 	super(ENTITY_ICON.ROBOT);
@@ -75,8 +78,9 @@ public abstract class Robot extends Entity {
     
     /**
      * Update robot status
+     * @throws IOException 
      */
-    public void update() {
+    public void update() throws IOException {
 	if (!isRobotStarted) {
 	    this.setStartingPosition();
 	    isRobotStarted = true;
@@ -94,6 +98,13 @@ public abstract class Robot extends Entity {
     	    
     	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
     	    	this.cleanMissiles();
+    	    	
+    	    	//TODO Add and improve particles generation
+    	    	for (int i = 0; i < 10; i ++) {
+    	    	    int directionParticle = 0;
+    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle));
+    	    	}
+    	    	
     	    	missileLifeCounter = 0;
     	    	isMissileShot = false;
     	    }
