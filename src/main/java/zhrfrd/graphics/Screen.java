@@ -10,28 +10,21 @@ public class Screen {
 	this.height = height;
 	pixels = new int[width * height];
     }
-
-    // Methods
-
-    /*
-     * Render missile sprite
+    
+    /**
+     * Render each pixel of the battlefield assigning it a color value
      */
-    public void renderMissile() {
-
+    public void render() {
+	for (int y = 0; y < height; y ++)
+	    for (int x = 0; x < width; x ++)
+		pixels[x + (y  * width)] = 0xff00ff;
     }
-
-    /*
-     * Render robot sprite
-     */
-    public void renderRobot() {
-
-    }
-
-    /*
-     * Clear screen
+    
+    /**
+     * Reset all the pixels to 0 in order to refresh at each loop the battlefield.
      */
     public void clear() {
-	for (int i = 0; i < pixels.length; i++)
+	for (int i = 0; i < pixels.length; i ++)
 	    pixels[i] = 0;
     }
 }

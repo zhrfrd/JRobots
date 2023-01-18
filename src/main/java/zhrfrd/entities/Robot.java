@@ -1,6 +1,8 @@
 package zhrfrd.entities;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -100,15 +102,12 @@ public abstract class Robot extends Entity {
     	    	this.cleanMissiles();
     	    	
     	    	//TODO Add and improve particles generation
-<<<<<<< HEAD
-    	    	for (int i = 0; i < 10; i ++)
-    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle));
-=======
     	    	for (int i = 0; i < 10; i ++) {
-    	    	    int directionParticle = 0;
-    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle));
+    	    	    Random random = new Random();
+    	    	    int directionParticle = random.nextInt(359 - 0 + 1) + 0;
+//    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle).draw());
+    	    	    System.out.println(directionParticle);
     	    	}
->>>>>>> d9215388247c8214d9b1637491408cac8726ba29
     	    	
     	    	missileLifeCounter = 0;
     	    	isMissileShot = false;

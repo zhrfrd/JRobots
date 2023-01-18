@@ -54,6 +54,9 @@ public class MainFrame extends JFrame implements ActionListener {
     
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
+    
+    int width = 480;
+    int height = 270;
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -135,9 +138,10 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelMain.add(panelRightMenuContainer);
 
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	Dimension minimumSize = new Dimension(480, 270);
+	Dimension minimumSize = new Dimension(width, height);
 
 	setMinimumSize(minimumSize);
+	
 	setPreferredSize(new Dimension(screenSize.width * 8 / 10, screenSize.height * 8 / 10));
 	panelRightMenuContainer.setMinimumSize(new Dimension(screenSize.width / 5, minimumSize.height));
 	panelRightMenuContainer.setPreferredSize(new Dimension(screenSize.width / 5, screenSize.height));

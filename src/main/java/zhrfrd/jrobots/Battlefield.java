@@ -1,6 +1,13 @@
 package zhrfrd.jrobots;
 
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,17 +19,27 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
+import zhrfrd.entities.Entity;
 import zhrfrd.entities.Missile;
+import zhrfrd.entities.Particle;
 import zhrfrd.entities.Robot;
+import zhrfrd.graphics.Screen;
 
-public class Battlefield extends JPanel implements Runnable {
+public class Battlefield extends Canvas implements Runnable {
     private static final long serialVersionUID = -2969862236631824201L;
     public JPanel panelBattleField;
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int width = screenSize.width - (screenSize.width / 5);
+    int height = screenSize.height;
 //    private ArrayList<Robot> robot;
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
     private Robot robot[];
-    private ArrayList<Missile> missileList = new ArrayList<>();
+    // TODO Change public to protected or private
+    public ArrayList<Entity> entitiesList = new ArrayList<>();
+    public ArrayList<Robot> robotsList = new ArrayList<>();
+    public ArrayList<Missile> missilesList = new ArrayList<>();
+    public ArrayList<Particle> particlesList = new ArrayList<>();
     static File fileRobot;
     static BufferedReader fileReader;
     static BufferedImage bufferedImage;
@@ -32,6 +49,19 @@ public class Battlefield extends JPanel implements Runnable {
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     protected JFileChooser fileChooser;
+    Screen screen;
+    /**
+     * Create an image for the battlefield. 
+     */
+    private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
+    /**
+     * Convert image to array of integers signaling the color of each pixel.
+     */
+    private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    
+    public Battlefield() {
+	this.screen = new Screen(width, height);
+    }
     
     /**
      * Create and start the main thread when the user presses the Start! button.
@@ -50,10 +80,48 @@ public class Battlefield extends JPanel implements Runnable {
 	if (isBattleStopped)
 	    resetBattle();
 	
-	else if (!isBattleStopped && !isBattlePaused)
+	else if (!isBattleStopped && !isBattlePaused) {
 	    for (int i = 0; i < robot.length; i ++) 
 		if (robot[i] != null)
 		    robot[i].update();
+	    
+	    for (int i = 0; i < particlesList.size(); i++)
+		if (particlesList.get(i) != null)
+		    particlesList.get(i).update();
+	}
+    }
+    
+    /**
+     * Render the Battlefield.
+     */
+    public void render() {
+	// Get actual buffer strategy from the object Battlefield (subclass of Canvas) and save it to bs. The first time you access render() bs is null.
+	BufferStrategy bufferStrategy = getBufferStrategy();
+	
+	// Called only once (the first time render() is accessed.
+	if (bufferStrategy == null) {
+		createBufferStrategy(3); // Triple buffering
+		return;
+	}
+	
+	screen.clear();
+	screen.render();
+	
+	for (int i = 0; i < pixels.length; i ++) {
+	    pixels[i] = screen.pixels[i];
+	}
+	
+	Graphics g = bufferStrategy.getDrawGraphics();
+	g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+	g.dispose();
+	bufferStrategy.show();
+	
+//	Graphics g = bs.getDrawGraphics();
+//	g.setColor(new Color(23, 45, 68));
+//	g.fillRect(0, 0, width, height);
+//	g.dispose();
+//	bs.show(); // Show the content of the buffer in queue
+//	System.out.println("kslfkjsldfjlksd");
     }
     
     /**
@@ -63,7 +131,7 @@ public class Battlefield extends JPanel implements Runnable {
 	System.out.println("Reset game");
 	isBattleStopped = false;
 	threadBattle.interrupt();
-	removeAll();
+//	removeAll();
 	revalidate();
 	repaint();
     }
@@ -104,7 +172,7 @@ public class Battlefield extends JPanel implements Runnable {
 //		this.threadRobots[i] = new Thread(newRobot);
 //		this.robot.add(newRobot);
 		robot[i] = newRobot;
-		add(robot[i]);
+//		add(robot[i]);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 		    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 		e1.printStackTrace();
@@ -113,6 +181,23 @@ public class Battlefield extends JPanel implements Runnable {
 	
 	start();
     }
+    
+    /**
+     * Automatically called method when the JPanel component is created to draw.
+     */
+//    @Override
+//    public void paintComponent(Graphics g) {
+//	super.paintComponent(g); // Must be done for the JPanel painting takes place
+//
+//	Graphics2D g2 = (Graphics2D)g;
+//	
+//	new Particle(40, 100, new Color(64, 47, 46), 0, 0, 500).draw(g2);
+//	
+//	// Add particles list to array list
+//	for (int i = 0; i < particlesList.size(); i++)
+//	    if (particlesList.get(i) != null)
+//		entitiesList.add(particlesList.get(i));
+//    }
 
     @Override
     public void run() {
@@ -137,15 +222,11 @@ public class Battlefield extends JPanel implements Runnable {
 
 	    // Every 0.01666 seconds (60 FPS)
 	    if (delta >= 1) {
-		try {
-		    update();
-		    
-		    if (isBattleStopped) 
-			break;
-		} catch (IOException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
+		//		    update();
+				    render();
+				    
+				    if (isBattleStopped) 
+					break;
 
 		delta--;
 	    }

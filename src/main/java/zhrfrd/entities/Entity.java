@@ -17,10 +17,6 @@ import javax.swing.JLabel;
 public abstract class Entity extends JLabel {
     private static final long serialVersionUID = -2678484620304652158L;
 
-    public static enum ENTITY_ICON {
-	ROBOT, MISSILE
-    };
-
     /**
      * Current entity position
      */
@@ -40,16 +36,16 @@ public abstract class Entity extends JLabel {
 
     protected Image icon;
     protected Dimension size;
+    
+    public static enum ENTITY_ICON {
+	ROBOT, MISSILE
+    };
 
     public Entity() {
     }
     
     public Entity(ENTITY_ICON icon) throws IOException {
 	this.initializeEntityIcon(icon);
-    }
-    
-    public Entity() {
-	
     }
     
     /**
