@@ -35,7 +35,7 @@ public class Battlefield extends Canvas implements Runnable {
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
     private Robot robot[];
-    // TODO Change public to protected or private
+    // TODO Change public to protected or private 
     public ArrayList<Entity> entitiesList = new ArrayList<>();
     public ArrayList<Robot> robotsList = new ArrayList<>();
     public ArrayList<Missile> missilesList = new ArrayList<>();

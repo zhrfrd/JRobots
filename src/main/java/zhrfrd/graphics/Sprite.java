@@ -6,7 +6,7 @@ public class Sprite {
     private int height, width;
     public int[] pixels;
     private SpriteSheet sheet;
-    public static Sprite grass = new Sprite(40, 0, 0, SpriteSheet.tiles); 
+    public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.tiles); 
     public static Sprite particle_explosion = new Sprite(3, 0xaaaaaa);
 
     /**
