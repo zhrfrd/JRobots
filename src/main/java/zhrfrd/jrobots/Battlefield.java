@@ -103,7 +103,7 @@ public class Battlefield extends Canvas implements Runnable {
 		createBufferStrategy(3); // Triple buffering
 		return;
 	}
-	
+	 
 	screen.clear();
 	screen.render();
 	

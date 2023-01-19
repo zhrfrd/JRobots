@@ -9,10 +9,10 @@ public class SpriteSheet {
     private String path;
     public final int SIZE;
     public int[] pixels;
-    public static SpriteSheet tiles = new SpriteSheet("/textures/spritesheet.png", 100);
+    public static SpriteSheet tiles = new SpriteSheet("/textures/spritesheet.png", 400);
 
     public SpriteSheet(String path, int size) {
-	this.path = path;
+	this.path = path; 
 	SIZE = size;
 	pixels = new int[SIZE * SIZE];
 	load();

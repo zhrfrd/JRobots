@@ -6,10 +6,16 @@ public class Sprite {
     private int height, width;
     public int[] pixels;
     private SpriteSheet sheet;
-    public static Sprite grass = new Sprite(10, 0, 0, SpriteSheet.tiles);
+    public static Sprite grass = new Sprite(40, 0, 0, SpriteSheet.tiles); 
     public static Sprite particle_explosion = new Sprite(3, 0xaaaaaa);
 
-    // Constructor
+    /**
+     * The sprite of a specific entity.
+     * @param size Size of the sprite in pixels.
+     * @param x X coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
+     * @param y Y coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
+     * @param sheet Spritesheet containing the sprite.
+     */
     public Sprite(int size, int x, int y, SpriteSheet sheet) {
 	this.width = size;
 	this.height = size;

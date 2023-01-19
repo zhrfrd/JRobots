@@ -4,10 +4,11 @@ import java.util.Random;
 
 public class Screen {
     public int width, height;
-    public final int MAP_SIZE = 40;
-    public final int MAP_SIZE_MASK = MAP_SIZE - 1;
+//    public final int MAP_SIZE = 64;
+//    public final int MAP_SIZE_MASK = MAP_SIZE - 1;
     public int[] pixels;
-    public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
+    public int[] tiles = new int[10 * 10];
+    private int tileSize = 40;
     private Random random = new Random();
 
     // Constructor
@@ -16,7 +17,8 @@ public class Screen {
 	this.height = height;
 	pixels = new int[width * height];
 	
-	for (int i = 0; i < MAP_SIZE * MAP_SIZE; i ++)
+	// Random color for each tile
+	for (int i = 0; i < 10 * 10; i ++)
 	    tiles[i] = random.nextInt(0xffffff);
     }
     
@@ -32,10 +34,16 @@ public class Screen {
 		if (x < 0 || x >= width)
 		    break;
 		
-//		int tileIndex = (x / 40) + (y / 40) * 10;
+		int tileIndex = (x / tileSize) + (y / tileSize) * 10; // Tile that needs to be rendered at a particular position
+		pixels[x + y * width] = tiles[tileIndex];
+//		pixels[x + y * width] = Sprite.grass.pixels[(x & 39) + (y & 39) * Sprite.grass.SIZE];
+			
+//		System.out.println(tileIndex);
+//		pixels[x + y * width] = 0xff00ff;
+//		int tileIndex = (x / 32) + (y / 32) * 64;
 //		pixels[x + y + width] = tiles[tileIndex];
-		int tileIndex = ((x / 10) & MAP_SIZE_MASK) + ((y / 10) & MAP_SIZE_MASK)  * MAP_SIZE;
-		pixels[x + y  * width] = Sprite.grass.pixels[(x & 9) + (y & 9)  * Sprite.grass.SIZE];
+//		int tileIndex = ((x / 10) & MAP_SIZE_MASK) + ((y / 10) & MAP_SIZE_MASK)  * MAP_SIZE;
+//		pixels[x + y  * width] = Sprite.grass.pixels[(x & 9) + (y & 9)  * Sprite.grass.SIZE];
 	    }
 	}
     }

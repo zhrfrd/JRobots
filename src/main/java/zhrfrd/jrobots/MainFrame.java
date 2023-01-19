@@ -55,7 +55,7 @@ public class MainFrame extends JFrame implements ActionListener {
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     
-    static final int SCREEN_WIDTH = 1200;
+    static final int SCREEN_WIDTH = 1000;
     static final int SCREEN_HEIGHT = SCREEN_WIDTH / 3 * 2; // ASPECT RATIO 16:9
     static final int RIGHT_MENU_WIDTH = SCREEN_WIDTH - (SCREEN_WIDTH / 3);
     static final int RIGHT_MENU_HEIGHT = SCREEN_HEIGHT;
