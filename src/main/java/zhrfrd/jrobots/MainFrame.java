@@ -55,8 +55,13 @@ public class MainFrame extends JFrame implements ActionListener {
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     
-    int width = 480;
-    int height = 270;
+    static final int SCREEN_WIDTH = 1200;
+    static final int SCREEN_HEIGHT = SCREEN_WIDTH / 3 * 2; // ASPECT RATIO 16:9
+    static final int RIGHT_MENU_WIDTH = SCREEN_WIDTH - (SCREEN_WIDTH / 3);
+    static final int RIGHT_MENU_HEIGHT = SCREEN_HEIGHT;
+    static final int BATTLEFIELD_WIDTH = SCREEN_WIDTH - RIGHT_MENU_WIDTH;
+    static final int BATTLEFIELD_HEIGHT = BATTLEFIELD_WIDTH;
+
 
     /**
      * Creates the layout of the battlefield with all the related components
@@ -133,27 +138,31 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelRightMenuContainer.add(panelStartController);
 
 	panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.X_AXIS));
+	panelMain.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 	panelMain.setFocusable(true);
 	panelMain.add(battlefield);
 	panelMain.add(panelRightMenuContainer);
-
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	Dimension minimumSize = new Dimension(width, height);
-
-	setMinimumSize(minimumSize);
 	
-	setPreferredSize(new Dimension(screenSize.width * 8 / 10, screenSize.height * 8 / 10));
-	panelRightMenuContainer.setMinimumSize(new Dimension(screenSize.width / 5, minimumSize.height));
-	panelRightMenuContainer.setPreferredSize(new Dimension(screenSize.width / 5, screenSize.height));
-	panelRightMenuContainer.setMaximumSize(new Dimension(screenSize.width / 5, screenSize.height));
+	battlefield.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
+	panelRightMenuContainer.setPreferredSize(new Dimension(SCREEN_WIDTH - SCREEN_HEIGHT, SCREEN_HEIGHT));
+	
+	System.out.println(battlefield.width + "  " + battlefield.height);
 
-	panelStartController.setMinimumSize(new Dimension(screenSize.width / 5, 100));
-	panelStartController.setPreferredSize(new Dimension(screenSize.width / 5, 200));
-	panelStartController.setMaximumSize(new Dimension(screenSize.width / 5, 200));
-
+//	Dimension monitorSize = Toolkit.getDefaultToolkit().getScreenSize();
+//	
+//	setPreferredSize(new Dimension(monitorSize.width * 8 / 10, monitorSize.height * 8 / 10));
+//	panelRightMenuContainer.setPreferredSize(new Dimension(monitorSize.width / 5, monitorSize.height));
+//	panelRightMenuContainer.setMaximumSize(new Dimension(monitorSize.width / 5, monitorSize.height));
+//
+//	panelStartController.setPreferredSize(new Dimension(monitorSize.width / 5, 200));
+//	panelStartController.setMaximumSize(new Dimension(monitorSize.width / 5, 200));
+//
+//	battlefield.setBackground(Color.red);
+//	battlefield.setPreferredSize(new Dimension(monitorSize.height * 8 / 10, monitorSize.height * 8 / 10));
+//	battlefield.setMaximumSize(new Dimension(monitorSize.height * 8 / 10, monitorSize.height * 8 / 10));
 	add(panelMain);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	setResizable(true);
+	setResizable(false);
 	pack();
 	setVisible(true);
 	setLocationRelativeTo(null);

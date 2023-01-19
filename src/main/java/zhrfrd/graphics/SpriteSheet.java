@@ -7,22 +7,20 @@ import javax.imageio.ImageIO;
 
 public class SpriteSheet {
     private String path;
-    public final int SIZE, WIDTH, HEIGHT;
+    public final int SIZE;
     public int[] pixels;
-    public static SpriteSheet missile = new SpriteSheet("/src/main/resources/sheets/missile.png", 48);
+    public static SpriteSheet tiles = new SpriteSheet("/textures/spritesheet.png", 100);
 
     public SpriteSheet(String path, int size) {
 	this.path = path;
 	SIZE = size;
-	WIDTH = size;
-	HEIGHT = size;
 	pixels = new int[SIZE * SIZE];
 	load();
     }
 
-    /*
-     * Load sprite sheet
-     */
+    /**
+     * Load sprite sheet from its path to a BufferedImage.
+     */ 
     private void load() {
 	try {
 	    BufferedImage image = ImageIO.read(SpriteSheet.class.getResource(path)); // Load the image from path

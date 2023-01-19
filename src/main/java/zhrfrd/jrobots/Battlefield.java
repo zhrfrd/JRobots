@@ -29,8 +29,8 @@ public class Battlefield extends Canvas implements Runnable {
     private static final long serialVersionUID = -2969862236631824201L;
     public JPanel panelBattleField;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    int width = screenSize.width - (screenSize.width / 5);
-    int height = screenSize.height;
+    int width = 1200 - (1200 - (1200 / 3));
+    int height = width;
 //    private ArrayList<Robot> robot;
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
@@ -222,11 +222,11 @@ public class Battlefield extends Canvas implements Runnable {
 
 	    // Every 0.01666 seconds (60 FPS)
 	    if (delta >= 1) {
-		//		    update();
-				    render();
-				    
-				    if (isBattleStopped) 
-					break;
+		// update();
+		render();
+
+		if (isBattleStopped) 
+		    break;
 
 		delta--;
 	    }

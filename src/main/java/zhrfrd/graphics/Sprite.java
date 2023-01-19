@@ -6,30 +6,28 @@ public class Sprite {
     private int height, width;
     public int[] pixels;
     private SpriteSheet sheet;
-    public static Sprite missile = new Sprite(16, 0, 2, SpriteSheet.missile);
+    public static Sprite grass = new Sprite(10, 0, 0, SpriteSheet.tiles);
     public static Sprite particle_explosion = new Sprite(3, 0xaaaaaa);
 
     // Constructor
     public Sprite(int size, int x, int y, SpriteSheet sheet) {
 	this.width = size;
 	this.height = size;
-	this.x = x * size;
-	this.y = y * size;
+	this.x = x * size; // Set coordinates for the target sprite in the spritesheet
+	this.y = y * size; //
 	this.sheet = sheet;
 	SIZE = size;
 	pixels = new int[SIZE * SIZE];
 	load();
     }
 
-    public Sprite(int size, int colour) {
+    public Sprite(int size, int colour) { 
 	this.width = size;
 	this.height = size;
 	SIZE = size;
 	pixels = new int[SIZE * SIZE];
 	setColour(colour);
     }
-
-    // Methods
 
     /*
      * Add colour to each pixel
@@ -39,8 +37,8 @@ public class Sprite {
 	    pixels[i] = colour;
     }
 
-    /*
-     * Load sprite
+    /**
+     * Load single sprite out of the spritesheet.
      */
     private void load() {
 	for (int y = 0; y < SIZE; y++)
