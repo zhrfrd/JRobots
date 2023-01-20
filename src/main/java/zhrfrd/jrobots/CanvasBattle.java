@@ -24,7 +24,6 @@ import zhrfrd.entities.Particle;
 import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
 import zhrfrd.level.Level;
-import zhrfrd.level.RandomLevel;
 
 public class CanvasBattle extends Canvas implements Runnable {
     private static final long serialVersionUID = -2969862236631824201L;
@@ -63,7 +62,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     
     public CanvasBattle() {
 	screen = new Screen(width, height);
-	level = new RandomLevel(64, 64);
+	level = new Level(25, 25);
     }
     
     /**
@@ -109,23 +108,15 @@ public class CanvasBattle extends Canvas implements Runnable {
 	 
 	screen.clear();
 //	screen.render();
-	level.render(0, 0, screen);
+	level.render(screen);
 	
-	for (int i = 0; i < pixels.length; i ++) {
+	for (int i = 0; i < pixels.length; i ++)
 	    pixels[i] = screen.pixels[i];
-	}
 	
 	Graphics g = bufferStrategy.getDrawGraphics();
 	g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 	g.dispose();
 	bufferStrategy.show();
-	
-//	Graphics g = bs.getDrawGraphics();
-//	g.setColor(new Color(23, 45, 68));
-//	g.fillRect(0, 0, width, height);
-//	g.dispose();
-//	bs.show(); // Show the content of the buffer in queue
-//	System.out.println("kslfkjsldfjlksd");
     }
     
     /**

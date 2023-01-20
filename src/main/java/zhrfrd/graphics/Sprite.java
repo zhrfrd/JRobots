@@ -11,13 +11,10 @@ public class Sprite {
     public static Sprite dirt3 = new Sprite(16, 2, 0, SpriteSheet.tiles); 
     public static Sprite dirt4 = new Sprite(16, 3, 0, SpriteSheet.tiles); 
     public static Sprite dirt5 = new Sprite(16, 4, 0, SpriteSheet.tiles);
-    public static Sprite dirt6 = new Sprite(16, 5, 0, SpriteSheet.tiles); 
-    public static Sprite dirt7 = new Sprite(16, 6, 0, SpriteSheet.tiles);
-    public static Sprite rock1 = new Sprite(16, 7, 0, SpriteSheet.tiles); 
-    public static Sprite rock2 = new Sprite(16, 8, 0, SpriteSheet.tiles); 
-    public static Sprite crack1 = new Sprite(16, 9, 0, SpriteSheet.tiles); 
-    public static Sprite crack2 = new Sprite(16, 10, 0, SpriteSheet.tiles); 
-    public static Sprite voidSprite = new Sprite(16, 0x000000);
+    public static Sprite rock1 = new Sprite(16, 5, 0, SpriteSheet.tiles); 
+    public static Sprite rock2 = new Sprite(16, 6, 0, SpriteSheet.tiles); 
+    public static Sprite rock3 = new Sprite(16, 7, 0, SpriteSheet.tiles); 
+    public static Sprite rock4 = new Sprite(16, 8, 0, SpriteSheet.tiles); 
     public static Sprite particle_explosion = new Sprite(3, 0x1b87e0);
 
     /**
@@ -43,15 +40,15 @@ public class Sprite {
 	this.height = size;
 	SIZE = size;
 	pixels = new int[SIZE * SIZE];
-	setColour(color);
+	setColor(color);
     }
 
     /*
      * Add colour to each pixel
      */
-    public void setColour(int colour) {
+    public void setColor(int color) {
 	for (int i = 0; i < SIZE * SIZE; i++)
-	    pixels[i] = colour;
+	    pixels[i] = color;
     }
 
     /**

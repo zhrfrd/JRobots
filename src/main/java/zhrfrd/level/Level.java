@@ -1,11 +1,14 @@
 package zhrfrd.level;
 
+import java.util.Random;
+
 import zhrfrd.graphics.Screen;
 import zhrfrd.level.tile.Tile;
 
 public class Level {
     protected int width, height;
     protected int[] tiles;
+    private static final Random RANDOM = new Random();
     
     public Level(int width, int height) {
 	this.width = width;
@@ -15,26 +18,25 @@ public class Level {
 	generateLevel();
     }
     
+    /**
+     * Generate level where tiles are set to a random number from 0 - 3.
+     */
     protected void generateLevel() {
-	
+	for (int y = 0; y < height; y ++)
+	    for (int x = 0; x < width; x ++)
+		tiles[x + y * width] = RANDOM.nextInt(18);
     }
     
-    public void update() {
+    public void render(Screen screen) {
+	// Corner pins to identify the area of the map to be rendered (from top-left to bottom-right)
+	int x0 = 0;
+	int x1 = screen.width >> 4;
+	int y0 = 0;
+	int y1 = screen.height >> 4;
 	
-    }
-    
-    public void render(int xScroll, int yScroll, Screen screen) {
-	// Corner pins to identify the area of the map to be rendered
-	int x0 = xScroll >> 4; // Tile precision 
-	int x1 = (xScroll + screen.width) >> 4;
-	int y0 = yScroll >> 4;
-	int y1 = (yScroll + screen.height) >> 4;
-	
-	for (int y = y0; y < y1; y ++) {
-	    for (int x = x0; x < x1; x ++) {
+	for (int y = y0; y < y1; y ++)
+	    for (int x = x0; x < x1; x ++)
 		getTile(x, y).render(x, y, screen);
-	    }
-	}
     }
     
     /**
@@ -45,36 +47,30 @@ public class Level {
      * @return Tile that needs to be rendered.
      */
     public Tile getTile(int x, int y) {
-	if (tiles[x + y * width] == 0)
+	if (tiles[x + y * width] == 0 || tiles[x + y * width] == 1 || tiles[x + y * width] == 2)
 	    return Tile.dirt1;
 	
-	else if (tiles[x + y * width] == 1)
+	if (tiles[x + y * width] == 3 || tiles[x + y * width] == 4 || tiles[x + y * width] == 5)
 	    return Tile.dirt2;
 	
-	else if (tiles[x + y * width] == 2)
+	if (tiles[x + y * width] == 6 || tiles[x + y * width] == 7 || tiles[x + y * width] == 8)
 	    return Tile.dirt3;
 	
-	else if (tiles[x + y * width] == 3)
+	if (tiles[x + y * width] == 9 || tiles[x + y * width] == 10 || tiles[x + y * width] == 11)
 	    return Tile.dirt4;
 	
-	else if (tiles[x + y * width] == 4)
+	if (tiles[x + y * width] == 12 || tiles[x + y * width] == 13)
 	    return Tile.dirt5;
 	
-	else if (tiles[x + y * width] == 5)
-	    return Tile.dirt6;
-	
-	else if (tiles[x + y * width] == 6)
-	    return Tile.dirt7;
-	
-	else if (tiles[x + y * width] == 7)
+	if (tiles[x + y * width] == 14)
 	    return Tile.rock1;
 	
-	else if (tiles[x + y * width] == 8)
+	if (tiles[x + y * width] == 15)
 	    return Tile.rock2;
 	
-	else if (tiles[x + y * width] == 9)
-	    return Tile.crack2;
+	if (tiles[x + y * width] == 16)
+	    return Tile.rock3;
 	
-	return Tile.crack2;
+	return Tile.rock4;
     }
 }
