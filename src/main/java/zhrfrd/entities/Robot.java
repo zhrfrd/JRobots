@@ -154,7 +154,7 @@ public abstract class Robot extends Entity {
     }
 
     /*
-     * Scan the battlefield towards a single line direction
+     * Scan the canvasBattle towards a single line direction
      */
     public final int scan(int direction) {
 	if (enemyFound())
@@ -182,7 +182,7 @@ public abstract class Robot extends Entity {
     }
 
     /**
-     * Check if some missile is dead and, if yes, remove it from the battlefield.
+     * Check if some missile is dead and, if yes, remove it from the canvasBattle.
      */
     protected void cleanMissiles() {
 	if (this.missileList == null || this.missileList.size() == 0)

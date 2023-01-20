@@ -49,14 +49,14 @@ public abstract class Entity extends JLabel {
     }
     
     /**
-     * Get the width of the battlefield.
+     * Get the width of the canvasBattle.
      */
     private int getBattleFieldWidth() {
 	return this.getParent().getWidth();
     }
 
     /**
-     * Get the height of the battlefield.
+     * Get the height of the canvasBattle.
      */
     private int getBattleFieldHeight() {
 	return this.getParent().getHeight();
@@ -154,7 +154,7 @@ public abstract class Entity extends JLabel {
     }
 
     /**
-     * Handle drawing of the entity to the battlefield.
+     * Handle drawing of the entity to the canvasBattle.
      */
     protected final void draw() {
 //	if (this.rotateIcon) {

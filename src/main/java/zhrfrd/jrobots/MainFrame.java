@@ -31,7 +31,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = -3190346657795484951L;
     protected JFileChooser fileChooser;
     protected JPanel panelMain, panelRightMenuContainer, panelStartController, panelRobotsContainer;
-    protected Battlefield battlefield;
+    protected CanvasBattle canvasBattle;
     protected JButton buttonStart;
     protected JButton buttonPause;
     protected JButton buttonReset;
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     /**
-     * Creates the layout of the battlefield with all the related components
+     * Creates the layout of the canvasBattle with all the related components
      */
     public MainFrame() {
 	initializeLayout();
@@ -78,8 +78,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	Font font = panelMain.getFont().deriveFont(50);
 	panelMain.setFont(font);
 
-	battlefield = new Battlefield();
-	battlefield.setBackground(new Color(153, 102, 51));
+	canvasBattle = new CanvasBattle();
+	canvasBattle.setBackground(new Color(153, 102, 51));
 
 	panelRightMenuContainer = new JPanel();
 	panelRightMenuContainer.setLayout(new BoxLayout(panelRightMenuContainer, BoxLayout.Y_AXIS));
@@ -140,13 +140,13 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.X_AXIS));
 	panelMain.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 	panelMain.setFocusable(true);
-	panelMain.add(battlefield);
+	panelMain.add(canvasBattle);
 	panelMain.add(panelRightMenuContainer);
 	
-	battlefield.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
+	canvasBattle.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
 	panelRightMenuContainer.setPreferredSize(new Dimension(SCREEN_WIDTH - SCREEN_HEIGHT, SCREEN_HEIGHT));
 	
-	System.out.println(battlefield.width + "  " + battlefield.height);
+	System.out.println(canvasBattle.width + "  " + canvasBattle.height);
 
 //	Dimension monitorSize = Toolkit.getDefaultToolkit().getScreenSize();
 //	
@@ -157,9 +157,9 @@ public class MainFrame extends JFrame implements ActionListener {
 //	panelStartController.setPreferredSize(new Dimension(monitorSize.width / 5, 200));
 //	panelStartController.setMaximumSize(new Dimension(monitorSize.width / 5, 200));
 //
-//	battlefield.setBackground(Color.red);
-//	battlefield.setPreferredSize(new Dimension(monitorSize.height * 8 / 10, monitorSize.height * 8 / 10));
-//	battlefield.setMaximumSize(new Dimension(monitorSize.height * 8 / 10, monitorSize.height * 8 / 10));
+//	canvasBattle.setBackground(Color.red);
+//	canvasBattle.setPreferredSize(new Dimension(monitorSize.height * 8 / 10, monitorSize.height * 8 / 10));
+//	canvasBattle.setMaximumSize(new Dimension(monitorSize.height * 8 / 10, monitorSize.height * 8 / 10));
 	add(panelMain);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setResizable(false);
@@ -244,22 +244,22 @@ public class MainFrame extends JFrame implements ActionListener {
 	    loadRobot(labelPathRobotArrayList.get(3));
 
 	if (e.getSource() == buttonStart) {
-	    battlefield.startBattle(fullClassRobotsArrayList);
+	    canvasBattle.startBattle(fullClassRobotsArrayList);
 	    buttonStart.setEnabled(false);
 	}
 	
 	if (e.getSource() == buttonPause) {
-	    battlefield.pauseBattle();
+	    canvasBattle.pauseBattle();
 	    buttonStart.setEnabled(false);
 	}
 	
 	if (e.getSource() == buttonReset) {
-	    battlefield.isBattleStopped = true;
+	    canvasBattle.isBattleStopped = true;
 	    buttonStart.setEnabled(true);
 	}
 	
 	if (e.getSource() == buttonRestart) {
-	    battlefield.isBattleStopped = true;
+	    canvasBattle.isBattleStopped = true;
 	    buttonStart.setEnabled(true);
 	}
     }

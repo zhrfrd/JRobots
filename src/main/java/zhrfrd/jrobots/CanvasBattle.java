@@ -1,7 +1,6 @@
 package zhrfrd.jrobots;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -24,8 +23,10 @@ import zhrfrd.entities.Missile;
 import zhrfrd.entities.Particle;
 import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
+import zhrfrd.level.Level;
+import zhrfrd.level.RandomLevel;
 
-public class Battlefield extends Canvas implements Runnable {
+public class CanvasBattle extends Canvas implements Runnable {
     private static final long serialVersionUID = -2969862236631824201L;
     public JPanel panelBattleField;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -49,9 +50,10 @@ public class Battlefield extends Canvas implements Runnable {
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     protected JFileChooser fileChooser;
+    private Level level;
     Screen screen;
     /**
-     * Create an image for the battlefield. 
+     * Create an image for the canvasBattle. 
      */
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
     /**
@@ -59,8 +61,9 @@ public class Battlefield extends Canvas implements Runnable {
      */
     private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     
-    public Battlefield() {
-	this.screen = new Screen(width, height);
+    public CanvasBattle() {
+	screen = new Screen(width, height);
+	level = new RandomLevel(64, 64);
     }
     
     /**
@@ -92,10 +95,10 @@ public class Battlefield extends Canvas implements Runnable {
     }
     
     /**
-     * Render the Battlefield.
+     * Render the CanvasBattle.
      */
     public void render() {
-	// Get actual buffer strategy from the object Battlefield (subclass of Canvas) and save it to bs. The first time you access render() bs is null.
+	// Get actual buffer strategy from the object CanvasBattle (subclass of Canvas) and save it to bs. The first time you access render() bs is null.
 	BufferStrategy bufferStrategy = getBufferStrategy();
 	
 	// Called only once (the first time render() is accessed.
@@ -105,7 +108,8 @@ public class Battlefield extends Canvas implements Runnable {
 	}
 	 
 	screen.clear();
-	screen.render();
+//	screen.render();
+	level.render(0, 0, screen);
 	
 	for (int i = 0; i < pixels.length; i ++) {
 	    pixels[i] = screen.pixels[i];
@@ -125,7 +129,7 @@ public class Battlefield extends Canvas implements Runnable {
     }
     
     /**
-     * Reset game by interrupting the main thread and clearing out the battlefield's JPanel.
+     * Reset game by interrupting the main thread and clearing out the canvasBattle's JPanel.
      */
     protected void resetBattle() {
 	System.out.println("Reset game");
