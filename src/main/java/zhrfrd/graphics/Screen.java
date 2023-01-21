@@ -1,6 +1,6 @@
 package zhrfrd.graphics;
 
-import zhrfrd.level.tile.Tile;
+import zhrfrd.level.Tile;
 
 public class Screen {
     public int width, height;

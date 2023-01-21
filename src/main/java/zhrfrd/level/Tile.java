@@ -1,4 +1,4 @@
-package zhrfrd.level.tile;
+package zhrfrd.level;
 
 import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
