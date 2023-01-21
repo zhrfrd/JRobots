@@ -4,11 +4,11 @@ import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
 
 public class Tile {
-    public int x, y;
+    public int xPos, y;
     public Sprite sprite;
     public static Tile dirt1 = new Tile(Sprite.dirt1);
     public static Tile dirt2 = new Tile(Sprite.dirt2);
-    public static Tile dirt3 = new Tile(Sprite.dirt3);
+    public static Tile dirt3 = new Tile(Sprite.dirt3); 
     public static Tile dirt4 = new Tile(Sprite.dirt4);
     public static Tile dirt5 = new Tile(Sprite.dirt5);
     public static Tile rock1 = new Tile(Sprite.rock1);

@@ -17,7 +17,7 @@ class RobotTest {
 
     @BeforeEach
     void BeforeEach() {
-	this.robot = Mockito.mock(Robot.class, Mockito.CALLS_REAL_METHODS);// new Robot();
+	this.robot = Mockito.mock(Robot.class, Mockito.CALLS_REAL_METHODS);// new Robot(); 
     }
 
     private void setParentContainer() {

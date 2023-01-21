@@ -22,6 +22,7 @@ import zhrfrd.entities.Entity;
 import zhrfrd.entities.Missile;
 import zhrfrd.entities.Particle;
 import zhrfrd.entities.Robot;
+import zhrfrd.entities.mobs.Player;
 import zhrfrd.graphics.Screen;
 import zhrfrd.level.Level;
 
@@ -51,6 +52,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     protected JFileChooser fileChooser;
     private Level level;
     Screen screen;
+    Player player;
     /**
      * Create an image for the canvasBattle. 
      */
@@ -63,6 +65,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     public CanvasBattle() {
 	screen = new Screen(width, height);
 	level = new Level(25, 25);
+	player = new Player();
     }
     
     /**
@@ -73,24 +76,29 @@ public class CanvasBattle extends Canvas implements Runnable {
 	threadBattle.start(); // Go to run()
     }
     
-    /**
-     * Update game's information every 0.01666 seconds (60fps).
-     * 
-     * @throws IOException 
-     */
-    protected void update() throws IOException {
-	if (isBattleStopped)
-	    resetBattle();
-	
-	else if (!isBattleStopped && !isBattlePaused) {
-	    for (int i = 0; i < robot.length; i ++) 
-		if (robot[i] != null)
-		    robot[i].update();
-	    
-	    for (int i = 0; i < particlesList.size(); i++)
-		if (particlesList.get(i) != null)
-		    particlesList.get(i).update();
-	}
+//    /**
+//     * Update game's information every 0.01666 seconds (60fps).
+//     * 
+//     * @throws IOException 
+//     */
+//    protected void update() throws IOException {
+//	if (isBattleStopped)
+//	    resetBattle();
+//	
+//	else if (!isBattleStopped && !isBattlePaused) {
+//	    for (int i = 0; i < robot.length; i ++) 
+//		if (robot[i] != null)
+//		    robot[i].update();
+//	    
+//	    for (int i = 0; i < particlesList.size(); i++)
+//		if (particlesList.get(i) != null)
+//		    particlesList.get(i).update();
+//	}
+//	
+//    }
+    
+    public void update() {
+//	player.update();
     }
     
     /**
@@ -108,7 +116,8 @@ public class CanvasBattle extends Canvas implements Runnable {
 	 
 	screen.clear();
 //	screen.render();
-	level.render(screen);
+	level.render(screen); // render(Screen screen);
+	player.render(screen);
 	
 	for (int i = 0; i < pixels.length; i ++)
 	    pixels[i] = screen.pixels[i];
@@ -153,7 +162,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     protected void startBattle(ArrayList<String> fullClassRobotsArrayList) {
 	robot = new Robot[MAX_ROBOTS];
 	System.out.println(robot.length);
-	
+	 
 	Class<?> classRobot = null;
 	Constructor<?> constructorRobot;
 //	this.threadRobots = new Thread[fullClassRobots.size()];

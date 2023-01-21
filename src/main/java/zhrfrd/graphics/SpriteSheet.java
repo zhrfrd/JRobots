@@ -17,7 +17,7 @@ public class SpriteSheet {
 	pixels = new int[SIZE * SIZE];
 	load();
     }
-
+ 
     /**
      * Load sprite sheet from its path to a BufferedImage.
      */ 

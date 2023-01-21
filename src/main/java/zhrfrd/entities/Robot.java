@@ -82,37 +82,45 @@ public abstract class Robot extends Entity {
      * Update robot status
      * @throws IOException 
      */
-    public void update() throws IOException {
-	if (!isRobotStarted) {
-	    this.setStartingPosition();
-	    isRobotStarted = true;
-	}
+//    public void update() throws IOException {
+//	if (!isRobotStarted) {
+//	    this.setStartingPosition();
+//	    isRobotStarted = true;
+//	}
+//	
+//	this.hasMoved = false;
+//	this.runTurn();
+//    	this.move(this.direction, this.speed);
+//    	this.draw();
+//    	
+//    	// Update missile status only if it exists in the current cycle until its life cycle terminates
+//    	if (missileList != null && missileList.size() > 0) {
+//    	    this.missileLifeCounter ++;
+//    	    this.missile.update();
+//    	    
+//    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
+//    	    	this.cleanMissiles();
+//    	    	
+//    	    	//TODO Add and improve particles generation
+//    	    	for (int i = 0; i < 10; i ++) {
+//    	    	    Random random = new Random();
+//    	    	    int directionParticle = random.nextInt(359 - 0 + 1) + 0;
+////    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle).draw());
+//    	    	    System.out.println(directionParticle);
+//    	    	}
+//    	    	
+//    	    	missileLifeCounter = 0;
+//    	    	isMissileShot = false;
+//    	    }
+//    	}
+//    }
+    
+    public void update() {
 	
-	this.hasMoved = false;
-	this.runTurn();
-    	this.move(this.direction, this.speed);
-    	this.draw();
-    	
-    	// Update missile status only if it exists in the current cycle until its life cycle terminates
-    	if (missileList != null && missileList.size() > 0) {
-    	    this.missileLifeCounter ++;
-    	    this.missile.update();
-    	    
-    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
-    	    	this.cleanMissiles();
-    	    	
-    	    	//TODO Add and improve particles generation
-    	    	for (int i = 0; i < 10; i ++) {
-    	    	    Random random = new Random();
-    	    	    int directionParticle = random.nextInt(359 - 0 + 1) + 0;
-//    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle).draw());
-    	    	    System.out.println(directionParticle);
-    	    	}
-    	    	
-    	    	missileLifeCounter = 0;
-    	    	isMissileShot = false;
-    	    }
-    	}
+    }
+    
+    public void render() {
+	
     }
     
     /**

@@ -25,7 +25,7 @@ public class Level {
 	for (int y = 0; y < height; y ++)
 	    for (int x = 0; x < width; x ++)
 		tiles[x + y * width] = RANDOM.nextInt(18);
-    }
+    } 
     
     public void render(Screen screen) {
 	// Corner pins to identify the area of the map to be rendered (from top-left to bottom-right)

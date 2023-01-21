@@ -14,28 +14,29 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import zhrfrd.graphics.Screen;
+import zhrfrd.level.Level;
+
 public abstract class Entity extends JLabel {
     private static final long serialVersionUID = -2678484620304652158L;
-
     /**
      * Current entity position
      */
     protected double posX, posY;
-
     /**
      * Current entity status
      */
     protected int life, direction, speed;
-    
     protected int maxLife;
-
     /**
      * The icon will rotate depending on the current entity direction
      */
     protected boolean rotateIcon;
-
     protected Image icon;
     protected Dimension size;
+    protected Level level;
+    private boolean removed = false;
+    public int x, y;
     
     public static enum ENTITY_ICON {
 	ROBOT, MISSILE
@@ -46,6 +47,22 @@ public abstract class Entity extends JLabel {
     
     public Entity(ENTITY_ICON icon) throws IOException {
 	this.initializeEntityIcon(icon);
+    }
+    
+    public void update() {
+	
+    }
+    
+    public void render(Screen screen) {
+	
+    }
+    
+    public void remove() {
+	removed = true;
+    }
+    
+    public boolean isRemoved() {
+	return removed;
     }
     
     /**

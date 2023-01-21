@@ -8,6 +8,6 @@ public class JRobotsTest {
 
     @Test
     public void testApp() {
-	assertTrue(true);
+	assertTrue(true); 
     }
 }

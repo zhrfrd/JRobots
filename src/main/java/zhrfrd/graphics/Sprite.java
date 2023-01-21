@@ -14,7 +14,11 @@ public class Sprite {
     public static Sprite rock1 = new Sprite(16, 5, 0, SpriteSheet.tiles); 
     public static Sprite rock2 = new Sprite(16, 6, 0, SpriteSheet.tiles); 
     public static Sprite rock3 = new Sprite(16, 7, 0, SpriteSheet.tiles); 
-    public static Sprite rock4 = new Sprite(16, 8, 0, SpriteSheet.tiles); 
+    public static Sprite rock4 = new Sprite(16, 8, 0, SpriteSheet.tiles);
+    public static Sprite player0 = new Sprite(16, 0, 10, SpriteSheet.tiles);
+    public static Sprite player1 = new Sprite(16, 1, 10, SpriteSheet.tiles);
+    public static Sprite player2 = new Sprite(16, 0, 11, SpriteSheet.tiles);
+    public static Sprite player3 = new Sprite(16, 1, 11, SpriteSheet.tiles);
     public static Sprite particle_explosion = new Sprite(3, 0x1b87e0);
 
     /**
@@ -44,7 +48,7 @@ public class Sprite {
     }
 
     /*
-     * Add colour to each pixel
+     * Add colour to each pixel 
      */
     public void setColor(int color) {
 	for (int i = 0; i < SIZE * SIZE; i++)
