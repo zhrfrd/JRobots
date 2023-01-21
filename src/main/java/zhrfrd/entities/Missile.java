@@ -3,18 +3,14 @@ package zhrfrd.entities;
 import java.awt.Color;
 import java.io.IOException;
 
-import javax.swing.ImageIcon;
-
 import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
 
 public class Missile extends Entity {
     private static final long serialVersionUID = -8959188412014341019L;
-    Robot robot;
-    public ImageIcon iconMissile;
+    private Robot robot;
 
-    public Missile(Robot robot, int direction) throws IOException {
-	super(ENTITY_ICON.MISSILE);
+    public Missile(Robot robot, int direction) {
 	this.rotateIcon = true;
 	this.robot = robot;
 	this.direction = direction;
@@ -24,28 +20,14 @@ public class Missile extends Entity {
      * Set missile's starting position by getting the current robot's position.
      */
     protected final void setStartingPosition() {
-	this.posX = this.robot.getPosX();
-	this.posY = this.robot.getPosY();
-    }
-    
-    /**
-     * Update missile information in the game.
-     */
-    public void update(Screen screen) {
-	this.move();
-	System.out.println("MOVE");
-//	this.draw();
-    }
-    
-    public void render(Screen screen) {
-	System.out.println("SHOOOOOOOT");
-	screen.renderMissile((int)posX, (int)posY,  Sprite.missile);
+	posX = this.robot.getPosX();
+	posY = this.robot.getPosY();
     }
 
     protected void move() {
-	double radians = Math.toRadians(this.direction);
-	double x = Math.cos(radians) * 0.1 * this.speed;
-	double y = Math.sin(radians) * 0.1 * this.speed;
+	double radians = Math.toRadians(direction);
+	double x = Math.cos(radians) * 0.1 * speed;
+	double y = Math.sin(radians) * 0.1 * speed;
 
 	// Adjust direction of the robot
 	// TODO: if the movement is limited by x then y should be limited as well but at
@@ -53,25 +35,43 @@ public class Missile extends Entity {
 	double newPosX = posX + x;
 	double newPosY = posY + y;
 
-	this.posX = Math.max(0, Math.min(100, newPosX));
-	this.posY = Math.max(0, Math.min(100, newPosY));
+	this.posX = Math.max(0, Math.min(400, newPosX));
+	this.posY = Math.max(0, Math.min(400, newPosY));
+    }
+    
+    /**
+     * Starting method of the missile which set its default values.
+     */
+    public void begin() {
+	this.setStartingPosition();
+
+	this.speed = 10 * BOOST;
+	this.life = 100;
     }
 
     /**
      * Retrieve the specific color of the particles.
-     * 
      * @return The RGB color code of the particle.
      */
     protected Color getParticleColor() {
 	Color color = new Color(65, 50, 30);
 	return color;
     }
-
+    
+    /**
+     * Update missile information in the game.
+     */
     @Override
-    public void begin() {
-	this.setStartingPosition();
-
-	this.speed = 3;
-	this.life = 100;
+    public void update() {
+	move();
+    }
+    
+    /**
+     * Render the missile to the battlefield.
+     * @param screen Screen that handles the rendering of the missile.
+     */
+    @Override
+    public void render(Screen screen) {
+	screen.renderEntity((int)posX, (int)posY,  Sprite.missile);
     }
 }

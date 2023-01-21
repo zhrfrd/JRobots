@@ -171,9 +171,7 @@ public class MainFrame extends JFrame implements ActionListener {
     /**
      * Upload the robot from a folder and load it to the game by adding the class
      * name of the robot to its specific JLabel.
-     * 
-     * @param labelPathRobot The JLabel that will contain the class name of the
-     *                       robot created by the user.
+     * @param labelPathRobot The JLabel that will contain the class name of the robot created by the user.
      */
     protected void loadRobot(JLabel labelPathRobot) {
 	resetFullClassRobots();
@@ -200,7 +198,6 @@ public class MainFrame extends JFrame implements ActionListener {
     
     /**
      * Get the full class name of the robot to be used to locate the robot's file.
-     * 
      * @return The class name of the robot in this format: packagefolder.subpackagefolder.Classname
      */
     private String extractFullClassRobot() {

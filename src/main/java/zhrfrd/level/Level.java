@@ -41,7 +41,6 @@ public class Level {
     
     /**
      * Get the tile that needs to be rendered.
-     * 
      * @param x X position of the tile in the battlefield using tile precision instead of pixel precision.
      * @param y Y position of the tile in the battlefield using tile precision instead of pixel precision.
      * @return Tile that needs to be rendered.

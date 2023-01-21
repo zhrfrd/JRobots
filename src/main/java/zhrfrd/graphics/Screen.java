@@ -5,6 +5,7 @@ import zhrfrd.level.tile.Tile;
 public class Screen {
     public int width, height;
     public int[] pixels;
+    private int SPRITE_SIZE = 16;
 
     // Constructor
     public Screen(int width, int height) {
@@ -14,10 +15,9 @@ public class Screen {
     } 
     
     /**
-     * Render tile on the battlefield by iterating through each pixel of the single tile'sprite (eg. tile.sprite.SIZE = 16 ).
-     * 
-     * @param xp Individual position of the tile in the x coordinate of the battlefield.
-     * @param yp Individual position of the tile in the Y coordinate of the battlefield.
+     * Render tile on the battlefield by iterating through each pixel of the single tile'sprite (eg. tile.sprite.SIZE = 16).
+     * @param xBattlefield Individual position of the tile in the x coordinate of the battlefield.
+     * @param yBattlefield Individual position of the tile in the Y coordinate of the battlefield.
      * @param tile Tile to be rendered.
      */
     public void renderTile(int xBattlefield, int yBattlefield, Tile tile) {
@@ -32,38 +32,14 @@ public class Screen {
 	} 
     }
     
-    public void renderRobot(int xBattlefield, int yBattlefield, Sprite sprite) {
-	for (int y = 0; y < 16; y ++) {
+    public void renderEntity(int xBattlefield, int yBattlefield, Sprite sprite) {
+	for (int y = 0; y < SPRITE_SIZE; y ++) {
 	    int yAbsolute = y + yBattlefield;
 	    
-	    for (int x = 0; x < 16; x ++) {
+	    for (int x = 0; x < SPRITE_SIZE; x ++) {
 		int xAbsolute = x + xBattlefield;
 		    
-		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
-	    }
-	}
-    }
-    
-    public void renderMissile(int xBattlefield, int yBattlefield, Sprite sprite) {
-	for (int y = 0; y < 16; y ++) {
-	    int yAbsolute = y + yBattlefield;
-	    
-	    for (int x = 0; x < 16; x ++) {
-		int xAbsolute = x + xBattlefield;
-		    
-		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
-	    }
-	}
-    }
-    
-    public void renderParticle(int xBattlefield, int yBattlefield, Sprite sprite) {
-	for (int y = 0; y < 16; y ++) {
-	    int yAbsolute = y + yBattlefield;
-	    
-	    for (int x = 0; x < 16; x ++) {
-		int xAbsolute = x + xBattlefield;
-		    
-		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
+		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * SPRITE_SIZE];
 	    }
 	}
     }

@@ -1,46 +1,27 @@
 package zhrfrd.entities;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.ImageIcon;
 
 import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
 
 public abstract class Robot extends Entity {
     private static final long serialVersionUID = -2377133046121834448L;
-
     /**
      * Determine if the move action has been done in the current turn.
      */
     private boolean hasMoved = false;
-    protected ImageIcon imageIcon;
-    protected File fileIconMissile;
-    protected BufferedImage bufferedImage;
-    public static String title = "JRobots";
-    public ImageIcon iconRobot;
-    public Missile missile;
+    private Missile missile;
     public ArrayList<Missile> missileList;
     private boolean isRobotStarted = false;
-    public boolean isMissileShot = false;
-    public int missileLifeCounter = 0;
-    public int missileLifeSpan = 120;
-    Color colorMissileParticle;
-    Color colorRobotParticle;
+    private boolean isMissileShot = false;
+    private int missileLifeCounter = 0;
+    private int missileLifeSpan = 120;
     
-    public Robot() throws IOException {
-	super(ENTITY_ICON.ROBOT);
+    public Robot() {
     }
-    
-//    public Robot(int x, int y) {
-//	this.x = x;
-//	this.y = y;
-//    }
 
     /**
      * Set robot starting position.
@@ -62,9 +43,8 @@ public abstract class Robot extends Entity {
 	    return;
 
 	this.hasMoved = true;
-	speed = Math.max(0, Math.min(5, speed));
 	this.direction = direction;
-	this.speed = speed;
+	this.speed = Math.max(0, Math.min(5, speed)) * BOOST;
 	double radians = Math.toRadians(direction);
 	double x = Math.cos(radians) * 0.1 * this.speed;
 	double y = Math.sin(radians) * 0.1 * this.speed;
@@ -78,44 +58,10 @@ public abstract class Robot extends Entity {
 	this.posX = Math.max(0, Math.min(100, newPosX));
 	this.posY = Math.max(0, Math.min(100, newPosY));
 
-	if (newPosX < 0 || newPosX > 100 || newPosY < 0 || newPosY > 100) {
+	if (newPosX < 0 || newPosX > 400 || newPosY < 0 || newPosY > 400) {
 	    this.inflictWallsDamage();
 	    this.speed = 0;
 	}
-    }
-    
-    /**
-     * Update robot status
-     */
-    public void update(Screen screen) {
-	if (!isRobotStarted) {
-	    this.setStartingPosition();
-	    isRobotStarted = true;
-	}
-	
-	this.hasMoved = false;
-	this.runTurn();
-    	this.move(this.direction, this.speed);
-//    	this.draw();
-    	render(screen);
-    	
-    	// Update missile status only if it exists in the current cycle until its life cycle terminates
-    	if (missileList != null && missileList.size() > 0) {
-    	    this.missileLifeCounter ++;
-    	    this.missile.update();
-    	    this.missile.render(screen);
-    	    
-    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
-    	    	this.cleanMissiles();
-    	    	
-    	    	missileLifeCounter = 0;
-    	    	isMissileShot = false;
-    	    }
-    	}
-    }
-    
-    public void render(Screen screen) {
-	screen.renderRobot((int)posX,  (int)posY,  Sprite.robot1);
     }
     
     /**
@@ -135,9 +81,6 @@ public abstract class Robot extends Entity {
         	
             missileList.add(missile);
             missile.begin();
-            
-//            missile.render(this.screen);
-//            this.getParent().add(missile);
 	}
     }
 
@@ -150,7 +93,6 @@ public abstract class Robot extends Entity {
 
     /**
      * Inflicts the amount of damage specified to the robot
-     * 
      * @param value the amount of damage to inflict. Absolute value is used
      */
     private void inflictDamage(int value) {
@@ -204,6 +146,42 @@ public abstract class Robot extends Entity {
 	    } else
 		i++;
 	}
+    }
+    
+    /**
+     * Update missile information in the game.
+     */
+    @Override
+    public void update() {
+	if (!isRobotStarted) {
+	    this.setStartingPosition();
+	    isRobotStarted = true;
+	}
+	
+	this.hasMoved = false;
+	this.runTurn();
+    	this.move(this.direction, this.speed);
+    	
+    	// Update missile status only if it exists in the current cycle until its life cycle terminates
+    	if (missileList != null && missileList.size() > 0) {
+    	    this.missileLifeCounter ++;
+    	    
+    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 400 || missile.getPosY() <= 0 || missile.getPosY() >= 400) {
+    	    	this.cleanMissiles();
+    	    	
+    	    	missileLifeCounter = 0;
+    	    	isMissileShot = false;
+    	    }
+    	}
+    }
+    
+    /**
+     * Render the robot to the battlefield.
+     * @param screen Screen that handles the rendering of the robot.
+     */
+    @Override
+    public void render(Screen screen) {
+	screen.renderEntity((int)posX,  (int)posY,  Sprite.robot1);
     }
     
     abstract protected void runTurn();

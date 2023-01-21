@@ -34,7 +34,7 @@ public class Particle extends Entity {
     }
     
     public void render(Screen screen) {
-	screen.renderParticle((int)posX,  (int)posY,  Sprite.robot1);
+	screen.renderEntity((int)posX,  (int)posY,  Sprite.robot1);
     }
     
     /**
@@ -47,6 +47,12 @@ public class Particle extends Entity {
 	
     @Override
     protected void setStartingPosition() {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void update() {
 	// TODO Auto-generated method stub
 	
     }
