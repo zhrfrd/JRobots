@@ -3,7 +3,6 @@ package zhrfrd.level;
 import java.util.Random;
 
 import zhrfrd.graphics.Screen;
-import zhrfrd.level.tile.Tile;
 
 public class Level {
     protected int width, height;
