@@ -16,24 +16,19 @@ public class Test extends Robot {
 
     public void runTurn() {
 	if (this.speed == 0) {
-//	if (!this.moved) {
-	    this.move(0, 4);
-//	    this.moved = true;
-//	}
+	    this.move(0, 5);
 	} else {
 	    if (this.direction == 0 && this.posX >= 90 && this.posY < 90) {
-		this.move(90, 4);
+		this.move(90, 5);
 	    } else if (this.direction == 90 && this.posX > 10 && this.posY >= 90) {
-		this.move(180, 4);
+		this.move(180, 5);
 	    } else if (this.direction == 180 && this.posX <= 10 && this.posY >= 90) {
-		this.move(270, 4);
+		this.move(270, 5);
 	    } else if (this.direction == 270 && this.posX <= 10 && this.posY <= 10) {
-		this.move(0, 4);
+		this.move(0, 5);
 	    }
 	}
 
-//	if (this.posX >= 75 && this.posX <= 80) {
-//	    if (!this.shot) {
 	Random r = new Random();
 
 	try {
@@ -41,9 +36,5 @@ public class Test extends Robot {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	// this.shot = true;
-//	    }
-//	} else
-//	    this.shot = false;
     }
 }

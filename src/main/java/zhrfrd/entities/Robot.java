@@ -1,8 +1,6 @@
 package zhrfrd.entities;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+
+import zhrfrd.graphics.Screen;
+import zhrfrd.graphics.Sprite;
 
 public abstract class Robot extends Entity {
     private static final long serialVersionUID = -2377133046121834448L;
@@ -26,15 +27,20 @@ public abstract class Robot extends Entity {
     public Missile missile;
     public ArrayList<Missile> missileList;
     private boolean isRobotStarted = false;
-    protected boolean isMissileShot = false;
-    int missileLifeCounter = 0;
-    int missileLifeSpan = 120;
+    public boolean isMissileShot = false;
+    public int missileLifeCounter = 0;
+    public int missileLifeSpan = 120;
     Color colorMissileParticle;
     Color colorRobotParticle;
-
+    
     public Robot() throws IOException {
 	super(ENTITY_ICON.ROBOT);
     }
+    
+//    public Robot(int x, int y) {
+//	this.x = x;
+//	this.y = y;
+//    }
 
     /**
      * Set robot starting position.
@@ -80,47 +86,36 @@ public abstract class Robot extends Entity {
     
     /**
      * Update robot status
-     * @throws IOException 
      */
-//    public void update() throws IOException {
-//	if (!isRobotStarted) {
-//	    this.setStartingPosition();
-//	    isRobotStarted = true;
-//	}
-//	
-//	this.hasMoved = false;
-//	this.runTurn();
-//    	this.move(this.direction, this.speed);
-//    	this.draw();
-//    	
-//    	// Update missile status only if it exists in the current cycle until its life cycle terminates
-//    	if (missileList != null && missileList.size() > 0) {
-//    	    this.missileLifeCounter ++;
-//    	    this.missile.update();
-//    	    
-//    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
-//    	    	this.cleanMissiles();
-//    	    	
-//    	    	//TODO Add and improve particles generation
-//    	    	for (int i = 0; i < 10; i ++) {
-//    	    	    Random random = new Random();
-//    	    	    int directionParticle = random.nextInt(359 - 0 + 1) + 0;
-////    	    	    this.getParent().add(new Particle(this.posX, this.posY, colorMissileParticle, directionParticle).draw());
-//    	    	    System.out.println(directionParticle);
-//    	    	}
-//    	    	
-//    	    	missileLifeCounter = 0;
-//    	    	isMissileShot = false;
-//    	    }
-//    	}
-//    }
-    
-    public void update() {
+    public void update(Screen screen) {
+	if (!isRobotStarted) {
+	    this.setStartingPosition();
+	    isRobotStarted = true;
+	}
 	
+	this.hasMoved = false;
+	this.runTurn();
+    	this.move(this.direction, this.speed);
+//    	this.draw();
+    	render(screen);
+    	
+    	// Update missile status only if it exists in the current cycle until its life cycle terminates
+    	if (missileList != null && missileList.size() > 0) {
+    	    this.missileLifeCounter ++;
+    	    this.missile.update();
+    	    this.missile.render(screen);
+    	    
+    	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 100 || missile.getPosY() <= 0 || missile.getPosY() >= 100) {
+    	    	this.cleanMissiles();
+    	    	
+    	    	missileLifeCounter = 0;
+    	    	isMissileShot = false;
+    	    }
+    	}
     }
     
-    public void render() {
-	
+    public void render(Screen screen) {
+	screen.renderRobot((int)posX,  (int)posY,  Sprite.robot1);
     }
     
     /**
@@ -141,7 +136,8 @@ public abstract class Robot extends Entity {
             missileList.add(missile);
             missile.begin();
             
-            this.getParent().add(missile);
+//            missile.render(this.screen);
+//            this.getParent().add(missile);
 	}
     }
 
@@ -192,7 +188,7 @@ public abstract class Robot extends Entity {
     /**
      * Check if some missile is dead and, if yes, remove it from the canvasBattle.
      */
-    protected void cleanMissiles() {
+    public void cleanMissiles() {
 	if (this.missileList == null || this.missileList.size() == 0)
 	    return;
 
@@ -200,10 +196,10 @@ public abstract class Robot extends Entity {
 
 	while (i < this.missileList.size()) {
 	    if (missile != null) {
-		System.out.println(this.getParent());
-		this.getParent().remove(missile);
-		this.getParent().validate();
-		this.getParent().repaint();
+//		System.out.println(this.getParent());
+//		this.getParent().remove(missile);
+//		this.getParent().validate();
+//		this.getParent().repaint();
 		this.missileList.remove(i);
 	    } else
 		i++;

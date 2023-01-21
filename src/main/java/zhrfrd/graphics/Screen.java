@@ -1,6 +1,5 @@
 package zhrfrd.graphics;
 
-import zhrfrd.entities.mobs.Player;
 import zhrfrd.level.tile.Tile;
 
 public class Screen {
@@ -26,21 +25,45 @@ public class Screen {
 	    int yAbsolute = y + yBattlefield;
 	    
 	    for (int x = 0; x < tile.sprite.SIZE; x ++) {
-		    int xAbsolute = x + xBattlefield;
+		int xAbsolute = x + xBattlefield;
 		    
-		    pixels[xAbsolute + yAbsolute * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+		pixels[xAbsolute + yAbsolute * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 	    }
 	} 
     }
     
-    public void renderPlayer(int xBattlefield, int yBattlefield, Sprite sprite) {
+    public void renderRobot(int xBattlefield, int yBattlefield, Sprite sprite) {
 	for (int y = 0; y < 16; y ++) {
 	    int yAbsolute = y + yBattlefield;
 	    
 	    for (int x = 0; x < 16; x ++) {
-		    int xAbsolute = x + xBattlefield;
+		int xAbsolute = x + xBattlefield;
 		    
-		    pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
+		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
+	    }
+	}
+    }
+    
+    public void renderMissile(int xBattlefield, int yBattlefield, Sprite sprite) {
+	for (int y = 0; y < 16; y ++) {
+	    int yAbsolute = y + yBattlefield;
+	    
+	    for (int x = 0; x < 16; x ++) {
+		int xAbsolute = x + xBattlefield;
+		    
+		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
+	    }
+	}
+    }
+    
+    public void renderParticle(int xBattlefield, int yBattlefield, Sprite sprite) {
+	for (int y = 0; y < 16; y ++) {
+	    int yAbsolute = y + yBattlefield;
+	    
+	    for (int x = 0; x < 16; x ++) {
+		int xAbsolute = x + xBattlefield;
+		    
+		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * 16];
 	    }
 	}
     }

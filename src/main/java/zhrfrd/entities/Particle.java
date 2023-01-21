@@ -3,6 +3,9 @@ package zhrfrd.entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import zhrfrd.graphics.Screen;
+import zhrfrd.graphics.Sprite;
+
 public class Particle extends Entity {
     private static final long serialVersionUID = 7596968145301880427L;
     Color color;
@@ -23,11 +26,15 @@ public class Particle extends Entity {
 	this.posY = posY;
     }
     
-    public void update() {
+    public void update(Screen screen) {
 	life --;
 	
 	if (life > 0)
 	    move(directionX, directionY);
+    }
+    
+    public void render(Screen screen) {
+	screen.renderParticle((int)posX,  (int)posY,  Sprite.robot1);
     }
     
     /**

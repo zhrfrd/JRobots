@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import javax.swing.ImageIcon;
 
+import zhrfrd.graphics.Screen;
+import zhrfrd.graphics.Sprite;
+
 public class Missile extends Entity {
     private static final long serialVersionUID = -8959188412014341019L;
     Robot robot;
@@ -28,9 +31,15 @@ public class Missile extends Entity {
     /**
      * Update missile information in the game.
      */
-    public void update() {
+    public void update(Screen screen) {
 	this.move();
-	this.draw();
+	System.out.println("MOVE");
+//	this.draw();
+    }
+    
+    public void render(Screen screen) {
+	System.out.println("SHOOOOOOOT");
+	screen.renderMissile((int)posX, (int)posY,  Sprite.missile);
     }
 
     protected void move() {

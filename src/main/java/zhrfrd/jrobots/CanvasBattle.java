@@ -22,7 +22,6 @@ import zhrfrd.entities.Entity;
 import zhrfrd.entities.Missile;
 import zhrfrd.entities.Particle;
 import zhrfrd.entities.Robot;
-import zhrfrd.entities.mobs.Player;
 import zhrfrd.graphics.Screen;
 import zhrfrd.level.Level;
 
@@ -35,11 +34,12 @@ public class CanvasBattle extends Canvas implements Runnable {
 //    private ArrayList<Robot> robot;
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
-    private Robot robot[];
+    private Robot robots[];
+//    private Missile missiles[];
     // TODO Change public to protected or private 
     public ArrayList<Entity> entitiesList = new ArrayList<>();
     public ArrayList<Robot> robotsList = new ArrayList<>();
-    public ArrayList<Missile> missilesList = new ArrayList<>();
+//    public ArrayList<Missile> missilesList = new ArrayList<>();
     public ArrayList<Particle> particlesList = new ArrayList<>();
     static File fileRobot;
     static BufferedReader fileReader;
@@ -52,7 +52,9 @@ public class CanvasBattle extends Canvas implements Runnable {
     protected JFileChooser fileChooser;
     private Level level;
     Screen screen;
-    Player player;
+//    public ArrayList<Missile> missileList = new ArrayList<Missile>();
+//    public Missile missile;
+
     /**
      * Create an image for the canvasBattle. 
      */
@@ -65,7 +67,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     public CanvasBattle() {
 	screen = new Screen(width, height);
 	level = new Level(25, 25);
-	player = new Player();
+//	player = new Player();
     }
     
     /**
@@ -76,30 +78,40 @@ public class CanvasBattle extends Canvas implements Runnable {
 	threadBattle.start(); // Go to run()
     }
     
-//    /**
-//     * Update game's information every 0.01666 seconds (60fps).
-//     * 
-//     * @throws IOException 
-//     */
-//    protected void update() throws IOException {
-//	if (isBattleStopped)
-//	    resetBattle();
-//	
-//	else if (!isBattleStopped && !isBattlePaused) {
-//	    for (int i = 0; i < robot.length; i ++) 
-//		if (robot[i] != null)
-//		    robot[i].update();
-//	    
-//	    for (int i = 0; i < particlesList.size(); i++)
-//		if (particlesList.get(i) != null)
-//		    particlesList.get(i).update();
-//	}
-//	
-//    }
-    
-    public void update() {
-//	player.update();
+    /**
+     * Update game's information every 0.01666 seconds (60fps).
+     * 
+     * @throws IOException 
+     */
+    protected void update() throws IOException {
+	if (isBattleStopped)
+	    resetBattle();
+	
+	else if (!isBattleStopped && !isBattlePaused) {
+	    for (int i = 0; i < robots.length; i ++) 
+		if (robots[i] != null) {
+		    robots[i].update(screen);
+		    
+		    for (int j = 0; j < robots[i].missileList.size(); j ++) 
+			if (robots[i].missileList.get(j) != null)
+			    robots[i].missileList.get(j).update(screen);
+		}
+	    
+//	    for (int i = 0; i < missiles.length; i ++) 
+//		if (missiles[i] != null)
+//		    missiles[i].update(screen);
+	    
+	    for (int i = 0; i < particlesList.size(); i++)
+		if (particlesList.get(i) != null)
+		    // TODO Refactor update() method (see Robot)
+		    particlesList.get(i).update(screen);
+	}
+	
     }
+    
+//    public void update() {
+////	player.update();
+//    }
     
     /**
      * Render the CanvasBattle.
@@ -115,9 +127,24 @@ public class CanvasBattle extends Canvas implements Runnable {
 	}
 	 
 	screen.clear();
-//	screen.render();
-	level.render(screen); // render(Screen screen);
-	player.render(screen);
+	level.render(screen);
+	
+	for (int i = 0; i < robots.length; i ++) 
+	    if (robots[i] != null) {
+		robots[i].render(screen);
+		
+		for (int j = 0; j < robots[i].missileList.size(); j ++) { 
+		    if (robots[i].missileList.get(j) != null) {
+			robots[i].missileList.get(j).render(screen);
+		    }
+		}
+	    }
+	
+//	for (int i = 0; i < missiles.length; i ++) { 
+//	    if (missiles[i] != null) {
+//		missiles[i].render(screen);
+//	    }
+//	}
 	
 	for (int i = 0; i < pixels.length; i ++)
 	    pixels[i] = screen.pixels[i];
@@ -160,8 +187,9 @@ public class CanvasBattle extends Canvas implements Runnable {
      * instance of Robot passing JRobots as parameter.
      */
     protected void startBattle(ArrayList<String> fullClassRobotsArrayList) {
-	robot = new Robot[MAX_ROBOTS];
-	System.out.println(robot.length);
+	robots = new Robot[MAX_ROBOTS];
+//	missiles = new Missile[10]; // TODO Change missile from array to something else
+	System.out.println(robots.length);
 	 
 	Class<?> classRobot = null;
 	Constructor<?> constructorRobot;
@@ -171,11 +199,10 @@ public class CanvasBattle extends Canvas implements Runnable {
 	    try {
 		classRobot = Class.forName(fullClassRobotsArrayList.get(i));
 		constructorRobot = classRobot.getDeclaredConstructor();
-		System.out.println(constructorRobot);
 		Robot newRobot = (Robot) constructorRobot.newInstance();
 //		this.threadRobots[i] = new Thread(newRobot);
 //		this.robot.add(newRobot);
-		robot[i] = newRobot;
+		robots[i] = newRobot;
 //		add(robot[i]);
 	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 		    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -216,7 +243,6 @@ public class CanvasBattle extends Canvas implements Runnable {
 		try {
 		    this.threadBattle.wait();
 		} catch (InterruptedException e1) {
-		    // TODO Auto-generated catch block
 		    e1.printStackTrace();
 		}
 //	    System.out.println("Running gameloop");
@@ -226,7 +252,11 @@ public class CanvasBattle extends Canvas implements Runnable {
 
 	    // Every 0.01666 seconds (60 FPS)
 	    if (delta >= 1) {
-		// update();
+		try {
+		    update();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
 		render();
 
 		if (isBattleStopped) 
