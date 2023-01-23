@@ -2,6 +2,9 @@ package zhrfrd.entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
@@ -12,19 +15,40 @@ public class Particle extends Entity {
     int size = 30;
     int directionX;
     int directionY;
-    int life;
-
-    public Particle(double startX, double startY, Color color, int directionX, int directionY, int maxLife) {
-	this.color = color;
-	this.directionX = directionX;
-	this.directionY = directionY;
-	this.life = maxLife;
+    public List<Particle> particlesList = new ArrayList<>();
+    public Sprite sprite;
+    private int life;
+    protected double xx, yy, xa, ya;
+    Random random = new Random();
+    
+    public Particle(int xOrigin, int yOrigin, int life) {
+	sprite = Sprite.particle_explosion;
+	this.posX = xOrigin;
+	this.posY = yOrigin;
+	this.xx = xOrigin;
+	this.yy = yOrigin;
+	this.life = life;
+	sprite = Sprite.particle_explosion;
+	
+	this.xa = random.nextGaussian();
+	this.ya = random.nextGaussian();
     }
     
-    public void move(int posX, int posY) {
-	this.posX = posX;
-	this.posY = posY;
+    public Particle(int xOrigin, int yOrigin, int life, int amount) {
+	this(xOrigin, yOrigin, life);
+	
+	for (int i = 0; i < amount - 1; i ++) 
+	    particlesList.add(new Particle(xOrigin, yOrigin, life));
+	
+	particlesList.add(this);
     }
+
+//    public Particle(double startX, double startY, Color color, int directionX, int directionY, int maxLife) {
+//	this.color = color;
+//	this.directionX = directionX;
+//	this.directionY = directionY;
+//	this.life = maxLife;
+//    }
     
     public void update(Screen screen) {
 	life --;
@@ -33,16 +57,11 @@ public class Particle extends Entity {
 	    move(directionX, directionY);
     }
     
-    public void render(Screen screen) {
-	screen.renderEntity((int)posX,  (int)posY,  Sprite.robot1);
-    }
     
-    /**
-     * Draw the particle on the map.
-     */
-    public void draw(Graphics2D g2) {
-	g2.setColor(color);
-	g2.fillRect((int)this.posX, (int)this.posY, size, size);
+    
+    public void move(int posX, int posY) {
+	this.posX = posX;
+	this.posY = posY;
     }
 	
     @Override
@@ -53,7 +72,12 @@ public class Particle extends Entity {
 
     @Override
     public void update() {
-	// TODO Auto-generated method stub
-	
+	this.xx += xa;
+	this.yy += ya;
+    }
+    
+    @Override
+    public void render(Screen screen) {
+	screen.renderSprite((int)xx, (int)yy, Sprite.particle_explosion);
     }
 }

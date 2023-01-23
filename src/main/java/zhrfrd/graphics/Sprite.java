@@ -20,7 +20,7 @@ public class Sprite {
 //    public static Sprite robot3 = new Sprite(16, 0, 11, SpriteSheet.tiles);
 //    public static Sprite robot4 = new Sprite(16, 1, 11, SpriteSheet.tiles);
     public static Sprite missile = new Sprite(16, 1, 1, SpriteSheet.tiles);
-    public static Sprite particle_explosion = new Sprite(3, 0x1b87e0);
+    public static Sprite particle_explosion = new Sprite(3, 0xaaaaaa);
 
     /**
      * The sprite of a specific entity.

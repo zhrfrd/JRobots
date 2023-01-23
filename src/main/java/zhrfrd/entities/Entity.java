@@ -18,7 +18,7 @@ public abstract class Entity extends JLabel {
     /**
      * Current entity position
      */
-    protected double posX, posY;
+    protected int posX, posY;
     protected final int BOOST = 3;
     /**
      * Current entity status
@@ -31,7 +31,7 @@ public abstract class Entity extends JLabel {
     protected boolean rotateIcon;
     protected Image icon;
     protected Dimension size;
-    protected Level level;
+
     private boolean removed = false;
 
     public Entity() {
@@ -48,14 +48,14 @@ public abstract class Entity extends JLabel {
     /**
      * Get the X position of the entity in percentage to the field width.
      */
-    public double getPosX() {
+    public int getPosX() {
 	return posX;
     }
 
     /**
      * Get the Y position of the entity in percentage to the field height.
      */
-    public double getPosY() {
+    public int getPosY() {
 	return posY;
     }
 

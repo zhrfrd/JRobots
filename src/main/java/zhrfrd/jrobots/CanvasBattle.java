@@ -59,9 +59,13 @@ public class CanvasBattle extends Canvas implements Runnable {
 		if (robots[i] != null) {
 		    robots[i].update();
 		    
-		    for (int j = 0; j < robots[i].missileList.size(); j ++) 
+		    for (int j = 0; j < robots[i].missileList.size(); j ++) { 
 			if (robots[i].missileList.get(j) != null)
 			    robots[i].missileList.get(j).update();
+		    
+		    	if (robots[i].isMissileExploded)
+		    	    robots[i].particle.update();
+		    }
 		}
 	}
 	
@@ -87,9 +91,13 @@ public class CanvasBattle extends Canvas implements Runnable {
 	    if (robots[i] != null) {
 		robots[i].render(screen);
 		
-		for (int j = 0; j < robots[i].missileList.size(); j ++) 
+		for (int j = 0; j < robots[i].missileList.size(); j ++) {
 		    if (robots[i].missileList.get(j) != null)
 			robots[i].missileList.get(j).render(screen);
+		    
+		    if (robots[i].isMissileExploded)
+			robots[i].particle.render(screen);
+		}
 	    }
 	
 	for (int i = 0; i < pixels.length; i ++)

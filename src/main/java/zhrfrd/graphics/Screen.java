@@ -32,6 +32,20 @@ public class Screen {
 	} 
     }
     
+    public void renderSprite (int xBattlefield, int yBattlefield, Sprite sprite) {   //Render single sprite
+	for (int y = 0; y < sprite.getHeight(); y ++) {
+		int yAbsolute = y + yBattlefield;
+		
+		for (int x = 0; x < sprite.getWidth(); x ++) {
+			int xAbsolute = x + xBattlefield;
+			
+			if (xAbsolute < 0 || xAbsolute >= width || yAbsolute < 0 || yAbsolute >= height)   //Don't draw when exceed the size of screen by skipping one iteration
+				continue;
+			pixels[xAbsolute + yAbsolute * width] = sprite.pixels [x + y * sprite.getWidth()];
+		}
+	}
+    }
+    
     public void renderEntity(int xBattlefield, int yBattlefield, Sprite sprite) {
 	for (int y = 0; y < SPRITE_SIZE; y ++) {
 	    int yAbsolute = y + yBattlefield;
