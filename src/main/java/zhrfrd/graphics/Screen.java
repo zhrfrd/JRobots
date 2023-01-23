@@ -53,7 +53,8 @@ public class Screen {
 	    for (int x = 0; x < SPRITE_SIZE; x ++) {
 		int xAbsolute = x + xBattlefield;
 		    
-		pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * SPRITE_SIZE];
+		if (sprite.pixels[x + y * SPRITE_SIZE] != 0xffff00ff)
+		    pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * SPRITE_SIZE];
 	    }
 	}
     }
