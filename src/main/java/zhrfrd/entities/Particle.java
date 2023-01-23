@@ -1,7 +1,5 @@
 package zhrfrd.entities;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,73 +9,66 @@ import zhrfrd.graphics.Sprite;
 
 public class Particle extends Entity {
     private static final long serialVersionUID = 7596968145301880427L;
-    Color color;
-    int size = 30;
-    int directionX;
-    int directionY;
     public List<Particle> particlesList = new ArrayList<>();
-    public Sprite sprite;
+    public Sprite sprite = Sprite.particle_explosion;
     private int life;
-    protected double xx, yy, xa, ya;
-    Random random = new Random();
+    private double  directionX, directionY;
+    private Random random = new Random();
     
-    public Particle(int xOrigin, int yOrigin, int life) {
-	sprite = Sprite.particle_explosion;
-	this.posX = xOrigin;
-	this.posY = yOrigin;
-	this.xx = xOrigin;
-	this.yy = yOrigin;
+    /**
+     * Construct a basic Particle object.
+     * @param xOrigin X position from where the particle is generated.
+     * @param yOrigin Y position from where the particle is generated.
+     * @param life Life span of the particle.
+     */
+    public Particle(double xOrigin, double yOrigin, int life) {
+	posX = xOrigin;
+	posY = yOrigin;
 	this.life = life;
-	sprite = Sprite.particle_explosion;
 	
-	this.xa = random.nextGaussian();
-	this.ya = random.nextGaussian();
+	directionX = random.nextGaussian();
+	directionY = random.nextGaussian();
     }
     
-    public Particle(int xOrigin, int yOrigin, int life, int amount) {
+    /**
+     * Construct a Particle object by specifying also the amount of particles to be added to the particles array list.
+     * @param xOrigin X position from where the particle is generated.
+     * @param yOrigin Y position from where the particle is generated.
+     * @param life Life span of the particle.
+     * @param amount Number of particles that are going to be generated.
+     */
+    public Particle(double xOrigin, double yOrigin, int life, int amount) {
 	this(xOrigin, yOrigin, life);
 	
 	for (int i = 0; i < amount - 1; i ++) 
 	    particlesList.add(new Particle(xOrigin, yOrigin, life));
+    }
+    
+    /**
+     * Update particle information in the game such as position in the battlefield.
+     * @param screen The object Screen needs to be passed for future reference to the render method.
+     */
+    public void update(Screen screen) {
+	posX += directionX;
+	posY += directionY;
 	
-	particlesList.add(this);
+	render(screen);
+    }
+    
+    /**
+     * Render the particle to the screen.
+     * @param screen The Screen object that will handle the rendering of the particle's sprite.
+     */
+    @Override
+    public void render(Screen screen) {
+	screen.renderSprite((int)posX, (int)posY, sprite);
     }
 
-//    public Particle(double startX, double startY, Color color, int directionX, int directionY, int maxLife) {
-//	this.color = color;
-//	this.directionX = directionX;
-//	this.directionY = directionY;
-//	this.life = maxLife;
-//    }
-    
-    public void update(Screen screen) {
-	life --;
-	
-	if (life > 0)
-	    move(directionX, directionY);
-    }
-    
-    
-    
-    public void move(int posX, int posY) {
-	this.posX = posX;
-	this.posY = posY;
-    }
-	
     @Override
     protected void setStartingPosition() {
-	// TODO Auto-generated method stub
-	
     }
 
     @Override
     public void update() {
-	this.xx += xa;
-	this.yy += ya;
-    }
-    
-    @Override
-    public void render(Screen screen) {
-	screen.renderSprite((int)xx, (int)yy, Sprite.particle_explosion);
     }
 }

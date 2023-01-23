@@ -1,26 +1,26 @@
-package zhrfrd.level;
+package zhrfrd.scenario;
 
 import java.util.Random;
 
 import zhrfrd.graphics.Screen;
 
-public class Level {
+public class Scenario {
     protected int width, height;
     protected int[] tiles;
     private static final Random RANDOM = new Random();
     
-    public Level(int width, int height) {
+    public Scenario(int width, int height) {
 	this.width = width;
 	this.height = height;
 	tiles = new int[width * height];
 	
-	generateLevel();
+	generateScenario();
     }
     
     /**
      * Generate level where tiles are set to a random number from 0 - 3.
      */
-    protected void generateLevel() {
+    protected void generateScenario() {
 	for (int y = 0; y < height; y ++)
 	    for (int x = 0; x < width; x ++)
 		tiles[x + y * width] = RANDOM.nextInt(18);

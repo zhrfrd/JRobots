@@ -11,14 +11,13 @@ import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
 
 import zhrfrd.graphics.Screen;
-import zhrfrd.level.Level;
 
 public abstract class Entity extends JLabel {
     private static final long serialVersionUID = -2678484620304652158L;
     /**
      * Current entity position
      */
-    protected int posX, posY;
+    protected double posX, posY;
     protected final int BOOST = 3;
     /**
      * Current entity status
@@ -48,14 +47,14 @@ public abstract class Entity extends JLabel {
     /**
      * Get the X position of the entity in percentage to the field width.
      */
-    public int getPosX() {
+    public double getPosX() {
 	return posX;
     }
 
     /**
      * Get the Y position of the entity in percentage to the field height.
      */
-    public int getPosY() {
+    public double getPosY() {
 	return posY;
     }
 

@@ -1,9 +1,5 @@
 package zhrfrd.entities;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
 
@@ -11,6 +7,11 @@ public class Missile extends Entity {
     private static final long serialVersionUID = -8959188412014341019L;
     private Robot robot;
 
+    /**
+     * Construct a missile.
+     * @param robot Robot that generates the missile.
+     * @param direction direction where the missile is shot.
+     */
     public Missile(Robot robot, int direction) {
 	rotateIcon = true;
 	this.robot = robot;
@@ -24,8 +25,22 @@ public class Missile extends Entity {
 	posX = robot.getPosX();
 	posY = robot.getPosY();
     }
+    
+    /**
+     * Starting method of the missile which set its default values.
+     */
+    public void begin() {
+	setStartingPosition();
 
-    protected void move() {
+	speed = 10 * BOOST;
+	life = 100;
+    }
+    
+    /**
+     * Update missile information in the game such as position in the battlefield.
+     */
+    @Override
+    public void update() {
 	double radians = Math.toRadians(direction);
 	double x = Math.cos(radians) * 0.1 * speed;
 	double y = Math.sin(radians) * 0.1 * speed;
@@ -38,33 +53,6 @@ public class Missile extends Entity {
 
 	posX = (int)Math.max(0, Math.min(400, newPosX));
 	posY = (int)Math.max(0, Math.min(400, newPosY));
-    }
-    
-    /**
-     * Starting method of the missile which set its default values.
-     */
-    public void begin() {
-	setStartingPosition();
-
-	speed = 10 * BOOST;
-	life = 100;
-    }
-
-    /**
-     * Retrieve the specific color of the particles.
-     * @return The RGB color code of the particle.
-     */
-    protected Color getParticleColor() {
-	Color color = new Color(65, 50, 30);
-	return color;
-    }
-    
-    /**
-     * Update missile information in the game.
-     */
-    @Override
-    public void update() {
-	move();
     }
     
     /**

@@ -16,16 +16,12 @@ public abstract class Robot extends Entity {
     private Missile missile;
     public ArrayList<Missile> missileList;
     public Particle particle;
-    public ArrayList<Particle> particleList;
     private boolean isRobotStarted = false;
     private boolean isMissileShot = false;
     private int missileLifeCounter = 0;
     private int missileLifeSpan = 120;
     public boolean isMissileExploded = false;
     
-    public Robot() {
-    }
-
     /**
      * Set robot starting position.
      */
@@ -55,8 +51,8 @@ public abstract class Robot extends Entity {
 	// Adjust direction of the robot
 	// TODO: if the movement is limited by x then y should be limited as well but at
 	// the moment this is not taken into consideration
-	int newPosX = posX + x;
-	int newPosY = posY + y;
+	int newPosX = (int)posX + x;
+	int newPosY = (int)posY + y;
 
 	posX = (int)Math.max(0, Math.min(100, newPosX));
 	posY = (int)Math.max(0, Math.min(100, newPosY));
@@ -141,10 +137,6 @@ public abstract class Robot extends Entity {
 
 	while (i < missileList.size()) {
 	    if (missile != null) {
-//		System.out.println(this.getParent());
-//		this.getParent().remove(missile);
-//		this.getParent().validate();
-//		this.getParent().repaint();
 		missileList.remove(i);
 	    } else
 		i++;
@@ -177,7 +169,6 @@ public abstract class Robot extends Entity {
     	    	isMissileShot = false;
     	    	
     	    	particle = new Particle(missile.getPosX(), missile.getPosY(), 50, 50);
-    	    	System.out.println(particle.sprite.SIZE);
     	    }
     	}
     }

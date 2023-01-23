@@ -13,7 +13,7 @@ import javax.swing.JFileChooser;
 
 import zhrfrd.entities.Robot;
 import zhrfrd.graphics.Screen;
-import zhrfrd.level.Level;
+import zhrfrd.scenario.Scenario;
 
 public class CanvasBattle extends Canvas implements Runnable {
     private static final long serialVersionUID = -2969862236631824201L;
@@ -27,7 +27,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     protected JFileChooser fileChooser;
-    private Level level;
+    private Scenario level;
     Screen screen;
     // Create an image for the canvasBattle. 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
@@ -36,7 +36,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     
     public CanvasBattle() {
 	screen = new Screen(width, height);
-	level = new Level(25, 25);
+	level = new Scenario(25, 25);
     }
     
     /**
@@ -62,13 +62,9 @@ public class CanvasBattle extends Canvas implements Runnable {
 		    for (int j = 0; j < robots[i].missileList.size(); j ++) { 
 			if (robots[i].missileList.get(j) != null)
 			    robots[i].missileList.get(j).update();
-		    
-		    	if (robots[i].isMissileExploded)
-		    	    robots[i].particle.update();
 		    }
 		}
 	}
-	
     }
     
     /**
@@ -91,13 +87,13 @@ public class CanvasBattle extends Canvas implements Runnable {
 	    if (robots[i] != null) {
 		robots[i].render(screen);
 		
-		for (int j = 0; j < robots[i].missileList.size(); j ++) {
+		for (int j = 0; j < robots[i].missileList.size(); j ++)
 		    if (robots[i].missileList.get(j) != null)
 			robots[i].missileList.get(j).render(screen);
-		    
-		    if (robots[i].isMissileExploded)
-			robots[i].particle.render(screen);
-		}
+		
+		if (robots[i].isMissileExploded)
+		    for (int k = 0; k < robots[i].particle.particlesList.size(); k ++)
+			robots[i].particle.particlesList.get(k).update(screen);
 	    }
 	
 	for (int i = 0; i < pixels.length; i ++)

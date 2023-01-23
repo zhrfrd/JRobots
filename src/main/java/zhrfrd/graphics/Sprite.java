@@ -16,14 +16,11 @@ public class Sprite {
     public static Sprite rock3 = new Sprite(16, 7, 0, SpriteSheet.tiles); 
     public static Sprite rock4 = new Sprite(16, 8, 0, SpriteSheet.tiles);
     public static Sprite robot1 = new Sprite(16, 0, 1, SpriteSheet.tiles);
-//    public static Sprite robot2 = new Sprite(16, 1, 10, SpriteSheet.tiles);
-//    public static Sprite robot3 = new Sprite(16, 0, 11, SpriteSheet.tiles);
-//    public static Sprite robot4 = new Sprite(16, 1, 11, SpriteSheet.tiles);
     public static Sprite missile = new Sprite(16, 1, 1, SpriteSheet.tiles);
     public static Sprite particle_explosion = new Sprite(3, 0xaaaaaa);
 
     /**
-     * The sprite of a specific entity.
+     * The sprite of a specific entity extracted from the sprite sheet.
      * @param size Size of the sprite in pixels.
      * @param x X coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
      * @param y Y coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
@@ -40,6 +37,11 @@ public class Sprite {
 	load();
     }
 
+    /**
+     * Sprite tha is not extracted from the sprite sheet but just a single color.
+     * @param size Size of the sprite in pixels.
+     * @param color The color of the entity's sprite.
+     */
     public Sprite(int size, int color) { 
 	this.width = size;
 	this.height = size;
@@ -48,8 +50,9 @@ public class Sprite {
 	setColor(color);
     }
 
-    /*
-     * Add colour to each pixel 
+    /**
+     * Add colour to each pixel of the entity.
+     * @param color The integer value of the color.
      */
     public void setColor(int color) {
 	for (int i = 0; i < SIZE * SIZE; i++)
@@ -65,15 +68,17 @@ public class Sprite {
 		pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
     }
 
-    /*
-     * Get width of the sprite
+    /**
+     * Get width of the sprite.
+     * @return The width of the sprite.
      */
     public int getWidth() {
 	return width;
     }
 
-    /*
-     * Get height of the sprite
+    /**
+     * Get height of the sprite.
+     * @return The width of the sprite.
      */
     public int getHeight() {
 	return height;

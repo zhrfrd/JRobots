@@ -1,4 +1,4 @@
-package zhrfrd.level;
+package zhrfrd.scenario;
 
 import zhrfrd.graphics.Screen;
 import zhrfrd.graphics.Sprite;
