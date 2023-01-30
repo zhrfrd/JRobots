@@ -27,14 +27,14 @@ Clone this repository inside your workspace:
 
 If you don't have Maven installed in your machine:
 
-- Go to [Maven's download page]()
+- Go to [Maven's download page]().
 - Under the **Files** section, select the link relative to the **Binary zip archive**.
 
 ### MacOS and Linux
 
 - Extract the downloaded content inside any chosen folder. In my case I decided to extract it inside the Library folder.
-- Open your terminal and go to HOME by typing `cd $HOME`
-- and open the .zshrc file `cat > .zshrc`
+- Open your terminal and go to HOME by typing `cd $HOME`.
+- and open the .zshrc file `cat > .zshrc`.
 - Add Maven to the PATH environment variable by typing the two lines below, press **control** + **D** to save the file (If you saved correctly you should be able to see the new PATH by typing `car .zshrc`) and close the terminal:
 
 ```
@@ -50,7 +50,7 @@ export PATH=$MAVEN_HOME/bin:$PATH
 - Select **Environment Variables**.
 - Add the **PATH** to the user variables i.e. `C:\Program Files\apache-maven-3.8.7\bin`.
 
-If the installation has been completed correctly, you should be able to verify the Maven version by typing: `mvn -v`
+If the installation has been completed correctly, you should be able to verify the Maven version by typing: `mvn -v`.
 
 ## 4. Configure Maven (Eclipse)
 

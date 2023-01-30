@@ -11,7 +11,7 @@ public class Particle extends Entity {
     private static final long serialVersionUID = 7596968145301880427L;
     public List<Particle> particlesList = new ArrayList<>();
     public Sprite sprite = Sprite.particle_explosion;
-    private int life;
+    public int life;
     private double  directionX, directionY;
     private Random random = new Random();
     
@@ -51,8 +51,9 @@ public class Particle extends Entity {
     public void update(Screen screen) {
 	posX += directionX;
 	posY += directionY;
+	life --;
 	
-	render(screen);
+//	render(screen);
     }
     
     /**

@@ -21,6 +21,8 @@ public abstract class Robot extends Entity {
     private int missileLifeCounter = 0;
     private int missileLifeSpan = 120;
     public boolean isMissileExploded = false;
+    public boolean isParticleGenerated = false;
+    
     
     /**
      * Set robot starting position.
@@ -162,13 +164,13 @@ public abstract class Robot extends Entity {
     	    missileLifeCounter ++;
     	    
     	    if (missileLifeCounter >= missileLifeSpan || missile.getPosX() <= 0 || missile.getPosX() >= 400 || missile.getPosY() <= 0 || missile.getPosY() >= 400) {
-    	    	isMissileExploded = true;
-    		cleanMissiles();
-    	    	
+    		isMissileExploded = true;
     	    	missileLifeCounter = 0;
     	    	isMissileShot = false;
-    	    	
-    	    	particle = new Particle(missile.getPosX(), missile.getPosY(), 50, 50);
+    	    	isParticleGenerated = true;
+    		
+    		cleanMissiles();
+    		particle = new Particle(missile.getPosX(), missile.getPosY(), 50, 50);
     	    }
     	}
     }

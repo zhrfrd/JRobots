@@ -76,7 +76,7 @@ public class CanvasBattle extends Canvas implements Runnable {
 	
 	// Called only once (the first time render() is accessed.
 	if (bufferStrategy == null) {
-		createBufferStrategy(3); // Triple buffering
+		createBufferStrategy(3);
 		return;
 	}
 	 
@@ -93,7 +93,11 @@ public class CanvasBattle extends Canvas implements Runnable {
 		
 		if (robots[i].isMissileExploded)
 		    for (int k = 0; k < robots[i].particle.particlesList.size(); k ++)
-			robots[i].particle.particlesList.get(k).update(screen);
+			if (robots[i].particle.particlesList.get(k).life > 0) {
+			    robots[i].particle.particlesList.get(k).update(screen);
+			    robots[i].particle.particlesList.get(k).render(screen);
+			    
+			}
 	    }
 	
 	for (int i = 0; i < pixels.length; i ++)
