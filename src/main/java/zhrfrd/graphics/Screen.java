@@ -7,7 +7,11 @@ public class Screen {
     public int[] pixels;
     private int SPRITE_SIZE = 16;
 
-    // Constructor
+    /**
+     * Screen handles the rendering of the elements to the game's screen.
+     * @param width Screen width in pixels.
+     * @param height Screen height in pixels.
+     */
     public Screen(int width, int height) {
 	this.width = width;
 	this.height = height; 
@@ -32,6 +36,12 @@ public class Screen {
 	} 
     }
     
+    /**
+     * Render particles to the screen.
+     * @param xBattlefield Individual position of the sprite in the X coordinate of the battlefield.
+     * @param yBattlefield Individual position of the sprite in the Y coordinate of the battlefield.
+     * @param sprite The sprite of the particle.
+     */
     public void renderSprite (int xBattlefield, int yBattlefield, Sprite sprite) {   //Render single sprite
 	for (int y = 0; y < sprite.getHeight(); y ++) {
 	    int yAbsolute = y + yBattlefield;
@@ -47,6 +57,12 @@ public class Screen {
 	}
     }
     
+    /**
+     * Render the entities to the screen.
+     * @param xBattlefield Individual position of the entity in the X coordinate of the battlefield.
+     * @param yBattlefield Individual position of the entity in the Y coordinate of the battlefield.
+     * @param sprite Entity's sprite.
+     */
     public void renderEntity(int xBattlefield, int yBattlefield, Sprite sprite) {
 	for (int y = 0; y < SPRITE_SIZE; y ++) {
 	    int yAbsolute = y + yBattlefield;

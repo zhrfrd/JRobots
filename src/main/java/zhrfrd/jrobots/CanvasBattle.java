@@ -27,7 +27,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     protected JFileChooser fileChooser;
-    private Scenario level;
+    private Scenario scenario;
     Screen screen;
     // Create an image for the canvasBattle. 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
@@ -36,7 +36,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     
     public CanvasBattle() {
 	screen = new Screen(width, height);
-	level = new Scenario(25, 25);
+	scenario = new Scenario(25, 25);
     }
     
     /**
@@ -81,7 +81,7 @@ public class CanvasBattle extends Canvas implements Runnable {
 	}
 	 
 	screen.clear();
-	level.render(screen);
+	scenario.render(screen);
 	
 	for (int i = 0; i < robots.length; i ++) 
 	    if (robots[i] != null) {

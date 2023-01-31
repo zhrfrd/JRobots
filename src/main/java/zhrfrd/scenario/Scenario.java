@@ -9,6 +9,11 @@ public class Scenario {
     protected int[] tiles;
     private static final Random RANDOM = new Random();
     
+    /**
+     * Scenario manages the creation and rendering of battle's scenario.
+     * @param width Battlefield width calculated in tiles.
+     * @param height Battlefield height calculated in tiles.
+     */
     public Scenario(int width, int height) {
 	this.width = width;
 	this.height = height;
@@ -26,6 +31,10 @@ public class Scenario {
 		tiles[x + y * width] = RANDOM.nextInt(18);
     } 
     
+    /**
+     * Render the scenario to the screen.
+     * @param screen Screen that manages the rendering of the scenario.
+     */
     public void render(Screen screen) {
 	// Corner pins to identify the area of the map to be rendered (from top-left to bottom-right)
 	int x0 = 0;
