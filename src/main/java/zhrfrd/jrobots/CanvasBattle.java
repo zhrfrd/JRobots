@@ -141,14 +141,18 @@ public class CanvasBattle extends Canvas implements Runnable {
      * instance of Robot passing JRobots as parameter.
      * @param fullClassesRobotsArrayList ArrayList containing the full class string of the robot.
      */
-    protected void startBattle(ArrayList<String> fullClassRobotsArrayList) {
+    protected void startBattle(String[] fullClassRobotsArrayList) {
 	robots = new Robot[MAX_ROBOTS]; 
 	Class<?> classRobot = null;
-	Constructor<?> constructorRobot;
+	Constructor<?> constructorRobot; 
 	
-	for (int i = 0; i < fullClassRobotsArrayList.size(); i++) {
+	for (int i = 0; i < fullClassRobotsArrayList.length; i++) {
+	    if (fullClassRobotsArrayList[i] == null)
+		break;
+	    
 	    try {
-		classRobot = Class.forName(fullClassRobotsArrayList.get(i));
+		classRobot = Class.forName(fullClassRobotsArrayList[i]);
+		System.out.println(fullClassRobotsArrayList[0]);
 		constructorRobot = classRobot.getDeclaredConstructor();
 		Robot newRobot = (Robot) constructorRobot.newInstance();
 		robots[i] = newRobot;
