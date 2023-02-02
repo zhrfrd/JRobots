@@ -188,18 +188,23 @@ public class MainFrame extends JFrame implements ActionListener {
 	int response = fileChooser.showOpenDialog(null);
 	String fullClass = "";
 
-	if (response == JFileChooser.APPROVE_OPTION)
+	if (response == JFileChooser.APPROVE_OPTION) {
 	    fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
+	    fullClass = extractFullClassRobot();
+	    fullClassesRobotsArrayList[index] = fullClass;
+	    labelPathRobot.setText(fullClass);
+	}
+	
+	else if (response == JFileChooser.CANCEL_OPTION) {
+	    System.out.println("Exit");
+	}
 
-	fullClass = extractFullClassRobot();
-	fullClassesRobotsArrayList[index] = fullClass;
-	labelPathRobot.setText(fullClass);
+	
     }
     
     protected void cancelLoadRobot(JLabel labelPathRobot, int index) {
 	resetFullClassRobots();
-	String fullClass = "";
-	labelPathRobot.setText(fullClass);
+	labelPathRobot.setText("Path: ");
     }
     
     /**
