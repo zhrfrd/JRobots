@@ -35,11 +35,24 @@ public class MainFrame extends JFrame implements ActionListener {
     protected JButton buttonPause;
     protected JButton buttonReset;
     protected JButton buttonRestart;
-    protected ArrayList<JPanel> panelRobotArrayList;
+    protected JButton buttonLoad0;
+    protected JButton buttonLoad1;
+    protected JButton buttonLoad2;
+    protected JButton buttonLoad3;
+    protected JButton buttonCancelLoad0;
+    protected JButton buttonCancelLoad1;
+    protected JButton buttonCancelLoad2;
+    protected JButton buttonCancelLoad3;
+    protected ArrayList<JPanel> panelsRobotArrayList;
     protected ArrayList<JButton> buttonsLoadArrayList;
-    protected ArrayList<JLabel> labelPathRobotArrayList;
-    protected ArrayList<JLabel> labelLifeRobotArrayList;
-    protected ArrayList<String> fullClassRobotsArrayList;
+    protected ArrayList<JButton> buttonsCancelLoadArrayList;
+    protected ArrayList<JLabel> labelsPathRobotArrayList;
+    protected ArrayList<JLabel> labelsLifeRobotArrayList;
+    protected ArrayList<String> fullClassesRobotsArrayList;
+    protected boolean isButtonLoad0Active = true;
+    protected boolean isButtonLoad1Active = true;
+    protected boolean isButtonLoad2Active = true;
+    protected boolean isButtonLoad3Active = true;
 //    private ArrayList<Robot> robot;
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
@@ -105,14 +118,16 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelStartController.add(buttonReset);
 	panelStartController.add(buttonRestart);
 
-	panelRobotArrayList = new ArrayList<JPanel>();
+	panelsRobotArrayList = new ArrayList<JPanel>();
 	buttonsLoadArrayList = new ArrayList<JButton>();
-	labelPathRobotArrayList = new ArrayList<JLabel>();
-	labelLifeRobotArrayList = new ArrayList<JLabel>();
-	fullClassRobotsArrayList = new ArrayList<String>();
+	buttonsCancelLoadArrayList = new ArrayList<JButton>();
+	labelsPathRobotArrayList = new ArrayList<JLabel>();
+	labelsLifeRobotArrayList = new ArrayList<JLabel>();
+	fullClassesRobotsArrayList = new ArrayList<String>();
 
 	for (int i = 0; i < MAX_ROBOTS; i++) {
 	    JButton buttonLoad = new JButton("Load robot " + (i + 1));
+	    JButton buttonCancelLoad = new JButton("Cancel load " + (i + 1));
 	    buttonLoad.addActionListener(this);
 	    JLabel labelPathRobot = new JLabel("Path: ");
 	    JLabel labelLifeRobot = new JLabel("Life: ");
@@ -120,16 +135,20 @@ public class MainFrame extends JFrame implements ActionListener {
 	    panelRobot.setBackground(Color.gray);
 	    panelRobot.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.white));
 	    panelRobot.add(buttonLoad);
+	    panelRobot.add(buttonCancelLoad);
 	    panelRobot.add(labelPathRobot);
 	    panelRobot.add(labelLifeRobot);
 	    panelRobot.setLayout(new BoxLayout(panelRobot, BoxLayout.Y_AXIS));
 	    buttonLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    buttonCancelLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    buttonCancelLoad.setVisible(false);
 	    labelPathRobot.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    labelLifeRobot.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    buttonsLoadArrayList.add(buttonLoad);
-	    labelPathRobotArrayList.add(labelPathRobot);
-	    labelLifeRobotArrayList.add(labelLifeRobot);
-	    panelRobotArrayList.add(panelRobot);
+	    buttonsCancelLoadArrayList.add(buttonCancelLoad);
+	    labelsPathRobotArrayList.add(labelPathRobot);
+	    labelsLifeRobotArrayList.add(labelLifeRobot);
+	    panelsRobotArrayList.add(panelRobot);
 	    panelRobotsContainer.add(panelRobot);
 	}
 
@@ -183,7 +202,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	    fileRobot = new File(fileChooser.getSelectedFile().getAbsolutePath());
 
 	fullClass = extractFullClassRobot();
-	fullClassRobotsArrayList.add(fullClass);
+	fullClassesRobotsArrayList.add(fullClass);
 	labelPathRobot.setText(fullClass);
     }
     
@@ -191,8 +210,8 @@ public class MainFrame extends JFrame implements ActionListener {
      * Remove all the classed saved inside the fullClassRobots array list.
      */
     protected void resetFullClassRobots() {
-	for (int i = 0; i < fullClassRobotsArrayList.size(); i ++)
-	    fullClassRobotsArrayList.remove(i);
+	for (int i = 0; i < fullClassesRobotsArrayList.size(); i ++)
+	    fullClassesRobotsArrayList.remove(i);
     }
     
     /**
@@ -221,26 +240,83 @@ public class MainFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+	// Load robots
 	if (e.getSource() == buttonsLoadArrayList.get(0)) {
+	    buttonLoad0 = buttonsLoadArrayList.get(0);
+	    buttonCancelLoad0 = buttonsCancelLoadArrayList.get(0);
+	    buttonLoad0.setVisible(false);
+	    buttonCancelLoad0.setVisible(true);
+	    isButtonLoad0Active = false;
 //	    loadRobot(labelPathRobot.get(0));
-	    fullClassRobotsArrayList.add("zhrfrd.testjrobots.Test");
-	    labelPathRobotArrayList.get(0).setText("zhrfrd.testjrobots.Test");
+	    fullClassesRobotsArrayList.add("zhrfrd.testjrobots.Test");
+	    labelsPathRobotArrayList.get(0).setText("zhrfrd.testjrobots.Test");
 	}
 
 	if (e.getSource() == buttonsLoadArrayList.get(1)) {
-	    fullClassRobotsArrayList.add("zhrfrd.testjrobots.Test");
-	    labelPathRobotArrayList.get(0).setText("zhrfrd.testjrobots.Test");
+	    buttonLoad1 = buttonsLoadArrayList.get(1);
+	    buttonCancelLoad1 = buttonsCancelLoadArrayList.get(1);
+	    buttonLoad1.setVisible(false);
+	    buttonCancelLoad1.setVisible(true);
+	    isButtonLoad1Active = false;
+	    fullClassesRobotsArrayList.add("zhrfrd.testjrobots.Test");
+	    labelsPathRobotArrayList.get(1).setText("zhrfrd.testjrobots.Test");
 //	    loadRobot(labelPathRobot.get(1));
 	}
 
-	if (e.getSource() == buttonsLoadArrayList.get(2))
-	    loadRobot(labelPathRobotArrayList.get(2));
+	if (e.getSource() == buttonsLoadArrayList.get(2)) {
+	    buttonLoad2 = buttonsLoadArrayList.get(2);
+	    buttonCancelLoad2 = buttonsCancelLoadArrayList.get(2);
+	    buttonLoad2.setVisible(false);
+	    buttonCancelLoad2.setVisible(true);
+	    isButtonLoad2Active = false;
+	    loadRobot(labelsPathRobotArrayList.get(2));
+	}
 
-	if (e.getSource() == buttonsLoadArrayList.get(3))
-	    loadRobot(labelPathRobotArrayList.get(3));
+	if (e.getSource() == buttonsLoadArrayList.get(3)) {
+	    buttonLoad3 = buttonsLoadArrayList.get(3);
+	    buttonCancelLoad3 = buttonsCancelLoadArrayList.get(3);
+	    buttonLoad3.setVisible(false);
+	    buttonCancelLoad3.setVisible(true);
+	    isButtonLoad3Active = false;
+	    loadRobot(labelsPathRobotArrayList.get(3));
+	}
+	
+	// Cancel load robots
+	if (e.getSource() == buttonsCancelLoadArrayList.get(0)) {
+	    buttonLoad0 = buttonsLoadArrayList.get(0);
+	    buttonCancelLoad0 = buttonsCancelLoadArrayList.get(0);
+	    buttonCancelLoad0.setVisible(false);
+	    buttonLoad0.setVisible(true);
+	    isButtonLoad0Active = true;
+	}
+	
+	if (e.getSource() == buttonsCancelLoadArrayList.get(1)) {
+	    buttonLoad1 = buttonsLoadArrayList.get(1);
+	    buttonCancelLoad1 = buttonsCancelLoadArrayList.get(1);
+	    buttonCancelLoad1.setVisible(false);
+	    buttonLoad1.setVisible(true);
+	    isButtonLoad1Active = true;
+	}
+	
+	if (e.getSource() == buttonsCancelLoadArrayList.get(2)) {
+	    buttonLoad2 = buttonsLoadArrayList.get(2);
+	    buttonCancelLoad2 = buttonsCancelLoadArrayList.get(2);
+	    buttonCancelLoad2.setVisible(false);
+	    buttonLoad2.setVisible(true);
+	    isButtonLoad2Active = true;
+	}
+	
+	if (e.getSource() == buttonsCancelLoadArrayList.get(3)) {
+	    buttonLoad3 = buttonsLoadArrayList.get(3);
+	    buttonCancelLoad3 = buttonsCancelLoadArrayList.get(3);
+	    buttonCancelLoad3.setVisible(false);
+	    buttonLoad3.setVisible(true);
+	    isButtonLoad3Active = true;
+	}
 
+	// Actions 
 	if (e.getSource() == buttonStart) {
-	    canvasBattle.startBattle(fullClassRobotsArrayList);
+	    canvasBattle.startBattle(fullClassesRobotsArrayList);
 	    buttonStart.setEnabled(false);
 	}
 	
@@ -259,6 +335,4 @@ public class MainFrame extends JFrame implements ActionListener {
 	    buttonStart.setEnabled(true);
 	}
     }
-
-    
 }
