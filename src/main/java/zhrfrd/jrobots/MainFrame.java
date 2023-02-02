@@ -49,10 +49,6 @@ public class MainFrame extends JFrame implements ActionListener {
     protected JLabel[] labelsPathRobotArrayList;
     protected JLabel[] labelsLifeRobotArrayList;
     protected String[] fullClassesRobotsArrayList;
-    protected boolean isButtonLoad0Active = true;
-    protected boolean isButtonLoad1Active = true;
-    protected boolean isButtonLoad2Active = true;
-    protected boolean isButtonLoad3Active = true;
 //    private ArrayList<Robot> robot;
     final int FPS = 60;
     final int MAX_ROBOTS = 4;
@@ -126,30 +122,26 @@ public class MainFrame extends JFrame implements ActionListener {
 	fullClassesRobotsArrayList = new String[4];
 
 	for (int i = 0; i < MAX_ROBOTS; i++) {
-	    JButton buttonLoad = new JButton("Load robot " + (i + 1));
-	    JButton buttonCancelLoad = new JButton("Cancel load " + (i + 1));
-	    buttonLoad.addActionListener(this);
-	    JLabel labelPathRobot = new JLabel("Path: ");
-	    JLabel labelLifeRobot = new JLabel("Life: ");
-	    JPanel panelRobot = new JPanel();
-	    panelRobot.setBackground(Color.gray);
-	    panelRobot.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.white));
-	    panelRobot.add(buttonLoad);
-	    panelRobot.add(buttonCancelLoad);
-	    panelRobot.add(labelPathRobot);
-	    panelRobot.add(labelLifeRobot);
-	    panelRobot.setLayout(new BoxLayout(panelRobot, BoxLayout.Y_AXIS));
-	    buttonLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    buttonCancelLoad.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    buttonCancelLoad.setVisible(false);
-	    labelPathRobot.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    labelLifeRobot.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    buttonsLoadArrayList[i] = buttonLoad;
-	    buttonsCancelLoadArrayList[i] = buttonCancelLoad;
-	    labelsPathRobotArrayList[i] = labelPathRobot;
-	    labelsLifeRobotArrayList[i] = labelLifeRobot;
-	    panelsRobotArrayList[i] = panelRobot;
-	    panelRobotsContainer.add(panelRobot);
+	    buttonsLoadArrayList[i] = new JButton("Load robot " + (i + 1));
+	    buttonsCancelLoadArrayList[i] = new JButton("Cancel load " + (i + 1));
+	    labelsPathRobotArrayList[i] = new JLabel("Path: ");
+	    labelsLifeRobotArrayList[i] = new JLabel("Life: ");
+	    buttonsLoadArrayList[i].addActionListener(this);
+	    buttonsCancelLoadArrayList[i].addActionListener(this);
+	    panelsRobotArrayList[i] = new JPanel();
+	    panelRobotsContainer.add(panelsRobotArrayList[i]);
+	    panelsRobotArrayList[i].setBackground(Color.gray);
+	    panelsRobotArrayList[i].setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.white));
+	    panelsRobotArrayList[i].add(buttonsLoadArrayList[i]);
+	    panelsRobotArrayList[i].add(buttonsCancelLoadArrayList[i]);
+	    panelsRobotArrayList[i].add(labelsPathRobotArrayList[i]);
+	    panelsRobotArrayList[i].add(labelsLifeRobotArrayList[i]);
+	    panelsRobotArrayList[i].setLayout(new BoxLayout(panelsRobotArrayList[i], BoxLayout.Y_AXIS));
+	    buttonsLoadArrayList[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+	    buttonsCancelLoadArrayList[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+	    buttonsCancelLoadArrayList[i].setVisible(false);
+	    labelsPathRobotArrayList[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+	    labelsLifeRobotArrayList[i].setAlignmentX(Component.CENTER_ALIGNMENT);
 	}
 
 	panelRightMenuContainer.add(panelRobotsContainer);
@@ -204,6 +196,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	labelPathRobot.setText(fullClass);
     }
     
+    protected void cancelLoadRobot(JLabel labelPathRobot, int index) {
+	resetFullClassRobots();
+	String fullClass = "";
+	labelPathRobot.setText(fullClass);
+    }
+    
     /**
      * Remove all the classed saved inside the fullClassRobots array list.
      */
@@ -240,77 +238,56 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 	// Load robots
 	if (e.getSource() == buttonsLoadArrayList[0]) {
-	    buttonLoad0 = buttonsLoadArrayList[0];
-	    buttonCancelLoad0 = buttonsCancelLoadArrayList[0];
-	    buttonLoad0.setVisible(false);
-	    buttonCancelLoad0.setVisible(true);
-	    isButtonLoad0Active = false;
+	    buttonsLoadArrayList[0].setVisible(false);
+	    buttonsCancelLoadArrayList[0].setVisible(true);
 	    fullClassesRobotsArrayList[0] = "zhrfrd.testjrobots.Test";
 	    labelsPathRobotArrayList[0].setText("zhrfrd.testjrobots.Test");
 //	    loadRobot(labelPathRobot.get(0), 0);
 	}
 
 	if (e.getSource() == buttonsLoadArrayList[1]) {
-	    buttonLoad1 = buttonsLoadArrayList[1];
-	    buttonCancelLoad1 = buttonsCancelLoadArrayList[1];
-	    buttonLoad1.setVisible(false);
-	    buttonCancelLoad1.setVisible(true);
-	    isButtonLoad1Active = false;
+	    buttonsLoadArrayList[1].setVisible(false);
+	    buttonsCancelLoadArrayList[1].setVisible(true);
 	    fullClassesRobotsArrayList[1] = "zhrfrd.testjrobots.Test";
 	    labelsPathRobotArrayList[1].setText("zhrfrd.testjrobots.Test");
 //	    loadRobot(labelPathRobot.get(1), 1);
 	}
 
 	if (e.getSource() == buttonsLoadArrayList[2]) {
-	    buttonLoad2 = buttonsLoadArrayList[2];
-	    buttonCancelLoad2 = buttonsCancelLoadArrayList[2];
-	    buttonLoad2.setVisible(false);
-	    buttonCancelLoad2.setVisible(true);
-	    isButtonLoad2Active = false;
+	    buttonsLoadArrayList[2].setVisible(false);
+	    buttonsCancelLoadArrayList[2].setVisible(true);
 	    loadRobot(labelsPathRobotArrayList[2], 2);
 	}
 
 	if (e.getSource() == buttonsLoadArrayList[3]) {
-	    buttonLoad3 = buttonsLoadArrayList[3];
-	    buttonCancelLoad3 = buttonsCancelLoadArrayList[3];
-	    buttonLoad3.setVisible(false);
-	    buttonCancelLoad3.setVisible(true);
-	    isButtonLoad3Active = false;
+	    buttonsLoadArrayList[3].setVisible(false);
+	    buttonsCancelLoadArrayList[3].setVisible(true);
 	    loadRobot(labelsPathRobotArrayList[3], 3);
 	}
-	
+	 
 	// Cancel load robots
 	if (e.getSource() == buttonsCancelLoadArrayList[0]) {
-	    buttonLoad0 = buttonsLoadArrayList[0];
-	    buttonCancelLoad0 = buttonsCancelLoadArrayList[0];
-	    buttonCancelLoad0.setVisible(false);
-	    buttonLoad0.setVisible(true);
-	    isButtonLoad0Active = true;
-	    
+	    buttonsLoadArrayList[0].setVisible(true);
+	    buttonsCancelLoadArrayList[0].setVisible(false);
+	    cancelLoadRobot(labelsPathRobotArrayList[0], 0);
 	}
 	
 	if (e.getSource() == buttonsCancelLoadArrayList[1]) {
-	    buttonLoad1 = buttonsLoadArrayList[1];
-	    buttonCancelLoad1 = buttonsCancelLoadArrayList[1];
-	    buttonCancelLoad1.setVisible(false);
-	    buttonLoad1.setVisible(true);
-	    isButtonLoad1Active = true;
+	    buttonsLoadArrayList[1].setVisible(true);
+	    buttonsCancelLoadArrayList[1].setVisible(false);
+	    cancelLoadRobot(labelsPathRobotArrayList[1], 1);
 	}
 	
 	if (e.getSource() == buttonsCancelLoadArrayList[2]) {
-	    buttonLoad2 = buttonsLoadArrayList[2];
-	    buttonCancelLoad2 = buttonsCancelLoadArrayList[2];
-	    buttonCancelLoad2.setVisible(false);
-	    buttonLoad2.setVisible(true);
-	    isButtonLoad2Active = true; 
+	    buttonsLoadArrayList[2].setVisible(true);
+	    buttonsCancelLoadArrayList[2].setVisible(false);
+	    cancelLoadRobot(labelsPathRobotArrayList[2], 2);
 	}
 	
 	if (e.getSource() == buttonsCancelLoadArrayList[3]) {
-	    buttonLoad3 = buttonsLoadArrayList[3];
-	    buttonCancelLoad3 = buttonsCancelLoadArrayList[3];
-	    buttonCancelLoad3.setVisible(false);
-	    buttonLoad3.setVisible(true);
-	    isButtonLoad3Active = true;
+	    buttonsLoadArrayList[3].setVisible(true);
+	    buttonsCancelLoadArrayList[3].setVisible(false);
+	    cancelLoadRobot(labelsPathRobotArrayList[3], 3);
 	}
 
 	// Actions 
