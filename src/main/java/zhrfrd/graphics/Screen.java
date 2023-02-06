@@ -49,8 +49,9 @@ public class Screen {
 	    for (int x = 0; x < sprite.getWidth(); x ++) {
 		int xAbsolute = x + xBattlefield;
 			
-		if (xAbsolute < 0 || xAbsolute >= width || yAbsolute < 0 || yAbsolute >= height)   //Don't draw when exceed the size of screen by skipping one iteration
+		if (xAbsolute < 0 || xAbsolute >= width || yAbsolute < 0 || yAbsolute >= height) {   //Don't draw when exceed the size of screen by skipping one iteration
 		    continue;
+		}
 		
 		pixels[xAbsolute + yAbsolute * width] = sprite.pixels [x + y * sprite.getWidth()];
 	    }
@@ -70,8 +71,9 @@ public class Screen {
 	    for (int x = 0; x < SPRITE_SIZE; x ++) {
 		int xAbsolute = x + xBattlefield;
 		    
-		if (sprite.pixels[x + y * SPRITE_SIZE] != 0xffff00ff)
+		if (sprite.pixels[x + y * SPRITE_SIZE] != 0xffff00ff) {
 		    pixels[xAbsolute + yAbsolute * width] = sprite.pixels[x + y * SPRITE_SIZE];
+		}
 	    }
 	}
     }
@@ -80,7 +82,8 @@ public class Screen {
      * Reset all the pixels to 0 in order to refresh at each loop the canvasBattle.
      */
     public void clear() {
-	for (int i = 0; i < pixels.length; i ++)
+	for (int i = 0; i < pixels.length; i ++) {
 	    pixels[i] = 0;
+	}
     }
 }

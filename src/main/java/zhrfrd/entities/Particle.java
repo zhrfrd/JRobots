@@ -40,8 +40,9 @@ public class Particle extends Entity {
     public Particle(double xOrigin, double yOrigin, int life, int amount) {
 	this(xOrigin, yOrigin, life);
 	
-	for (int i = 0; i < amount - 1; i ++) 
+	for (int i = 0; i < amount - 1; i ++) {
 	    particlesList.add(new Particle(xOrigin, yOrigin, life));
+	}
     }
     
     /**

@@ -51,19 +51,22 @@ public class CanvasBattle extends Canvas implements Runnable {
      * Update game's information every 0.01666 seconds (60fps).
      */
     protected void update() {
-	if (isBattleStopped)
+	if (isBattleStopped) {
 	    resetBattle();
+	}
 	
 	else if (!isBattleStopped && !isBattlePaused) {
-	    for (int i = 0; i < robots.length; i ++) 
+	    for (int i = 0; i < robots.length; i ++) {
 		if (robots[i] != null) {
 		    robots[i].update();
 		    
 		    for (int j = 0; j < robots[i].missileList.size(); j ++) { 
-			if (robots[i].missileList.get(j) != null)
+			if (robots[i].missileList.get(j) != null) {
 			    robots[i].missileList.get(j).update();
+			}
 		    }
 		}
+	    }
 	}
     }
     
@@ -76,32 +79,38 @@ public class CanvasBattle extends Canvas implements Runnable {
 	
 	// Called only once (the first time render() is accessed.
 	if (bufferStrategy == null) {
-		createBufferStrategy(3);
-		return;
+	    createBufferStrategy(3);
+	    return;
 	}
 	 
 	screen.clear();
 	scenario.render(screen);
 	
-	for (int i = 0; i < robots.length; i ++) 
+	for (int i = 0; i < robots.length; i ++) {
 	    if (robots[i] != null) {
 		robots[i].render(screen);
 		
-		for (int j = 0; j < robots[i].missileList.size(); j ++)
-		    if (robots[i].missileList.get(j) != null)
+		for (int j = 0; j < robots[i].missileList.size(); j ++) {
+		    if (robots[i].missileList.get(j) != null) {
 			robots[i].missileList.get(j).render(screen);
+		    }
+		}
 		
-		if (robots[i].isMissileExploded)
-		    for (int k = 0; k < robots[i].particle.particlesList.size(); k ++)
+		if (robots[i].isMissileExploded) {
+		    for (int k = 0; k < robots[i].particle.particlesList.size(); k ++) {
 			if (robots[i].particle.particlesList.get(k).life > 0) {
 			    robots[i].particle.particlesList.get(k).update(screen);
 			    robots[i].particle.particlesList.get(k).render(screen);
 			    
 			}
+		    }
+		}
 	    }
+	}
 	
-	for (int i = 0; i < pixels.length; i ++)
+	for (int i = 0; i < pixels.length; i ++) {
 	    pixels[i] = screen.pixels[i];
+	}
 	
 	Graphics g = bufferStrategy.getDrawGraphics();
 	g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
@@ -147,8 +156,9 @@ public class CanvasBattle extends Canvas implements Runnable {
 	Constructor<?> constructorRobot; 
 	
 	for (int i = 0; i < fullClassRobotsArrayList.length; i++) {
-	    if (fullClassRobotsArrayList[i] == null)
+	    if (fullClassRobotsArrayList[i] == null) {
 		break;
+	    }
 	    
 	    try {
 		classRobot = Class.forName(fullClassRobotsArrayList[i]);
@@ -174,12 +184,9 @@ public class CanvasBattle extends Canvas implements Runnable {
 
 	// Game loop
 	while (true) {
-	    if (isBattlePaused)
-		try {
-		    threadBattle.wait();
-		} catch (InterruptedException e1) {
-		    e1.printStackTrace();
-		}
+	    if (isBattlePaused) {
+		threadBattle.interrupt();
+	    }
 	    
 	    currentTime = System.nanoTime();
 	    delta += (currentTime - lastTime) / drawInterval;
@@ -190,8 +197,9 @@ public class CanvasBattle extends Canvas implements Runnable {
 		update();
 		render();
 
-		if (isBattleStopped) 
+		if (isBattleStopped) {
 		    break;
+		}
 
 		delta--;
 	    }

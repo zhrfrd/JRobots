@@ -55,17 +55,20 @@ public class Sprite {
      * @param color The integer value of the color.
      */
     public void setColor(int color) {
-	for (int i = 0; i < SIZE * SIZE; i++)
+	for (int i = 0; i < SIZE * SIZE; i++) {
 	    pixels[i] = color;
+	}
     }
 
     /**
      * Load single sprite out of the spritesheet.
      */
     private void load() {
-	for (int y = 0; y < SIZE; y++)
-	    for (int x = 0; x < SIZE; x++)
+	for (int y = 0; y < SIZE; y++) {
+	    for (int x = 0; x < SIZE; x++) {
 		pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+	    }
+	}
     }
 
     /**

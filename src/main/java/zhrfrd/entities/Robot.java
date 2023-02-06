@@ -40,8 +40,9 @@ public abstract class Robot extends Entity {
      * @param speed     The speed at which the robot travels.
      */
     public void move(int direction, int speed) {
-	if (hasMoved)
+	if (hasMoved) {
 	    return;
+	}
 
 	hasMoved = true;
 	this.direction = direction;
@@ -71,8 +72,9 @@ public abstract class Robot extends Entity {
      * @throws IOException
      */
     public final void shoot(int direction) throws IOException {
-	if (missileList != null && missileList.size() > 0)
+	if (missileList != null && missileList.size() > 0) {
 	    return;
+	}
 	
 	if (!isMissileShot) {
 	    isMissileShot = true;
@@ -104,8 +106,9 @@ public abstract class Robot extends Entity {
      * Scan the canvasBattle towards a single line direction
      */
     public final int scan(int direction) {
-	if (enemyFound())
+	if (enemyFound()) {
 	    return direction;
+	}
 
 	return 0;
     }
@@ -114,8 +117,9 @@ public abstract class Robot extends Entity {
      * Scan the battleground towards the specified direction +/- the resolution
      */
     public final int scan(int direction, int resolution) {
-	if (enemyFound())
+	if (enemyFound()) {
 	    return direction;
+	}
 
 	return 0;
     }
@@ -132,16 +136,20 @@ public abstract class Robot extends Entity {
      * Check if some missile is dead and, if yes, remove it from the canvasBattle.
      */
     public void cleanMissiles() {
-	if (missileList == null || missileList.size() == 0)
+	if (missileList == null || missileList.size() == 0) {
 	    return;
+	}
 
 	int i = 0;
 
 	while (i < missileList.size()) {
 	    if (missile != null) {
 		missileList.remove(i);
-	    } else
+	    } 
+	    
+	    else {
 		i++;
+	    }
 	}
     }
     

@@ -26,9 +26,11 @@ public class Scenario {
      * Generate level where tiles are set to a random number from 0 - 3.
      */
     protected void generateScenario() {
-	for (int y = 0; y < height; y ++)
-	    for (int x = 0; x < width; x ++)
+	for (int y = 0; y < height; y ++) {
+	    for (int x = 0; x < width; x ++) {
 		tiles[x + y * width] = RANDOM.nextInt(18);
+	    }
+	}
     } 
     
     /**
@@ -42,9 +44,11 @@ public class Scenario {
 	int y0 = 0;
 	int y1 = screen.height >> 4;
 	
-	for (int y = y0; y < y1; y ++)
-	    for (int x = x0; x < x1; x ++)
+	for (int y = y0; y < y1; y ++) {
+	    for (int x = x0; x < x1; x ++) {
 		getTile(x, y).render(x, y, screen);
+	    }
+	}
     }
     
     /**
@@ -54,29 +58,37 @@ public class Scenario {
      * @return Tile that needs to be rendered.
      */
     public Tile getTile(int x, int y) {
-	if (tiles[x + y * width] == 0 || tiles[x + y * width] == 1 || tiles[x + y * width] == 2)
+	if (tiles[x + y * width] == 0 || tiles[x + y * width] == 1 || tiles[x + y * width] == 2) {
 	    return Tile.dirt1;
+	}
 	
-	if (tiles[x + y * width] == 3 || tiles[x + y * width] == 4 || tiles[x + y * width] == 5)
+	if (tiles[x + y * width] == 3 || tiles[x + y * width] == 4 || tiles[x + y * width] == 5) {
 	    return Tile.dirt2;
+	}
 	
-	if (tiles[x + y * width] == 6 || tiles[x + y * width] == 7 || tiles[x + y * width] == 8)
+	if (tiles[x + y * width] == 6 || tiles[x + y * width] == 7 || tiles[x + y * width] == 8) {
 	    return Tile.dirt3;
+	}
 	
-	if (tiles[x + y * width] == 9 || tiles[x + y * width] == 10 || tiles[x + y * width] == 11)
+	if (tiles[x + y * width] == 9 || tiles[x + y * width] == 10 || tiles[x + y * width] == 11) {
 	    return Tile.dirt4;
+	}
 	
-	if (tiles[x + y * width] == 12 || tiles[x + y * width] == 13)
+	if (tiles[x + y * width] == 12 || tiles[x + y * width] == 13) {
 	    return Tile.dirt5;
+	}
 	
-	if (tiles[x + y * width] == 14)
+	if (tiles[x + y * width] == 14) {
 	    return Tile.rock1;
+	}
 	
-	if (tiles[x + y * width] == 15)
+	if (tiles[x + y * width] == 15) {
 	    return Tile.rock2;
+	}
 	
-	if (tiles[x + y * width] == 16)
+	if (tiles[x + y * width] == 16) {
 	    return Tile.rock3;
+	}
 	
 	return Tile.rock4;
     }

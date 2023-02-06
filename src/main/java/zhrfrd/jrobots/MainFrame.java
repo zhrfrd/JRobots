@@ -209,8 +209,9 @@ public class MainFrame extends JFrame implements ActionListener {
      * Remove all the classed saved inside the fullClassRobots array list.
      */
     protected void resetFullClassRobots() {
-	for (int i = 0; i < fullClassesRobots.length; i ++)
+	for (int i = 0; i < fullClassesRobots.length; i ++) {
 	    fullClassesRobots[i] = null;
+	}
     }
     
     /**

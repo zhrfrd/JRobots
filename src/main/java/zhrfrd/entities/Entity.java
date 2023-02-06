@@ -134,8 +134,9 @@ public abstract class Entity extends JLabel {
      * @return boolean
      */
     public final boolean isAlive() {
-	if (this.life <= 0)
+	if (this.life <= 0) {
 	    return false;
+	}
 
 	return true;
     }
