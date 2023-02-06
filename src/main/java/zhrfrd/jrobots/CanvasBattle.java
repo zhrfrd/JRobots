@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
@@ -33,6 +32,11 @@ public class CanvasBattle extends Canvas implements Runnable {
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
     // Convert image to array of integers signalling the color of each pixel.
     private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    // Game loop
+    double drawInterval;
+    double delta;
+    long lastTime;
+    long currentTime;
     
     public CanvasBattle() {
 	screen = new Screen(width, height);
@@ -135,13 +139,11 @@ public class CanvasBattle extends Canvas implements Runnable {
      */
     protected void pauseBattle() {
 	if (!isBattlePaused) {
-//	    this.threadMain.interrupt();
 	    isBattlePaused = true;
 	}
 	
 	else if (isBattlePaused) {
-//	    this.threadMain.notify();
-	    isBattlePaused = false;
+	    resumeGame();
 	}
     }
     
@@ -166,8 +168,7 @@ public class CanvasBattle extends Canvas implements Runnable {
 		constructorRobot = classRobot.getDeclaredConstructor();
 		Robot newRobot = (Robot) constructorRobot.newInstance();
 		robots[i] = newRobot;
-	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-		    | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+	    } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 		e1.printStackTrace();
 	    }
 	}
@@ -175,34 +176,50 @@ public class CanvasBattle extends Canvas implements Runnable {
 	start();
     }
     
+    private void setupGameLoop() {
+	isBattlePaused = false;
+	drawInterval = 1000000000 / FPS; // Draw every 0.01666 seconds
+	delta = 0;
+	lastTime = System.nanoTime();
+    }
+    
     @Override
     public void run() {
-	double drawInterval = 1000000000 / FPS; // Draw every 0.01666 seconds
-	double delta = 0;
-	long lastTime = System.nanoTime();
-	long currentTime;
-
+	setupGameLoop();
+   
 	// Game loop
 	while (true) {
-	    if (isBattlePaused) {
-		threadBattle.interrupt();
+	    synchronized(this) {
+		while (isBattlePaused) {
+		    try {
+			wait();
+		    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		}
 	    }
-	    
+                 
 	    currentTime = System.nanoTime();
 	    delta += (currentTime - lastTime) / drawInterval;
 	    lastTime = currentTime;
-
+              
 	    // Every 0.01666 seconds (60 FPS)
 	    if (delta >= 1) {
-		update();
-		render();
-
-		if (isBattleStopped) {
-		    break;
-		}
-
-		delta--;
+       	    	update();
+       	    	render();
+             
+       	    	if (isBattleStopped) {
+       	    	    break;
+       	    	}
+              
+       	    	delta--;
 	    }
 	}
+    }
+    
+    synchronized void resumeGame() {
+	setupGameLoop();
+	notify();
     }
 }

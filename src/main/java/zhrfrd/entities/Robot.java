@@ -23,7 +23,6 @@ public abstract class Robot extends Entity {
     public boolean isMissileExploded = false;
     public boolean isParticleGenerated = false;
     
-    
     /**
      * Set robot starting position.
      */

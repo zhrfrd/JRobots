@@ -33,7 +33,6 @@ public class MainFrame extends JFrame implements ActionListener {
     protected CanvasBattle canvasBattle;
     protected JButton buttonStart;
     protected JButton buttonPause;
-    protected JButton buttonReset;
     protected JButton buttonRestart;
     protected JButton buttonLoad0;
     protected JButton buttonLoad1;
@@ -101,8 +100,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	buttonStart.addActionListener(this);
 	buttonPause = new JButton("Pause");
 	buttonPause.addActionListener(this);
-	buttonReset = new JButton("Reset");
-	buttonReset.addActionListener(this);
 	buttonRestart = new JButton("Restart");
 	buttonRestart.addActionListener(this);
 
@@ -111,7 +108,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelStartController.setLayout(new GridLayout(4, 0));
 	panelStartController.add(buttonStart);
 	panelStartController.add(buttonPause);
-	panelStartController.add(buttonReset);
 	panelStartController.add(buttonRestart);
 
 	panelsRobot = new JPanel[4];
@@ -303,11 +299,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	if (e.getSource() == buttonPause) {
 	    canvasBattle.pauseBattle();
 	    buttonStart.setEnabled(false);
-	}
-	
-	if (e.getSource() == buttonReset) {
-	    canvasBattle.isBattleStopped = true;
-	    buttonStart.setEnabled(true);
 	}
 	
 	if (e.getSource() == buttonRestart) {
