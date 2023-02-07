@@ -22,7 +22,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     private final int MAX_ROBOTS = 4;
     private Robot robots[];
     // TODO Change public to protected or private 
-    private Thread threadBattle;
+    protected Thread threadBattle;
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
     protected JFileChooser fileChooser;
@@ -33,10 +33,11 @@ public class CanvasBattle extends Canvas implements Runnable {
     // Convert image to array of integers signalling the color of each pixel.
     private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     // Game loop
-    double drawInterval;
-    double delta;
-    long lastTime;
-    long currentTime;
+    protected boolean running = true;
+    private double drawInterval;
+    private double delta;
+    private long lastTime;
+    private long currentTime;
     
     public CanvasBattle() {
 	screen = new Screen(width, height);
@@ -176,6 +177,9 @@ public class CanvasBattle extends Canvas implements Runnable {
 	start();
     }
     
+    /**
+     * Initialise game loop variables.
+     */
     private void setupGameLoop() {
 	isBattlePaused = false;
 	drawInterval = 1000000000 / FPS; // Draw every 0.01666 seconds
@@ -188,7 +192,7 @@ public class CanvasBattle extends Canvas implements Runnable {
 	setupGameLoop();
    
 	// Game loop
-	while (true) {
+	while (running) {
 	    synchronized(this) {
 		while (isBattlePaused) {
 		    try {
@@ -218,6 +222,9 @@ public class CanvasBattle extends Canvas implements Runnable {
 	}
     }
     
+    /**
+     * Notify the thread waiting in order to resume the game.
+     */
     synchronized void resumeGame() {
 	setupGameLoop();
 	notify();

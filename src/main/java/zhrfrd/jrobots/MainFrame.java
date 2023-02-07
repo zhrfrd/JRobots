@@ -33,7 +33,7 @@ public class MainFrame extends JFrame implements ActionListener {
     protected CanvasBattle canvasBattle;
     protected JButton buttonStart;
     protected JButton buttonPause;
-    protected JButton buttonRestart;
+    protected JButton buttonReset;
     protected JButton buttonLoad0;
     protected JButton buttonLoad1;
     protected JButton buttonLoad2;
@@ -85,8 +85,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	Font font = panelMain.getFont().deriveFont(50);
 	panelMain.setFont(font);
 
-	canvasBattle = new CanvasBattle();
-	canvasBattle.setBackground(new Color(153, 102, 51));
+	refreshCanvasBattle();
 
 	panelRightMenuContainer = new JPanel();
 	panelRightMenuContainer.setLayout(new BoxLayout(panelRightMenuContainer, BoxLayout.Y_AXIS));
@@ -100,15 +99,15 @@ public class MainFrame extends JFrame implements ActionListener {
 	buttonStart.addActionListener(this);
 	buttonPause = new JButton("Pause");
 	buttonPause.addActionListener(this);
-	buttonRestart = new JButton("Restart");
-	buttonRestart.addActionListener(this);
+	buttonReset = new JButton("Reset");
+	buttonReset.addActionListener(this);
 
 	panelStartController = new JPanel();
 	panelStartController.setBackground(Color.black);
 	panelStartController.setLayout(new GridLayout(4, 0));
 	panelStartController.add(buttonStart);
 	panelStartController.add(buttonPause);
-	panelStartController.add(buttonRestart);
+	panelStartController.add(buttonReset);
 
 	panelsRobot = new JPanel[4];
 	buttonsLoad = new JButton[4];
@@ -146,7 +145,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.X_AXIS));
 	panelMain.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 	panelMain.setFocusable(true);
-	panelMain.add(canvasBattle);
+	addCanvasBattle();
+//	panelMain.add(canvasBattle);
 	panelMain.add(panelRightMenuContainer);
 	
 	canvasBattle.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
@@ -170,6 +170,23 @@ public class MainFrame extends JFrame implements ActionListener {
 	pack();
 	setVisible(true);
 	setLocationRelativeTo(null);
+    }
+    
+    /**
+     * Reset canvas battle to original state.
+     */
+    private void refreshCanvasBattle() {
+	canvasBattle = new CanvasBattle();
+	canvasBattle.setBackground(new Color(153, 102, 51));
+	addCanvasBattle();
+    }
+    
+    /**
+     * Add the updated canvas battle to the main frame.
+     */
+    private void addCanvasBattle() {
+	panelMain.add(canvasBattle);
+	add(panelMain);
     }
     
     /**
@@ -293,17 +310,19 @@ public class MainFrame extends JFrame implements ActionListener {
 	// Actions 
 	if (e.getSource() == buttonStart) {
 	    canvasBattle.startBattle(fullClassesRobots);
-	    buttonStart.setEnabled(false);
+	    canvasBattle.running = true;
+//	    buttonStart.setEnabled(false);
 	}
 	
 	if (e.getSource() == buttonPause) {
 	    canvasBattle.pauseBattle();
-	    buttonStart.setEnabled(false);
+//	    buttonStart.setEnabled(false);
 	}
 	
-	if (e.getSource() == buttonRestart) {
-	    canvasBattle.isBattleStopped = true;
-	    buttonStart.setEnabled(true);
+	if (e.getSource() == buttonReset) {
+	    canvasBattle.running = false;
+	    refreshCanvasBattle();
+//	    buttonStart.setEnabled(true);
 	}
     }
 }
