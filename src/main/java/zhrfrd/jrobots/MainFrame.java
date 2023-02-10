@@ -104,7 +104,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	panelStartController = new JPanel();
 	panelStartController.setBackground(Color.black);
-	panelStartController.setLayout(new GridLayout(4, 0));
+	panelStartController.setLayout(new GridLayout(3, 0));
 	panelStartController.add(buttonStart);
 	panelStartController.add(buttonPause);
 	panelStartController.add(buttonReset);
@@ -179,6 +179,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	canvasBattle = new CanvasBattle();
 	canvasBattle.setBackground(new Color(153, 102, 51));
 	addCanvasBattle();
+	
+	if (labelsPathRobot != null) {
+	    for (int i = 0; i < labelsPathRobot.length; i ++) {
+    	    	cancelLoadRobot(labelsPathRobot[i], i);
+	    }
+	}
     }
     
     /**
@@ -213,6 +219,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
     }
     
+    /**
+     * Reset the fullClassRobot and the robot path label.
+     * @param labelPathRobot JLabel containing the path robot.
+     * @param index Robot index in the menu from 0 to 3.
+     */
     protected void cancelLoadRobot(JLabel labelPathRobot, int index) {
 	resetFullClassRobots();
 	labelPathRobot.setText("Path: ");
@@ -259,6 +270,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	    buttonsCancelLoad[0].setVisible(true);
 	    fullClassesRobots[0] = "zhrfrd.testjrobots.Test";
 	    labelsPathRobot[0].setText("zhrfrd.testjrobots.Test");
+//	    loadRobot(labelsPathRobot[0], 0);
 //	    loadRobot(labelPathRobot.get(0), 0);
 	}
 
@@ -310,6 +322,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	// Actions 
 	if (e.getSource() == buttonStart) {
 	    canvasBattle.startBattle(fullClassesRobots);
+	    System.out.println(fullClassesRobots[0]);
 	    canvasBattle.running = true;
 //	    buttonStart.setEnabled(false);
 	}

@@ -106,7 +106,6 @@ public class CanvasBattle extends Canvas implements Runnable {
 			if (robots[i].particle.particlesList.get(k).life > 0) {
 			    robots[i].particle.particlesList.get(k).update(screen);
 			    robots[i].particle.particlesList.get(k).render(screen);
-			    
 			}
 		    }
 		}
@@ -165,7 +164,6 @@ public class CanvasBattle extends Canvas implements Runnable {
 	    
 	    try {
 		classRobot = Class.forName(fullClassRobotsArrayList[i]);
-		System.out.println(fullClassRobotsArrayList[0]);
 		constructorRobot = classRobot.getDeclaredConstructor();
 		Robot newRobot = (Robot) constructorRobot.newInstance();
 		robots[i] = newRobot;
@@ -173,6 +171,8 @@ public class CanvasBattle extends Canvas implements Runnable {
 		e1.printStackTrace();
 	    }
 	}
+	
+	System.out.println(robots);
 	
 	start();
     }
