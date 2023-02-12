@@ -84,9 +84,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	panelMain = new JPanel();
 	Font font = panelMain.getFont().deriveFont(50);
 	panelMain.setFont(font);
-
+	canvasBattle = new CanvasBattle();
 	refreshCanvasBattle();
-
+	canvasBattle.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
 	panelRightMenuContainer = new JPanel();
 	panelRightMenuContainer.setLayout(new BoxLayout(panelRightMenuContainer, BoxLayout.Y_AXIS));
 	panelRightMenuContainer.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.red));
@@ -149,7 +149,7 @@ public class MainFrame extends JFrame implements ActionListener {
 //	panelMain.add(canvasBattle);
 	panelMain.add(panelRightMenuContainer);
 	
-	canvasBattle.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
+//	canvasBattle.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
 	panelRightMenuContainer.setPreferredSize(new Dimension(SCREEN_WIDTH - SCREEN_HEIGHT, SCREEN_HEIGHT));
 
 //	Dimension monitorSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -176,8 +176,10 @@ public class MainFrame extends JFrame implements ActionListener {
      * Reset canvas battle to original state.
      */
     private void refreshCanvasBattle() {
-	canvasBattle = new CanvasBattle();
-	canvasBattle.setBackground(new Color(153, 102, 51));
+//	canvasBattle = new CanvasBattle();
+	canvasBattle.setBackground(new Color(200, 202, 51));
+	canvasBattle.setPreferredSize(new Dimension(SCREEN_HEIGHT, SCREEN_HEIGHT));
+	
 	addCanvasBattle();
 	
 	if (labelsPathRobot != null) {
@@ -335,6 +337,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	if (e.getSource() == buttonReset) {
 	    canvasBattle.running = false;
 	    refreshCanvasBattle();
+//	    initializeLayout();
 //	    buttonStart.setEnabled(true);
 	}
     }

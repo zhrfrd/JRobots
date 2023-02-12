@@ -198,7 +198,6 @@ public class CanvasBattle extends Canvas implements Runnable {
 		    try {
 			wait();
 		    } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
 		}
