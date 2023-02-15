@@ -33,23 +33,23 @@ class RobotTest {
     }
 
 //    @Test
-    void isAliveAtGameStart() {
-	this.setParentContainer();
-	this.robot.run();
-	assertTrue(this.robot.isAlive(), "The robot should be alive at start, dead instead");
-    }
-
-//    @Test
-    void canMove() {
-	this.setParentContainer();
-
-	this.robot.run();
-	double initialX = this.robot.getPosX();
-	double initialY = this.robot.getPosY();
-	this.robot.move(10, 2);
-
-	assertNotEquals(initialX, this.robot.getPosX());
-	assertNotEquals(initialY, this.robot.getPosY());
-    }
+//    void isAliveAtGameStart() {
+//	this.setParentContainer();
+//	this.robot.run();
+//	assertTrue(this.robot.isAlive(), "The robot should be alive at start, dead instead");
+//    }
+//
+////    @Test
+//    void canMove() {
+//	this.setParentContainer();
+//
+//	this.robot.run();
+//	double initialX = this.robot.getPosX();
+//	double initialY = this.robot.getPosY();
+//	this.robot.move(10, 2);
+//
+//	assertNotEquals(initialX, this.robot.getPosX());
+//	assertNotEquals(initialY, this.robot.getPosY());
+//    }
 
 }
