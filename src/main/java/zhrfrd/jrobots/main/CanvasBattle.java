@@ -26,7 +26,8 @@ public class CanvasBattle extends Canvas implements Runnable {
     protected boolean isBattlePaused = false; 
     protected JFileChooser fileChooser;
     private Scenario scenario;
-    Screen screen;
+    private Screen screen;
+    private CollisionChecker collisionChecker;
     // Create an image for the canvasBattle. 
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
     // Convert image to array of integers signalling the color of each pixel.
@@ -186,6 +187,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     @Override
     public void run() {
 	setupGameLoop();
+	collisionChecker = new CollisionChecker(robots);
    
 	// Game loop
 	while (running) {
@@ -207,6 +209,7 @@ public class CanvasBattle extends Canvas implements Runnable {
 	    if (delta >= 1) {
        	    	update();
        	    	render();
+       	    	collisionChecker.checkCollision(robots);
              
        	    	if (isBattleStopped) {
        	    	    break;
