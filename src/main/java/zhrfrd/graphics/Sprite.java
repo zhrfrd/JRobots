@@ -7,9 +7,9 @@ public class Sprite {
     public int[] pixels;
     private SpriteSheet sheet;
     public static Sprite dirt1 = new Sprite(16, 0, 0, SpriteSheet.tiles); 
-    public static Sprite dirt2 = new Sprite(16, 1, 0, SpriteSheet.tiles); 
+    public static Sprite dirt2 = new Sprite(16, 1, 0, SpriteSheet.tiles);  
     public static Sprite dirt3 = new Sprite(16, 2, 0, SpriteSheet.tiles); 
-    public static Sprite dirt4 = new Sprite(16, 3, 0, SpriteSheet.tiles); 
+    public static Sprite dirt4 = new Sprite(16, 3, 0, SpriteSheet.tiles);  
     public static Sprite dirt5 = new Sprite(16, 4, 0, SpriteSheet.tiles);
     public static Sprite rock1 = new Sprite(16, 5, 0, SpriteSheet.tiles); 
     public static Sprite rock2 = new Sprite(16, 6, 0, SpriteSheet.tiles); 

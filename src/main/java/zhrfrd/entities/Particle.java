@@ -13,7 +13,7 @@ public class Particle extends Entity {
     public Sprite sprite = Sprite.particle_explosion;
     public int life;
     private double  directionX, directionY;
-    private Random random = new Random();
+    private Random random = new Random(); 
     
     /**
      * Construct a basic Particle object.

@@ -21,7 +21,6 @@ public class CanvasBattle extends Canvas implements Runnable {
     private final int FPS = 60;
     private final int MAX_ROBOTS = 4;
     private Robot robots[];
-    // TODO Change public to protected or private 
     protected Thread threadBattle;
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false; 
@@ -129,7 +128,6 @@ public class CanvasBattle extends Canvas implements Runnable {
 	System.out.println("Reset game");
 	isBattleStopped = false;
 	threadBattle.interrupt();
-//	removeAll();
 	revalidate();
 	repaint();
     }
@@ -171,8 +169,6 @@ public class CanvasBattle extends Canvas implements Runnable {
 		e1.printStackTrace();
 	    }
 	}
-	
-	System.out.println(robots);
 	
 	start();
     }

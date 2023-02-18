@@ -1,5 +1,6 @@
 package zhrfrd.entities;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,6 +23,7 @@ public abstract class Robot extends Entity {
     private int missileLifeSpan = 120;
     public boolean isMissileExploded = false;
     public boolean isParticleGenerated = false;
+    protected Rectangle solidArea = new Rectangle((int)posX, (int)posY, 16, 16);;   // Default solid area for the collision detection
     
     /**
      * Set robot starting position.
@@ -43,8 +45,6 @@ public abstract class Robot extends Entity {
 	if (hasMoved) {
 	    return;
 	}
-	
-	System.out.println(posX);
 
 	hasMoved = true;
 	this.direction = direction;
@@ -66,6 +66,9 @@ public abstract class Robot extends Entity {
 	    inflictWallsDamage();
 	    this.speed = 0;
 	}
+	
+	System.out.println(solidArea.x + " " + solidArea.y);
+	
     }
     
     /**
@@ -168,6 +171,8 @@ public abstract class Robot extends Entity {
 	hasMoved = false;
 	runTurn();
     	move(direction, speed);
+    	solidArea.x = (int)posX;
+    	solidArea.y = (int)posY;
     	
     	// Update missile status only if it exists in the current cycle until its life cycle terminates
     	if (missileList != null && missileList.size() > 0) {
