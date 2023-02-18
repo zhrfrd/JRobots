@@ -1,8 +1,6 @@
 package zhrfrd.entities;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -10,6 +8,8 @@ import java.awt.Dimension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import zhrfrd.jrobots.entities.Robot;
 
 class RobotTest {
     private Robot robot;

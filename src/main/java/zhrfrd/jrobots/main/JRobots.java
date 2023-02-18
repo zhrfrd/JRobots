@@ -1,4 +1,4 @@
-package zhrfrd.jrobots;
+package zhrfrd.jrobots.main;
 
 public class JRobots {
 

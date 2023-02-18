@@ -1,4 +1,4 @@
-package zhrfrd.jrobots;
+package zhrfrd.jrobots.main;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -23,8 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import zhrfrd.entities.Missile;
-import zhrfrd.entities.Robot;
+import zhrfrd.jrobots.entities.Missile;
+import zhrfrd.jrobots.entities.Robot;
 
 public class MainFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = -3190346657795484951L;
@@ -269,8 +269,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	if (e.getSource() == buttonsLoad[0]) {
 	    buttonsLoad[0].setVisible(false);
 	    buttonsCancelLoad[0].setVisible(true);
-	    fullClassesRobots[0] = "zhrfrd.testjrobots.Test";
-	    labelsPathRobot[0].setText("zhrfrd.testjrobots.Test");
+	    fullClassesRobots[0] = "zhrfrd.jrobots.testjrobots.Test";
+	    labelsPathRobot[0].setText("zhrfrd.jrobots.testjrobots.Test");
 //	    loadRobot(labelsPathRobot[0], 0);
 //	    loadRobot(labelPathRobot.get(0), 0);
 	}
@@ -278,8 +278,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	if (e.getSource() == buttonsLoad[1]) {
 	    buttonsLoad[1].setVisible(false);
 	    buttonsCancelLoad[1].setVisible(true);
-	    fullClassesRobots[1] = "zhrfrd.testjrobots.Test2";
-	    labelsPathRobot[1].setText("zhrfrd.testjrobots.Test2");
+	    fullClassesRobots[1] = "zhrfrd.jrobots.testjrobots.Test2";
+	    labelsPathRobot[1].setText("zhrfrd.jrobots.testjrobots.Test2");
 //	    loadRobot(labelPathRobot.get(1), 1);
 	}
 

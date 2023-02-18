@@ -1,16 +1,16 @@
-package zhrfrd.testjrobots;
+package zhrfrd.jrobots.testjrobots;
 
 import java.io.IOException;
 import java.util.Random;
 
-import zhrfrd.entities.Robot;
+import zhrfrd.jrobots.entities.Robot;
 
-public class Test extends Robot {
+public class Test2 extends Robot {
     private static final long serialVersionUID = 2939127812037210694L;
     private boolean shot = false;
     private boolean moved = false; 
 
-    public Test() {
+    public Test2() {
 	super();
     }
 

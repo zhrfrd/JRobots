@@ -1,7 +1,7 @@
-package zhrfrd.scenario;
+package zhrfrd.jrobots.scenario;
 
-import zhrfrd.graphics.Screen;
-import zhrfrd.graphics.Sprite;
+import zhrfrd.jrobots.graphics.Screen;
+import zhrfrd.jrobots.graphics.Sprite;
 
 public class Tile {
     public int xPos, y;

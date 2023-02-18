@@ -1,9 +1,9 @@
-package zhrfrd.entities;
+package zhrfrd.jrobots.entities;
 
 import java.awt.Rectangle;
 
-import zhrfrd.graphics.Screen;
-import zhrfrd.graphics.Sprite;
+import zhrfrd.jrobots.graphics.Screen;
+import zhrfrd.jrobots.graphics.Sprite;
 
 public class Missile extends Entity {
     private static final long serialVersionUID = -8959188412014341019L;
@@ -59,6 +59,8 @@ public class Missile extends Entity {
 	
 	solidArea.x = (int)posX;
     	solidArea.y = (int)posY;
+    	
+    	
     }
     
     /**

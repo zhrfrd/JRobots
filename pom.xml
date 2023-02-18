@@ -55,7 +55,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-				                        zhrfrd.jrobots.JRobots
+				                        zhrfrd.jrobots.main.JRobots
 				                    </mainClass>
 								</manifest>
 							</archive>

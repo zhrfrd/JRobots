@@ -1,11 +1,11 @@
-package zhrfrd.entities;
+package zhrfrd.jrobots.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import zhrfrd.graphics.Screen;
-import zhrfrd.graphics.Sprite;
+import zhrfrd.jrobots.graphics.Screen;
+import zhrfrd.jrobots.graphics.Sprite;
 
 public class Particle extends Entity {
     private static final long serialVersionUID = 7596968145301880427L;

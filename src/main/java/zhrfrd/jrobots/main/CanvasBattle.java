@@ -1,4 +1,4 @@
-package zhrfrd.jrobots;
+package zhrfrd.jrobots.main;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
@@ -10,9 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFileChooser;
 
-import zhrfrd.entities.Robot;
-import zhrfrd.graphics.Screen;
-import zhrfrd.scenario.Scenario;
+import zhrfrd.jrobots.entities.Robot;
+import zhrfrd.jrobots.graphics.Screen;
+import zhrfrd.jrobots.scenario.Scenario;
 
 public class CanvasBattle extends Canvas implements Runnable {
     private static final long serialVersionUID = -2969862236631824201L;

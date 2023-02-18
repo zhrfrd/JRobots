@@ -1,6 +1,6 @@
-package zhrfrd.graphics;
+package zhrfrd.jrobots.graphics;
 
-import zhrfrd.scenario.Tile;
+import zhrfrd.jrobots.scenario.Tile;
 
 public class Screen {
     public int width, height;

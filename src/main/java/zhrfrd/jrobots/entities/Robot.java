@@ -1,12 +1,12 @@
-package zhrfrd.entities;
+package zhrfrd.jrobots.entities;
 
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import zhrfrd.graphics.Screen;
-import zhrfrd.graphics.Sprite;
+import zhrfrd.jrobots.graphics.Screen;
+import zhrfrd.jrobots.graphics.Sprite;
 
 public abstract class Robot extends Entity {
     private static final long serialVersionUID = -2377133046121834448L;
@@ -32,7 +32,7 @@ public abstract class Robot extends Entity {
 	Random random = new Random();
 	posX = random.nextInt(400);
 //	posY = random.nextInt(100);
-	posY = 50;
+	posY = 5;
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class Robot extends Entity {
 	    this.speed = 0;
 	}
 	
-	System.out.println(solidArea.x + " " + solidArea.y);
+	
 	
     }
     

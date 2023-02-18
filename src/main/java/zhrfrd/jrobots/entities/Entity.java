@@ -1,11 +1,11 @@
-package zhrfrd.entities;
+package zhrfrd.jrobots.entities;
 
 import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.JLabel;
 
-import zhrfrd.graphics.Screen;
+import zhrfrd.jrobots.graphics.Screen;
 
 public abstract class Entity extends JLabel {
     private static final long serialVersionUID = -2678484620304652158L;

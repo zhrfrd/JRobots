@@ -1,13 +1,13 @@
-package zhrfrd.scenario;
+package zhrfrd.jrobots.scenario;
 
 import java.util.Random;
 
-import zhrfrd.graphics.Screen;
+import zhrfrd.jrobots.graphics.Screen;
 
 public class Scenario {
     protected int width, height;
     protected int[] tiles;
-    private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new Random(); 
     
     /**
      * Scenario manages the creation and rendering of battle's scenario.

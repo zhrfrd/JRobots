@@ -1,4 +1,4 @@
-package zhrfrd.graphics;
+package zhrfrd.jrobots.graphics;
 
 public class Sprite {
     public final int SIZE;
