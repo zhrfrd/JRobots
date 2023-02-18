@@ -24,7 +24,7 @@ public class CanvasBattle extends Canvas implements Runnable {
     // TODO Change public to protected or private 
     protected Thread threadBattle;
     protected boolean isBattleStopped = false;
-    protected boolean isBattlePaused = false;
+    protected boolean isBattlePaused = false; 
     protected JFileChooser fileChooser;
     private Scenario scenario;
     Screen screen;

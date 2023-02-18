@@ -64,7 +64,7 @@ public class Sprite {
      * Load single sprite out of the spritesheet.
      */
     private void load() {
-	for (int y = 0; y < SIZE; y++) {
+	for (int y = 0; y < SIZE; y++) { 
 	    for (int x = 0; x < SIZE; x++) {
 		pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
 	    }

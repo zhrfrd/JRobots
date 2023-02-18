@@ -13,7 +13,7 @@ public abstract class Robot extends Entity {
      * Determine if the move action has been done in the current turn.
      */
     private boolean hasMoved = false;
-    private Missile missile;
+    private Missile missile; 
     public ArrayList<Missile> missileList;
     public Particle particle;
     private boolean isRobotStarted = false;
@@ -28,8 +28,9 @@ public abstract class Robot extends Entity {
      */
     protected final void setStartingPosition() {
 	Random random = new Random();
-	posX = random.nextInt(100);
-	posY = random.nextInt(100);
+	posX = random.nextInt(400);
+//	posY = random.nextInt(100);
+	posY = 50;
     }
 
     /**
@@ -42,6 +43,8 @@ public abstract class Robot extends Entity {
 	if (hasMoved) {
 	    return;
 	}
+	
+	System.out.println(posX);
 
 	hasMoved = true;
 	this.direction = direction;
@@ -56,8 +59,8 @@ public abstract class Robot extends Entity {
 	int newPosX = (int)posX + x;
 	int newPosY = (int)posY + y;
 
-	posX = (int)Math.max(0, Math.min(100, newPosX));
-	posY = (int)Math.max(0, Math.min(100, newPosY));
+	posX = (int)Math.max(0, Math.min(400, newPosX));
+	posY = (int)Math.max(0, Math.min(400, newPosY));
 
 	if (newPosX < 0 || newPosX > 400 || newPosY < 0 || newPosY > 400) {
 	    inflictWallsDamage();

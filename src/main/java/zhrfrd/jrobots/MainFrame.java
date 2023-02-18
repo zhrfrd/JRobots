@@ -57,7 +57,7 @@ public class MainFrame extends JFrame implements ActionListener {
     static BufferedReader fileReader;
     static BufferedImage bufferedImage;
     static ImageIcon imageIcon;
-    static String firstLineFile = "";
+    static String firstLineFile = ""; 
     
     protected boolean isBattleStopped = false;
     protected boolean isBattlePaused = false;
@@ -278,8 +278,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	if (e.getSource() == buttonsLoad[1]) {
 	    buttonsLoad[1].setVisible(false);
 	    buttonsCancelLoad[1].setVisible(true);
-	    fullClassesRobots[1] = "zhrfrd.testjrobots.Test";
-	    labelsPathRobot[1].setText("zhrfrd.testjrobots.Test");
+	    fullClassesRobots[1] = "zhrfrd.testjrobots.Test2";
+	    labelsPathRobot[1].setText("zhrfrd.testjrobots.Test2");
 //	    loadRobot(labelPathRobot.get(1), 1);
 	}
 

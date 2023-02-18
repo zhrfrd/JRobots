@@ -14,7 +14,7 @@ public class Scenario {
      * @param width Battlefield width calculated in tiles.
      * @param height Battlefield height calculated in tiles.
      */
-    public Scenario(int width, int height) {
+    public Scenario(int width, int height) { 
 	this.width = width;
 	this.height = height;
 	tiles = new int[width * height];
@@ -57,7 +57,7 @@ public class Scenario {
      * @param y Y position of the tile in the battlefield using tile precision instead of pixel precision.
      * @return Tile that needs to be rendered.
      */
-    public Tile getTile(int x, int y) {
+    public Tile getTile(int x, int y) { 
 	if (tiles[x + y * width] == 0 || tiles[x + y * width] == 1 || tiles[x + y * width] == 2) {
 	    return Tile.dirt1;
 	}
