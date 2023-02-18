@@ -14,6 +14,7 @@ public abstract class Robot extends Entity {
      * Determine if the move action has been done in the current turn.
      */
     private boolean hasMoved = false;
+//    private int life = 100;
     private Missile missile; 
     public ArrayList<Missile> missileList;
     public Particle particle;
@@ -33,6 +34,8 @@ public abstract class Robot extends Entity {
 	posX = random.nextInt(400);
 //	posY = random.nextInt(100);
 	posY = 5;
+	
+	life = 100;
     }
 
     /**

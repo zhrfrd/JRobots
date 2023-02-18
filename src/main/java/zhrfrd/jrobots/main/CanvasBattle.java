@@ -64,6 +64,7 @@ public class CanvasBattle extends Canvas implements Runnable {
 	    for (int i = 0; i < robots.length; i ++) {
 		if (robots[i] != null) {
 		    robots[i].update();
+		    System.out.println(robots[i].getLife());
 		    
 		    for (int j = 0; j < robots[i].missileList.size(); j ++) { 
 			if (robots[i].missileList.get(j) != null) {
