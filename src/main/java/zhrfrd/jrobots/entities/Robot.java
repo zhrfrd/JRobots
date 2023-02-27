@@ -24,7 +24,7 @@ public abstract class Robot extends Entity {
     private int missileLifeSpan = 120;
     public boolean isMissileExploded = false;
     public boolean isParticleGenerated = false;
-    public Rectangle solidArea = new Rectangle((int)posX, (int)posY, 16, 16);;   // Default solid area for the collision detection
+    public Rectangle solidArea = new Rectangle((int)posX, (int)posY, 16, 16);   // Default solid area for the collision detection
     
     /**
      * Set robot starting position.

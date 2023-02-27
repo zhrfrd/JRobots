@@ -8,7 +8,7 @@ import zhrfrd.jrobots.graphics.Sprite;
 public class Missile extends Entity {
     private static final long serialVersionUID = -8959188412014341019L;
     private Robot robot;
-    protected Rectangle solidArea = new Rectangle((int)posX, (int)posY, 16, 16);;   // Default solid area for the collision detection
+    public Rectangle solidArea = new Rectangle((int)posX, (int)posY, 16, 16);   // Default solid area for the collision detection
 
     /**
      * Construct a missile.
