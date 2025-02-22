@@ -4,8 +4,7 @@ JRobots is a programming game similar to [CRobots](https://crobots.deepthought.i
 is to code your own robot and fight against other robots.
 
 **JRobots is still in development**, which means that it's still not fully functional so, if you want to contribute to
-the code base you are more than welcome ;) Just read the [CONTRIBUTING.md](CONTRIBUTING.md) file to understand how to
-set up the project and our guidelines.
+the code base you are more than welcome ;)
 
 ## 1. Requirements
 
