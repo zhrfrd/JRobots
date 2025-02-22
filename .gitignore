@@ -1,4 +1,11 @@
 bin
-/test_bin/
+/bin/
+.settings
+/.settings/
+.idea
+/idea/
+target
 /target/
+.classpath
+.project
 **/.DS_Store
