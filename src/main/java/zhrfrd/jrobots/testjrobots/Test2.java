@@ -8,24 +8,20 @@ import zhrfrd.jrobots.entities.Robot;
 public class Test2 extends Robot {
     private static final long serialVersionUID = 2939127812037210694L;
     private boolean shot = false;
-    private boolean moved = false; 
+    private boolean moved = false;
 
     public Test2() {
-	super();
+        super();
     }
 
     public void runTurn() {
-	if (speed == 0) {
-	    move(0, 5);
-	}
-	
-	else if (direction == 0 && posX >= 390) {
-	    move(180, 5);
-	}
-	
-	else if (direction == 180 && posX <= 10) {
-	    move(180, 5);
-	}
+        if (speed == 0) {
+            move(0, 5);
+        } else if (direction == 0 && posX >= 390) {
+            move(180, 5);
+        } else if (direction == 180 && posX <= 10) {
+            move(180, 5);
+        }
 //	if (speed == 0) {
 //	    move(0, 5);
 //	} 
@@ -46,12 +42,12 @@ public class Test2 extends Robot {
 //	    move(0, 5);
 //	}
 
-	Random r = new Random();
+        Random r = new Random();
 
-	try {
-	    shoot(r.nextInt(360));
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+        try {
+            shoot(r.nextInt(360));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

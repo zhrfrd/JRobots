@@ -14,11 +14,11 @@ public abstract class Entity extends JLabel {
      */
     protected double posX, posY;
     protected final int BOOST = 3;
-    /** 
+    /**
      * Current entity status
      */
     protected int life, direction, speed;
-    protected int maxLife;  
+    protected int maxLife;
     /**
      * The icon will rotate depending on the current entity direction
      */
@@ -30,48 +30,48 @@ public abstract class Entity extends JLabel {
 
     public Entity() {
     }
-    
+
     public void remove() {
-	removed = true;
+        removed = true;
     }
-    
+
     public boolean isRemoved() {
-	return removed;
+        return removed;
     }
 
     /**
      * Get the X position of the entity in percentage to the field width.
      */
     public double getPosX() {
-	return posX;
+        return posX;
     }
 
     /**
      * Get the Y position of the entity in percentage to the field height.
      */
     public double getPosY() {
-	return posY;
+        return posY;
     }
 
     /**
      * Get the current entity life.
      */
     public int getLife() {
-	return life;
+        return life;
     }
 
     /**
      * Get the current entity direction.
      */
     public int getDirection() {
-	return direction;
+        return direction;
     }
 
     /**
      * Get the current entity speed.
      */
     public int getSpeed() {
-	return speed;
+        return speed;
     }
 
 //    private BufferedImage scaleImageToSize(BufferedImage image) {
@@ -116,24 +116,25 @@ public abstract class Entity extends JLabel {
      * Kills the entity instantly.
      */
     public void die() {
-	this.life = 0;
+        this.life = 0;
     }
 
     /**
      * Check if the entity is alive.
+     *
      * @return boolean
      */
     public final boolean isAlive() {
-	if (this.life <= 0) {
-	    return false;
-	}
+        if (this.life <= 0) {
+            return false;
+        }
 
-	return true;
+        return true;
     }
-    
+
     public abstract void update();
-    
+
     public abstract void render(Screen screen);
-    
+
     protected abstract void setStartingPosition();
 }

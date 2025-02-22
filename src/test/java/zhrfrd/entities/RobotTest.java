@@ -17,19 +17,19 @@ class RobotTest {
 
     @BeforeEach
     void BeforeEach() {
-	this.robot = Mockito.mock(Robot.class, Mockito.CALLS_REAL_METHODS);// new Robot(); 
+        this.robot = Mockito.mock(Robot.class, Mockito.CALLS_REAL_METHODS);// new Robot();
     }
 
     private void setParentContainer() {
-	this.parentContainer = new Container();
-	this.parentContainer.setSize(new Dimension(100, 100));
+        this.parentContainer = new Container();
+        this.parentContainer.setSize(new Dimension(100, 100));
 //	this.parentContainer.add(this.robot);
-	Mockito.when(this.robot.getParent()).thenReturn(this.parentContainer);
+        Mockito.when(this.robot.getParent()).thenReturn(this.parentContainer);
     }
 
     @Test
     void isNotAliveAtCreation() {
-	assertFalse(this.robot.isAlive(), "The robot should be alive at start, dead instead");
+        assertFalse(this.robot.isAlive(), "The robot should be alive at start, dead instead");
     }
 
 //    @Test

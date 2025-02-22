@@ -6,14 +6,14 @@ public class Sprite {
     private int height, width;
     public int[] pixels;
     private SpriteSheet sheet;
-    public static Sprite dirt1 = new Sprite(16, 0, 0, SpriteSheet.tiles); 
-    public static Sprite dirt2 = new Sprite(16, 1, 0, SpriteSheet.tiles);  
-    public static Sprite dirt3 = new Sprite(16, 2, 0, SpriteSheet.tiles); 
-    public static Sprite dirt4 = new Sprite(16, 3, 0, SpriteSheet.tiles);  
+    public static Sprite dirt1 = new Sprite(16, 0, 0, SpriteSheet.tiles);
+    public static Sprite dirt2 = new Sprite(16, 1, 0, SpriteSheet.tiles);
+    public static Sprite dirt3 = new Sprite(16, 2, 0, SpriteSheet.tiles);
+    public static Sprite dirt4 = new Sprite(16, 3, 0, SpriteSheet.tiles);
     public static Sprite dirt5 = new Sprite(16, 4, 0, SpriteSheet.tiles);
-    public static Sprite rock1 = new Sprite(16, 5, 0, SpriteSheet.tiles); 
-    public static Sprite rock2 = new Sprite(16, 6, 0, SpriteSheet.tiles); 
-    public static Sprite rock3 = new Sprite(16, 7, 0, SpriteSheet.tiles); 
+    public static Sprite rock1 = new Sprite(16, 5, 0, SpriteSheet.tiles);
+    public static Sprite rock2 = new Sprite(16, 6, 0, SpriteSheet.tiles);
+    public static Sprite rock3 = new Sprite(16, 7, 0, SpriteSheet.tiles);
     public static Sprite rock4 = new Sprite(16, 8, 0, SpriteSheet.tiles);
     public static Sprite robot1 = new Sprite(16, 0, 1, SpriteSheet.tiles);
     public static Sprite missile = new Sprite(16, 1, 1, SpriteSheet.tiles);
@@ -21,69 +21,74 @@ public class Sprite {
 
     /**
      * The sprite of a specific entity extracted from the sprite sheet.
-     * @param size Size of the sprite in pixels.
-     * @param x X coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
-     * @param y Y coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
+     *
+     * @param size  Size of the sprite in pixels.
+     * @param x     X coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
+     * @param y     Y coordinate of the sprite inside the spritesheet. (Not in pixels but in tiles)
      * @param sheet Spritesheet containing the sprite.
      */
     public Sprite(int size, int x, int y, SpriteSheet sheet) {
-	this.width = size;
-	this.height = size;
-	this.x = x * size; // Set coordinates for the target sprite in the spritesheet
-	this.y = y * size; //
-	this.sheet = sheet;
-	SIZE = size;
-	pixels = new int[SIZE * SIZE];
-	load();
+        this.width = size;
+        this.height = size;
+        this.x = x * size; // Set coordinates for the target sprite in the spritesheet
+        this.y = y * size; //
+        this.sheet = sheet;
+        SIZE = size;
+        pixels = new int[SIZE * SIZE];
+        load();
     }
 
     /**
      * Sprite tha is not extracted from the sprite sheet but just a single color.
-     * @param size Size of the sprite in pixels.
+     *
+     * @param size  Size of the sprite in pixels.
      * @param color The color of the entity's sprite.
      */
-    public Sprite(int size, int color) { 
-	this.width = size;
-	this.height = size;
-	SIZE = size;
-	pixels = new int[SIZE * SIZE];
-	setColor(color);
+    public Sprite(int size, int color) {
+        this.width = size;
+        this.height = size;
+        SIZE = size;
+        pixels = new int[SIZE * SIZE];
+        setColor(color);
     }
 
     /**
      * Add colour to each pixel of the entity.
+     *
      * @param color The integer value of the color.
      */
     public void setColor(int color) {
-	for (int i = 0; i < SIZE * SIZE; i++) {
-	    pixels[i] = color;
-	}
+        for (int i = 0; i < SIZE * SIZE; i++) {
+            pixels[i] = color;
+        }
     }
 
     /**
      * Load single sprite out of the spritesheet.
      */
     private void load() {
-	for (int y = 0; y < SIZE; y++) { 
-	    for (int x = 0; x < SIZE; x++) {
-		pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
-	    }
-	}
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+            }
+        }
     }
 
     /**
      * Get width of the sprite.
+     *
      * @return The width of the sprite.
      */
     public int getWidth() {
-	return width;
+        return width;
     }
 
     /**
      * Get height of the sprite.
+     *
      * @return The width of the sprite.
      */
     public int getHeight() {
-	return height;
+        return height;
     }
 }
