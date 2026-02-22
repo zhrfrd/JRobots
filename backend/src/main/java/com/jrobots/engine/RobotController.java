@@ -6,7 +6,7 @@ package com.jrobots.engine;
  *
  * <ul>
  *     <li>Observes the world through RobotView.</li>
- *     <li>Requests actions through RobotActions.</li>
+ *     <li>Requests actions through RobotActions. (Doesn't apply actions).</li>
  * </ul>
  */
 public interface RobotController {

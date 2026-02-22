@@ -9,15 +9,11 @@ package com.jrobots.engine;
  * </p>
  */
 public class RobotState {
-    /** Robot unique identifier. */
     public final int id;
-    /** Robot x position in the arena. */
     protected double x;
-    /** Robot y position in the arena. */
     protected double y;
     /** Direction the robot body is facing in degrees. */
     protected double bodyAngleDeg;
-    /** Robot energy */
     protected double energy = 100.0;
     /** How much distance the robot still needs to move. */
     protected double pendingMove;
