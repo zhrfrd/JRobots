@@ -1,7 +1,7 @@
 package com.jrobots.engine;
 
 /**
- * RobotView is a READ-ONLY wrapper around RobotState.
+ * RobotView is a READ-ONLY wrapper around RobotState. It's a "window" into the state.
  * Controllers receive this object to inspect their own robot state.
  *
  * <ul>
