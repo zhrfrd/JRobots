@@ -14,14 +14,23 @@ public class MatchEngine {
     private static final double MAX_TURN_PER_TICK = 6.0;
 
     /**
-     * RobotSnapshot is a read-only record containing the minimal info needed to render a robot.
+     * MatchResult is the final outcome of a match which will be returned to the API layer.
+     * <p>
+     *     It wraps:
+     *     <ul>
+     *         <li>Arena metadata.</li>
+     *         <li>Total tick executed.</li>
+     *         <li>Winner id (or -1 in case of a draw).</li>
+     *         <li>Replay snapshots.</li>
+     *     </ul>
+     * </p>
      */
-    public record RobotSnapshot(
-            int id,
-            double x,
-            double y,
-            double energy,
-            double bodyAngleDeg
+    public record MatchResult(
+            int arenaWidth,
+            int arenaHeight,
+            int totalTicks,
+            int winnerId,
+            List<Snapshot> replay
     ) {}
 
     /**
@@ -34,13 +43,24 @@ public class MatchEngine {
     ) {}
 
     /**
+     * RobotSnapshot is a read-only record containing the minimal info needed to render a robot.
+     */
+    public record RobotSnapshot(
+            int id,
+            double x,
+            double y,
+            double energy,
+            double bodyAngleDeg
+    ) {}
+
+    /**
      * Runs a match between two controllers.
      * @param controller1 Brain of robot 1.
      * @param controller2 Brain of robot 2.
      * @param maxTicks Max number of simulation ticks.
      * @return List of snapshots (replay).
      */
-    public List<Snapshot> runMatch(RobotController controller1, RobotController controller2, int maxTicks) {
+    public MatchResult runMatch(RobotController controller1, RobotController controller2, int maxTicks) {
         RobotState r1 = new RobotState(1, 100, 300);
         RobotState r2 = new RobotState(2, 700, 300);
         RobotView r1View = new RobotView(r1);
@@ -49,8 +69,12 @@ public class MatchEngine {
         RobotActions r2Actions = new RobotActions();
         List<Snapshot> replay = new ArrayList<>();
 
+        int executedTicks = 0;
+        int winnerId = -1;
+
         for (int tick = 0; tick < maxTicks; tick ++) {
             if (r1.energy <= 0 || r2.energy <= 0) {
+                winnerId = r1.energy > 0 ? r1.id : r2.id;
                 break;
             }
 
@@ -73,9 +97,11 @@ public class MatchEngine {
                     new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
                     new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
             )));
+
+            executedTicks ++;
         }
 
-        return replay;
+        return new MatchResult(WIDTH, HEIGHT, executedTicks, winnerId, replay);
     }
 
     /**
