@@ -10,16 +10,28 @@ import java.util.List;
 public class MatchEngine {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
-
-    // Max movement and turning we allow the physics system to apply per tick.
-    // (Robot can request more; it becomes "pending" and is applied over time.)
     private static final double MAX_MOVE_PER_TICK = 4.0;
     private static final double MAX_TURN_PER_TICK = 6.0;
 
     /**
-     * Very simple replay snapshot for now. Needs to be updated.
+     * RobotSnapshot is a read-only record containing the minimal info needed to render a robot.
      */
-    public record Snapshot(int tick, double r1x, double r1y, double r1energy, double r2x, double r2y, double r2energy) {}
+    public record RobotSnapshot(
+            int id,
+            double x,
+            double y,
+            double energy,
+            double bodyAngleDeg
+    ) {}
+
+    /**
+     * Snapshot represents the world state at a given tick.
+     * Note: For now it contains only robots. Later it will include bullets, explosions, etc.
+     */
+    public record Snapshot(
+            int tick,
+            List<RobotSnapshot> robots
+    ) {}
 
     /**
      * Runs a match between two controllers.
@@ -57,7 +69,10 @@ public class MatchEngine {
             applyMovement(r1);
             applyMovement(r2);
 
-            replay.add(new Snapshot(tick, r1.x, r1.y, r1.energy, r2.x, r2.y, r2.energy));
+            replay.add(new Snapshot(tick, List.of(
+                    new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
+                    new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
+            )));
         }
 
         return replay;
@@ -69,22 +84,15 @@ public class MatchEngine {
      * @param robotState The current robot state.
      */
     private void applyMovement(RobotState robotState) {
-        // Turn: apply only up to MAX_TURN_PER_TICK each tick
         double turn = clamp(robotState.pendingTurn, -MAX_TURN_PER_TICK, MAX_TURN_PER_TICK);
         robotState.bodyAngleDeg += turn;
-        robotState.pendingTurn -= turn;
+        robotState.pendingTurn -= turn;   // Avoid forever turn
 
-        // Move: apply only up to MAX_MOVE_PER_TICK each tick
         double move = clamp(robotState.pendingMove, -MAX_MOVE_PER_TICK, MAX_MOVE_PER_TICK);
-
-        // Convert angle to direction vector using cos/sin
         double rad = Math.toRadians(robotState.bodyAngleDeg);
         robotState.x += Math.cos(rad) * move;
         robotState.y += Math.sin(rad) * move;
-
-        robotState.pendingMove -= move;
-
-        // Keep robot inside the arena boundaries (simple clamp for now)
+        robotState.pendingMove -= move;   // Avoid forever move
         robotState.x = clamp(robotState.x, 0, WIDTH);
         robotState.y = clamp(robotState.y, 0, HEIGHT);
     }
@@ -97,6 +105,12 @@ public class MatchEngine {
      * @return The pending value or, if it exceeded the boundaries, the limit.
      */
     private double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
+        if (value < min) {
+            return min;
+        } else if (value > max) {
+            return max;
+        }
+
+        return value;
     }
 }
