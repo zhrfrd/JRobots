@@ -58,7 +58,7 @@ public class MatchEngine {
     ) {}
 
     /**
-     * Manage the match between multiple robots through controllers.
+     * Manage the match between multiple robots through controllers. TODO: This method is messy. Needs to be cleaned.
      * @param controller1 Brain of robot 1.
      * @param controller2 Brain of robot 2.
      * @param maxTicks Max number of simulation ticks.
@@ -72,27 +72,26 @@ public class MatchEngine {
         RobotActions r1Actions = new RobotActions();
         RobotActions r2Actions = new RobotActions();
         List<Snapshot> replay = new ArrayList<>();
-
         int executedTicks = 0;
         int winnerId = -1;
-
         List<BulletState> bullets = new ArrayList<>();
         int nextBulletId = 1;
 
         for (int tick = 0; tick < maxTicks; tick ++) {
-            if (r1.energy <= 0 || r2.energy <= 0) {
-                winnerId = r1.energy > 0 ? r1.id : r2.id;
-                break;
-            }
-
+            // Reset action requests
             r1Actions.resetForTick();
             r2Actions.resetForTick();
+
+            // Controllers decide actions
             controller1.onTick(r1View, r1Actions);
             controller2.onTick(r2View, r2Actions);
 
-            // Spawn bullet for robot 1 TODO: Refactor and make it more general
+            // --- Bullets spawn
+
+            // Spawn bullet for robot 1 TODO: Temporary code. Refactor and make it more general
             if (r1Actions.isFireRequested() && r1.energy > FIRE_ENERGY_COST) {
                 r1.energy -= FIRE_ENERGY_COST;
+
                 double rad = Math.toRadians(r1.bodyAngleDeg);
                 double bx = r1.x + Math.cos(rad) * ROBOT_RADIUS;
                 double by = r1.y + Math.sin(rad) * ROBOT_RADIUS;
@@ -102,9 +101,10 @@ public class MatchEngine {
                 bullets.add(new BulletState(nextBulletId ++, r1.id, bx, by, vx, vy, BULLET_POWER));
             }
 
-            // Spawn bullet for robot 2 TODO: Refactor and make it more general
+            // Spawn bullet for robot 2 TODO: Temporary code. Refactor and make it more general
             if (r2Actions.isFireRequested() && r2.energy > FIRE_ENERGY_COST) {
                 r2.energy -= FIRE_ENERGY_COST;
+
                 double rad = Math.toRadians(r2.bodyAngleDeg);
                 double bx = r2.x + Math.cos(rad) * ROBOT_RADIUS;
                 double by = r2.y + Math.sin(rad) * ROBOT_RADIUS;
@@ -115,21 +115,98 @@ public class MatchEngine {
             }
 
             // Engine reads the requested actions and applies them as "pending" intent.
-            // IMPORTANT: We apply requests to pendingMove/pendingTurn HERE, not in RobotActions.
+            // IMPORTANT: We apply requests to pendingMove/pendingTurn here, not in RobotActions.
             r1.pendingMove += r1Actions.getRequestedMove();
             r1.pendingTurn += r1Actions.getRequestedTurn();
             r2.pendingMove += r2Actions.getRequestedMove();
             r2.pendingTurn += r2Actions.getRequestedTurn();
 
+            // --- Robot movement
             applyMovement(r1);
             applyMovement(r2);
 
+            // --- Bullet movement
+            for (BulletState b : bullets) {
+                if (!b.alive) {
+                    continue;
+                }
+
+                b.x += b.vx;
+                b.y += b.vy;
+
+                // Collision with robot 1
+                if (b.ownerId != r1.id) {
+                    double dx = r1.x - b.x;
+                    double dy = r1.y - b.y;
+
+                    if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
+                        r1.energy -= b.power;
+                        b.alive = false;
+                        continue; // Prevent double-hit
+                    }
+                }
+
+                // Collision with robot 2
+                if (b.ownerId != r2.id) {
+                    double dx = r2.x - b.x;
+                    double dy = r2.y - b.y;
+
+                    if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
+                        r2.energy -= b.power;
+                        b.alive = false;
+                        continue; // Prevent double-hit
+                    }
+                }
+
+                // Remove bullet if outside arena
+                if (b.x < 0 || b.x > WIDTH || b.y < 0 || b.y > HEIGHT) {
+                    b.alive = false;
+                }
+            }
+
+            // Remove dead bullets safely
+            bullets.removeIf(b -> !b.alive);
+
+            // --- Check winner after physics & collisions
+
+            if (r1.energy <= 0 && r2.energy <= 0) {
+                winnerId = -1; // draw
+                executedTicks++;
+                replay.add(new Snapshot(tick, List.of(
+                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
+                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
+                )));
+
+                break;
+            }
+
+            if (r1.energy <= 0) {
+                winnerId = r2.id;
+                executedTicks++;
+                replay.add(new Snapshot(tick, List.of(
+                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
+                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
+                )));
+                break;
+            }
+
+            if (r2.energy <= 0) {
+                winnerId = r1.id;
+                executedTicks++;
+                replay.add(new Snapshot(tick, List.of(
+                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
+                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
+                )));
+                break;
+            }
+
+            // --- Record snapshot
             replay.add(new Snapshot(tick, List.of(
                     new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
                     new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
             )));
 
-            executedTicks ++;
+            executedTicks++;
         }
 
         return new MatchResult(WIDTH, HEIGHT, executedTicks, winnerId, replay);
