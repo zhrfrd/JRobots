@@ -12,3 +12,14 @@ other robots.
   - SpringBoot DevTools
   - Lombok (optional)
 - Maven
+
+## Design
+The game runs at a certain number of ticks per seconds during which a series of tasks are completed in order:
+1) Engine resets all the actions.
+2) Controllers request actions.
+3) Spawn bullets if fire is requested by a robot.
+4) Apply robot physics.
+5) Apply bullet physics.
+6) Detect collision between bullets and robots.
+7) Remove dead bullets.
+8) Record snapshot.

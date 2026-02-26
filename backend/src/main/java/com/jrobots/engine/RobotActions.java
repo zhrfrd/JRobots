@@ -16,6 +16,7 @@ package com.jrobots.engine;
 public class RobotActions {
     private double requestedMove;
     private double requestedTurn;
+    private boolean requestedFire;   // Only one fire request per tick.
 
     /**
      * Update the requested movement and save it for later to be used by {@link MatchEngine}. This does NOT move immediately.
@@ -34,11 +35,19 @@ public class RobotActions {
     }
 
     /**
+     * Request a bullet to be fired. {@link MatchEngine} will decide if firing is allowed.
+     */
+    public void fire() {
+        requestedFire = true;
+    }
+
+    /**
      * Called by {@link MatchEngine} at the start of every tick to clear previous requests.
      */
     protected void resetForTick() {
         requestedMove = 0;
         requestedTurn = 0;
+        requestedFire = false;
     }
 
     protected double getRequestedMove() {
@@ -47,5 +56,9 @@ public class RobotActions {
 
     protected double getRequestedTurn() {
         return requestedTurn;
+    }
+
+    boolean isFireRequested() {
+        return requestedFire;
     }
 }

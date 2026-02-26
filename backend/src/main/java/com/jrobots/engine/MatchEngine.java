@@ -12,6 +12,10 @@ public class MatchEngine {
     public static final int HEIGHT = 600;
     private static final double MAX_MOVE_PER_TICK = 4.0;
     private static final double MAX_TURN_PER_TICK = 6.0;
+    private static final double ROBOT_RADIUS = 20.0;
+    private static final double BULLET_SPEED = MAX_MOVE_PER_TICK * 2;
+    private static final double BULLET_POWER = 10.0;
+    private static final double FIRE_ENERGY_COST = 5.0;
 
     /**
      * MatchResult is the final outcome of a match which will be returned to the API layer.
@@ -54,7 +58,7 @@ public class MatchEngine {
     ) {}
 
     /**
-     * Runs a match between two controllers.
+     * Manage the match between multiple robots through controllers.
      * @param controller1 Brain of robot 1.
      * @param controller2 Brain of robot 2.
      * @param maxTicks Max number of simulation ticks.
@@ -72,6 +76,9 @@ public class MatchEngine {
         int executedTicks = 0;
         int winnerId = -1;
 
+        List<BulletState> bullets = new ArrayList<>();
+        int nextBulletId = 1;
+
         for (int tick = 0; tick < maxTicks; tick ++) {
             if (r1.energy <= 0 || r2.energy <= 0) {
                 winnerId = r1.energy > 0 ? r1.id : r2.id;
@@ -82,6 +89,30 @@ public class MatchEngine {
             r2Actions.resetForTick();
             controller1.onTick(r1View, r1Actions);
             controller2.onTick(r2View, r2Actions);
+
+            // Spawn bullet for robot 1 TODO: Refactor and make it more general
+            if (r1Actions.isFireRequested() && r1.energy > FIRE_ENERGY_COST) {
+                r1.energy -= FIRE_ENERGY_COST;
+                double rad = Math.toRadians(r1.bodyAngleDeg);
+                double bx = r1.x + Math.cos(rad) * ROBOT_RADIUS;
+                double by = r1.y + Math.sin(rad) * ROBOT_RADIUS;
+                double vx = Math.cos(rad) * BULLET_SPEED;
+                double vy = Math.sin(rad) * BULLET_SPEED;
+
+                bullets.add(new BulletState(nextBulletId ++, r1.id, bx, by, vx, vy, BULLET_POWER));
+            }
+
+            // Spawn bullet for robot 2 TODO: Refactor and make it more general
+            if (r2Actions.isFireRequested() && r2.energy > FIRE_ENERGY_COST) {
+                r2.energy -= FIRE_ENERGY_COST;
+                double rad = Math.toRadians(r2.bodyAngleDeg);
+                double bx = r2.x + Math.cos(rad) * ROBOT_RADIUS;
+                double by = r2.y + Math.sin(rad) * ROBOT_RADIUS;
+                double vx = Math.cos(rad) * BULLET_SPEED;
+                double vy = Math.sin(rad) * BULLET_SPEED;
+
+                bullets.add(new BulletState(nextBulletId ++, r2.id, bx, by, vx, vy, BULLET_POWER));
+            }
 
             // Engine reads the requested actions and applies them as "pending" intent.
             // IMPORTANT: We apply requests to pendingMove/pendingTurn HERE, not in RobotActions.
