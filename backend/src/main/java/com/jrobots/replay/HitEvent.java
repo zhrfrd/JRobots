@@ -2,10 +2,6 @@ package com.jrobots.replay;
 
 /**
  * Hit event: a bullet hit a robot.
- */
-
-/**
- * Hit event: a bullet hit a robot.
  * @param type Type of event: "HIT".
  * @param bulletId Id of the bullet.
  * @param ownerId Id of the robot that shot the bullet.
