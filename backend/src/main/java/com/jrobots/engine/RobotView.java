@@ -28,7 +28,6 @@ public class RobotView {
         return self.energy;
     }
 
-
     public double getBodyAngleDeg() {
         return self.bodyAngleDeg;
     }

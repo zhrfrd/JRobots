@@ -1,5 +1,7 @@
 package com.jrobots.engine;
 
+import com.jrobots.replay.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,46 +18,6 @@ public class MatchEngine {
     private static final double BULLET_SPEED = MAX_MOVE_PER_TICK * 2;
     private static final double BULLET_POWER = 10.0;
     private static final double FIRE_ENERGY_COST = 5.0;
-
-    /**
-     * MatchResult is the final outcome of a match which will be returned to the API layer.
-     * <p>
-     *     It wraps:
-     *     <ul>
-     *         <li>Arena metadata.</li>
-     *         <li>Total tick executed.</li>
-     *         <li>Winner id (or -1 in case of a draw).</li>
-     *         <li>Replay snapshots.</li>
-     *     </ul>
-     * </p>
-     */
-    public record MatchResult(
-            int arenaWidth,
-            int arenaHeight,
-            int totalTicks,
-            int winnerId,
-            List<Snapshot> replay
-    ) {}
-
-    /**
-     * Snapshot represents the world state at a given tick.
-     * Note: For now it contains only robots. Later it will include bullets, explosions, etc.
-     */
-    public record Snapshot(
-            int tick,
-            List<RobotSnapshot> robots
-    ) {}
-
-    /**
-     * RobotSnapshot is a read-only record containing the minimal info needed to render a robot.
-     */
-    public record RobotSnapshot(
-            int id,
-            double x,
-            double y,
-            double energy,
-            double bodyAngleDeg
-    ) {}
 
     /**
      * Manage the match between multiple robots through controllers. TODO: This method is messy. Needs to be cleaned.
@@ -78,6 +40,8 @@ public class MatchEngine {
         int nextBulletId = 1;
 
         for (int tick = 0; tick < maxTicks; tick ++) {
+            List<MatchEvent> events = new ArrayList<>();
+
             // Reset action requests
             r1Actions.resetForTick();
             r2Actions.resetForTick();
@@ -97,8 +61,10 @@ public class MatchEngine {
                 double by = r1.y + Math.sin(rad) * ROBOT_RADIUS;
                 double vx = Math.cos(rad) * BULLET_SPEED;
                 double vy = Math.sin(rad) * BULLET_SPEED;
+                int bulletId = nextBulletId ++;
 
-                bullets.add(new BulletState(nextBulletId ++, r1.id, bx, by, vx, vy, BULLET_POWER));
+                bullets.add(new BulletState(bulletId, r1.id, bx, by, vx, vy, BULLET_POWER));
+                events.add(new FireEvent(r1.id, bulletId));
             }
 
             // Spawn bullet for robot 2 TODO: Temporary code. Refactor and make it more general
@@ -110,8 +76,10 @@ public class MatchEngine {
                 double by = r2.y + Math.sin(rad) * ROBOT_RADIUS;
                 double vx = Math.cos(rad) * BULLET_SPEED;
                 double vy = Math.sin(rad) * BULLET_SPEED;
+                int bulletId = nextBulletId++;
 
-                bullets.add(new BulletState(nextBulletId ++, r2.id, bx, by, vx, vy, BULLET_POWER));
+                bullets.add(new BulletState(bulletId, r2.id, bx, by, vx, vy, BULLET_POWER));
+                events.add(new FireEvent(r2.id, bulletId));
             }
 
             // Engine reads the requested actions and applies them as "pending" intent.
@@ -142,6 +110,9 @@ public class MatchEngine {
                     if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
                         r1.energy -= b.power;
                         b.alive = false;
+
+                        events.add(new HitEvent(b.id, b.ownerId, r1.id, b.power));
+
                         continue; // Prevent double-hit
                     }
                 }
@@ -154,6 +125,9 @@ public class MatchEngine {
                     if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
                         r2.energy -= b.power;
                         b.alive = false;
+
+                        events.add(new HitEvent(b.id, b.ownerId, r2.id, b.power));
+
                         continue; // Prevent double-hit
                     }
                 }
@@ -172,44 +146,45 @@ public class MatchEngine {
             if (r1.energy <= 0 && r2.energy <= 0) {
                 winnerId = -1; // draw
                 executedTicks++;
-                replay.add(new Snapshot(tick, List.of(
-                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
-                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
-                )));
+                replay.add(createSnapshot(tick, r1, r2, bullets, events));
 
                 break;
             }
 
             if (r1.energy <= 0) {
                 winnerId = r2.id;
-                executedTicks++;
-                replay.add(new Snapshot(tick, List.of(
-                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
-                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
-                )));
+                executedTicks ++;
+                replay.add(createSnapshot(tick, r1, r2, bullets, events));
                 break;
             }
 
             if (r2.energy <= 0) {
                 winnerId = r1.id;
-                executedTicks++;
-                replay.add(new Snapshot(tick, List.of(
-                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
-                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
-                )));
+                executedTicks ++;
+                replay.add(createSnapshot(tick, r1, r2, bullets, events));
                 break;
             }
 
             // --- Record snapshot
-            replay.add(new Snapshot(tick, List.of(
-                    new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
-                    new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
-            )));
-
+            replay.add(createSnapshot(tick, r1, r2, bullets, events));
             executedTicks++;
         }
 
         return new MatchResult(WIDTH, HEIGHT, executedTicks, winnerId, replay);
+    }
+
+    private Snapshot createSnapshot(int tick, RobotState r1, RobotState r2, List<BulletState> bullets, List<MatchEvent> events) {
+        return new Snapshot(
+                tick,
+                List.of(
+                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
+                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
+                ),
+                bullets.stream()
+                        .map(b -> new BulletSnapshot(b.id, b.ownerId, b.x, b.y))
+                        .toList(),
+                List.copyOf(events)
+        );
     }
 
     /**
