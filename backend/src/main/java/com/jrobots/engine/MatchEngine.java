@@ -143,31 +143,39 @@ public class MatchEngine {
 
             // --- Check winner after physics & collisions
 
-            if (r1.energy <= 0 && r2.energy <= 0) {
-                winnerId = -1; // draw
-                executedTicks++;
+            boolean r1Dead = r1.energy <= 0;
+            boolean r2Dead = r2.energy <= 0;
+
+            if (r1Dead || r2Dead) {
+                // Emit DeathEvents
+                if (r1Dead) {
+                    events.add(new DeathEvent(r1.id));
+                }
+                if (r2Dead) {
+                    events.add(new DeathEvent(r2.id));
+                }
+
+                // Determine match outcome
+                if (r1Dead && r2Dead) {
+                    winnerId = -1;
+                    events.add(new EndEvent("DRAW", -1));
+                } else if (r1Dead) {
+                    winnerId = r2.id;
+                    events.add(new EndEvent("WIN", r2.id));
+                } else {
+                    winnerId = r1.id;
+                    events.add(new EndEvent("WIN", r1.id));
+                }
+
                 replay.add(createSnapshot(tick, r1, r2, bullets, events));
-
-                break;
-            }
-
-            if (r1.energy <= 0) {
-                winnerId = r2.id;
                 executedTicks ++;
-                replay.add(createSnapshot(tick, r1, r2, bullets, events));
-                break;
-            }
-
-            if (r2.energy <= 0) {
-                winnerId = r1.id;
-                executedTicks ++;
-                replay.add(createSnapshot(tick, r1, r2, bullets, events));
                 break;
             }
 
             // --- Record snapshot
             replay.add(createSnapshot(tick, r1, r2, bullets, events));
-            executedTicks++;
+            executedTicks ++;
+
         }
 
         return new MatchResult(WIDTH, HEIGHT, executedTicks, winnerId, replay);
