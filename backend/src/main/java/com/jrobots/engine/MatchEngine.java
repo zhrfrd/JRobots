@@ -18,6 +18,7 @@ public class MatchEngine {
     private static final double BULLET_SPEED = MAX_MOVE_PER_TICK * 2;
     private static final double BULLET_POWER = 10.0;
     private static final double FIRE_ENERGY_COST = 5.0;
+    private int nextBulletId = 1;
 
     /**
      * Manage the match between multiple robots through controllers. TODO: This method is messy. Needs to be cleaned.
@@ -27,172 +28,180 @@ public class MatchEngine {
      * @return List of snapshots (replay).
      */
     public MatchResult runMatch(RobotController controller1, RobotController controller2, int maxTicks) {
-        RobotState r1 = new RobotState(1, 100, 300);
-        RobotState r2 = new RobotState(2, 700, 300);
-        RobotView r1View = new RobotView(r1);
-        RobotView r2View = new RobotView(r2);
-        RobotActions r1Actions = new RobotActions();
-        RobotActions r2Actions = new RobotActions();
+        // --- Create robots
+        List<RobotInstance> robots = new ArrayList<>();
+
+        robots.add(new RobotInstance(new RobotState(1, 100, 300), controller1));
+        robots.add(new RobotInstance(new RobotState(2, 700, 300), controller2));
+
+        List<BulletState> bullets = new ArrayList<>();
         List<Snapshot> replay = new ArrayList<>();
         int executedTicks = 0;
         int winnerId = -1;
-        List<BulletState> bullets = new ArrayList<>();
-        int nextBulletId = 1;
 
-        for (int tick = 0; tick < maxTicks; tick ++) {
+        for (int tick = 0; tick < maxTicks; tick++) {
             List<MatchEvent> events = new ArrayList<>();
 
-            // Reset action requests
-            r1Actions.resetForTick();
-            r2Actions.resetForTick();
+            // --- Controller phase
+            processControllers(robots);
 
-            // Controllers decide actions
-            controller1.onTick(r1View, r1Actions);
-            controller2.onTick(r2View, r2Actions);
+            // --- Bullet spawning
+            spawnBullets(robots, bullets, events);
 
-            // --- Bullets spawn
-
-            // Spawn bullet for robot 1 TODO: Temporary code. Refactor and make it more general
-            if (r1Actions.isFireRequested() && r1.energy > FIRE_ENERGY_COST) {
-                r1.energy -= FIRE_ENERGY_COST;
-
-                double rad = Math.toRadians(r1.bodyAngleDeg);
-                double bx = r1.x + Math.cos(rad) * ROBOT_RADIUS;
-                double by = r1.y + Math.sin(rad) * ROBOT_RADIUS;
-                double vx = Math.cos(rad) * BULLET_SPEED;
-                double vy = Math.sin(rad) * BULLET_SPEED;
-                int bulletId = nextBulletId ++;
-
-                bullets.add(new BulletState(bulletId, r1.id, bx, by, vx, vy, BULLET_POWER));
-                events.add(new FireEvent(r1.id, bulletId));
-            }
-
-            // Spawn bullet for robot 2 TODO: Temporary code. Refactor and make it more general
-            if (r2Actions.isFireRequested() && r2.energy > FIRE_ENERGY_COST) {
-                r2.energy -= FIRE_ENERGY_COST;
-
-                double rad = Math.toRadians(r2.bodyAngleDeg);
-                double bx = r2.x + Math.cos(rad) * ROBOT_RADIUS;
-                double by = r2.y + Math.sin(rad) * ROBOT_RADIUS;
-                double vx = Math.cos(rad) * BULLET_SPEED;
-                double vy = Math.sin(rad) * BULLET_SPEED;
-                int bulletId = nextBulletId++;
-
-                bullets.add(new BulletState(bulletId, r2.id, bx, by, vx, vy, BULLET_POWER));
-                events.add(new FireEvent(r2.id, bulletId));
-            }
-
-            // Engine reads the requested actions and applies them as "pending" intent.
-            // IMPORTANT: We apply requests to pendingMove/pendingTurn here, not in RobotActions.
-            r1.pendingMove += r1Actions.getRequestedMove();
-            r1.pendingTurn += r1Actions.getRequestedTurn();
-            r2.pendingMove += r2Actions.getRequestedMove();
-            r2.pendingTurn += r2Actions.getRequestedTurn();
+            // --- Apply requested actions
+            applyRobotActions(robots);
 
             // --- Robot movement
-            applyMovement(r1);
-            applyMovement(r2);
-
-            // --- Bullet movement
-            for (BulletState b : bullets) {
-                if (!b.alive) {
-                    continue;
-                }
-
-                b.x += b.vx;
-                b.y += b.vy;
-
-                // Collision with robot 1
-                if (b.ownerId != r1.id) {
-                    double dx = r1.x - b.x;
-                    double dy = r1.y - b.y;
-
-                    if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
-                        r1.energy -= b.power;
-                        b.alive = false;
-
-                        events.add(new HitEvent(b.id, b.ownerId, r1.id, b.power));
-
-                        continue; // Prevent double-hit
-                    }
-                }
-
-                // Collision with robot 2
-                if (b.ownerId != r2.id) {
-                    double dx = r2.x - b.x;
-                    double dy = r2.y - b.y;
-
-                    if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
-                        r2.energy -= b.power;
-                        b.alive = false;
-
-                        events.add(new HitEvent(b.id, b.ownerId, r2.id, b.power));
-
-                        continue; // Prevent double-hit
-                    }
-                }
-
-                // Remove bullet if outside arena
-                if (b.x < 0 || b.x > WIDTH || b.y < 0 || b.y > HEIGHT) {
-                    b.alive = false;
-                }
+            for (RobotInstance robot : robots) {
+                applyMovement(robot.state);
             }
 
-            // Remove dead bullets safely
-            bullets.removeIf(b -> !b.alive);
+            // --- Bullet updates (move + collisions + cleanup)
+            updateBullets(bullets, robots, events);
 
-            // --- Check winner after physics & collisions
+            // --- Winner detection
+            List<RobotInstance> alive = robots.stream()
+                    .filter(r -> r.state.energy > 0)
+                    .toList();
 
-            boolean r1Dead = r1.energy <= 0;
-            boolean r2Dead = r2.energy <= 0;
+            if (alive.size() <= 1) {
 
-            if (r1Dead || r2Dead) {
-                // Emit DeathEvents
-                if (r1Dead) {
-                    events.add(new DeathEvent(r1.id));
+                // Emit death events
+                for (RobotInstance robot : robots) {
+                    if (robot.state.energy <= 0) {
+                        events.add(new DeathEvent(robot.state.id));
+                    }
                 }
-                if (r2Dead) {
-                    events.add(new DeathEvent(r2.id));
-                }
 
-                // Determine match outcome
-                if (r1Dead && r2Dead) {
+                if (alive.isEmpty()) {
                     winnerId = -1;
                     events.add(new EndEvent("DRAW", -1));
-                } else if (r1Dead) {
-                    winnerId = r2.id;
-                    events.add(new EndEvent("WIN", r2.id));
                 } else {
-                    winnerId = r1.id;
-                    events.add(new EndEvent("WIN", r1.id));
+                    winnerId = alive.get(0).state.id;
+                    events.add(new EndEvent("WIN", winnerId));
                 }
 
-                replay.add(createSnapshot(tick, r1, r2, bullets, events));
-                executedTicks ++;
+                replay.add(createSnapshot(tick, robots, bullets, events));
+                executedTicks++;
                 break;
             }
 
             // --- Record snapshot
-            replay.add(createSnapshot(tick, r1, r2, bullets, events));
-            executedTicks ++;
-
+            replay.add(createSnapshot(tick, robots, bullets, events));
+            executedTicks++;
         }
 
         return new MatchResult(WIDTH, HEIGHT, executedTicks, winnerId, replay);
     }
 
-    private Snapshot createSnapshot(int tick, RobotState r1, RobotState r2, List<BulletState> bullets, List<MatchEvent> events) {
-        return new Snapshot(
-                tick,
-                List.of(
-                        new RobotSnapshot(r1.id, r1.x, r1.y, r1.energy, r1.bodyAngleDeg),
-                        new RobotSnapshot(r2.id, r2.x, r2.y, r2.energy, r2.bodyAngleDeg)
-                ),
-                bullets.stream()
-                        .map(b -> new BulletSnapshot(b.id, b.ownerId, b.x, b.y))
-                        .toList(),
-                List.copyOf(events)
-        );
+    private void processControllers(List<RobotInstance> robots) {
+        for (RobotInstance robot : robots) {
+            robot.actions.resetForTick();
+            robot.controller.onTick(robot.view, robot.actions);
+        }
+    }
+
+    // Engine reads the requested actions and applies them as "pending" intent.
+    // IMPORTANT: We apply requests to pendingMove/pendingTurn here, not in RobotActions.
+    private void applyRobotActions(List<RobotInstance> robots) {
+        for (RobotInstance robot : robots) {
+            RobotState r = robot.state;
+            r.pendingMove += robot.actions.getRequestedMove();
+            r.pendingTurn += robot.actions.getRequestedTurn();
+        }
+    }
+
+    private void spawnBullets(List<RobotInstance> robots, List<BulletState> bullets, List<MatchEvent> events) {
+        for (RobotInstance robot : robots) {
+            RobotState r = robot.state;
+
+            if (robot.actions.isFireRequested() && r.energy > FIRE_ENERGY_COST) {
+                r.energy -= FIRE_ENERGY_COST;
+                double rad = Math.toRadians(r.bodyAngleDeg);
+                double bx = r.x + Math.cos(rad) * ROBOT_RADIUS;
+                double by = r.y + Math.sin(rad) * ROBOT_RADIUS;
+                double vx = Math.cos(rad) * BULLET_SPEED;
+                double vy = Math.sin(rad) * BULLET_SPEED;
+                int bulletId = nextBulletId++;
+
+                bullets.add(new BulletState(bulletId, r.id, bx, by, vx, vy, BULLET_POWER));
+                events.add(new FireEvent(r.id, bulletId));
+            }
+        }
+    }
+
+    private void updateBullets(List<BulletState> bullets, List<RobotInstance> robots, List<MatchEvent> events) {
+        // --- Move bullets
+        for (BulletState b : bullets) {
+            if (!b.alive) {
+                continue;
+            }
+
+            b.x += b.vx;
+            b.y += b.vy;
+        }
+
+        // --- Detect collisions
+        for (BulletState b : bullets) {
+            if (!b.alive) {
+                continue;
+            }
+
+            for (RobotInstance robot : robots) {
+                RobotState r = robot.state;
+
+                if (b.ownerId == r.id) {
+                    continue;
+                }
+
+                double dx = r.x - b.x;
+                double dy = r.y - b.y;
+
+                if (dx * dx + dy * dy <= ROBOT_RADIUS * ROBOT_RADIUS) {
+                    r.energy -= b.power;
+                    b.alive = false;
+                    events.add(new HitEvent(b.id, b.ownerId, r.id, b.power));
+
+                    break;
+                }
+            }
+
+            if (!b.alive) {
+                continue;
+            }
+
+            if (b.x < 0 || b.x > WIDTH || b.y < 0 || b.y > HEIGHT) {
+                b.alive = false;
+            }
+        }
+
+        // --- Remove dead bullets
+        bullets.removeIf(b -> !b.alive);
+    }
+
+    private Snapshot createSnapshot(int tick, List<RobotInstance> robots, List<BulletState> bullets, List<MatchEvent> events) {
+        List<RobotSnapshot> robotSnapshots = robots
+                .stream()
+                .map(r -> new RobotSnapshot(
+                        r.state.id,
+                        r.state.x,
+                        r.state.y,
+                        r.state.energy,
+                        r.state.bodyAngleDeg
+                ))
+                .toList();
+
+        List<BulletSnapshot> bulletSnapshots = bullets
+                .stream()
+                .map(b -> new BulletSnapshot(
+                        b.id,
+                        b.ownerId,
+                        b.x,
+                        b.y
+                ))
+                .toList();
+
+        return new Snapshot(tick, robotSnapshots, bulletSnapshots, List.copyOf(events));
     }
 
     /**
