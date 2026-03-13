@@ -28,7 +28,6 @@ public class MatchEngine {
      * @return List of snapshots (replay).
      */
     public MatchResult runMatch(RobotController controller1, RobotController controller2, int maxTicks) {
-        // --- Create robots
         List<RobotInstance> robots = new ArrayList<>();
 
         robots.add(new RobotInstance(new RobotState(1, 100, 300), controller1));
@@ -41,32 +40,28 @@ public class MatchEngine {
 
         for (int tick = 0; tick < maxTicks; tick++) {
             List<MatchEvent> events = new ArrayList<>();
+            List<RobotState> robotStates = robots
+                    .stream()
+                    .map(r -> r.state)
+                    .toList();
 
-            // --- Controller phase
+            // Update robot perception
+            for (RobotInstance robot : robots) {
+                robot.view.updateArenaState(robotStates);
+            }
+
             processControllers(robots);
-
-            // --- Bullet spawning
             spawnBullets(robots, bullets, events);
-
-            // --- Apply requested actions
             applyRobotActions(robots);
 
-            // --- Robot movement
             for (RobotInstance robot : robots) {
                 applyMovement(robot.state);
             }
 
-            // --- Bullet updates (move + collisions + cleanup)
             updateBullets(bullets, robots, events);
-
-            // --- Winner detection
-            List<RobotInstance> alive = robots.stream()
-                    .filter(r -> r.state.energy > 0)
-                    .toList();
+            List<RobotInstance> alive = robots.stream().filter(r -> r.state.energy > 0).toList();
 
             if (alive.size() <= 1) {
-
-                // Emit death events
                 for (RobotInstance robot : robots) {
                     if (robot.state.energy <= 0) {
                         events.add(new DeathEvent(robot.state.id));
@@ -82,13 +77,13 @@ public class MatchEngine {
                 }
 
                 replay.add(createSnapshot(tick, robots, bullets, events));
-                executedTicks++;
+                executedTicks ++;
                 break;
             }
 
-            // --- Record snapshot
             replay.add(createSnapshot(tick, robots, bullets, events));
-            executedTicks++;
+
+            executedTicks ++;
         }
 
         return new MatchResult(WIDTH, HEIGHT, executedTicks, winnerId, replay);
@@ -182,23 +177,12 @@ public class MatchEngine {
     private Snapshot createSnapshot(int tick, List<RobotInstance> robots, List<BulletState> bullets, List<MatchEvent> events) {
         List<RobotSnapshot> robotSnapshots = robots
                 .stream()
-                .map(r -> new RobotSnapshot(
-                        r.state.id,
-                        r.state.x,
-                        r.state.y,
-                        r.state.energy,
-                        r.state.bodyAngleDeg
-                ))
+                .map(r -> new RobotSnapshot(r.state.id, r.state.x, r.state.y, r.state.energy, r.state.bodyAngleDeg))
                 .toList();
 
         List<BulletSnapshot> bulletSnapshots = bullets
                 .stream()
-                .map(b -> new BulletSnapshot(
-                        b.id,
-                        b.ownerId,
-                        b.x,
-                        b.y
-                ))
+                .map(b -> new BulletSnapshot(b.id, b.ownerId, b.x, b.y))
                 .toList();
 
         return new Snapshot(tick, robotSnapshots, bulletSnapshots, List.copyOf(events));

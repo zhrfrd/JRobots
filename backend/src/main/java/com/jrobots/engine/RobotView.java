@@ -1,5 +1,7 @@
 package com.jrobots.engine;
 
+import java.util.List;
+
 /**
  * RobotView is a READ-ONLY wrapper around RobotState. It's a "window" into the state.
  * Controllers receive this object to inspect their own robot state.
@@ -11,9 +13,14 @@ package com.jrobots.engine;
  */
 public class RobotView {
     private final RobotState self;
+    private List<RobotState> robots;
 
     public RobotView(RobotState self) {
         this.self = self;
+    }
+
+    protected void updateArenaState(List<RobotState> robots) {
+        this.robots = robots;
     }
 
     public double getX() {
