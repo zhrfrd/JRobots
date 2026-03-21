@@ -19,6 +19,55 @@ public class RobotView {
         this.self = self;
     }
 
+    /**
+     * Scan battlefield (see enemies, detect direction, measure distance).
+     * @param angleDeg Direction where the robot scans.
+     * @return The distance of the closest target.
+     */
+    public double scan(double angleDeg) {
+        if (robots == null) {
+            return -1;
+        }
+
+        double rad = Math.toRadians(angleDeg);
+        double dx = Math.cos(rad);
+        double dy = Math.sin(rad);
+        double bestDistance = Double.MAX_VALUE;
+
+        for (RobotState robot : robots) {
+            if (robot.id == self.id) {
+                continue;
+            }
+
+            double rx = robot.x - self.x;
+            double ry = robot.y - self.y;
+            double dist = Math.sqrt(rx * rx + ry * ry);
+
+            if (dist == 0) {
+                continue;
+            }
+
+            double dot = (rx * dx + ry * dy) / dist;
+
+            // Clamp to avoid floating point errors (i.e. 1.0000001 NaN)
+            if (dot > 1) {
+                dot = 1;
+            } else if (dot < -1) {
+                dot = -1;
+            }
+
+            double angle = Math.acos(dot);
+
+            if (angle < Math.toRadians(5)) {
+                if (dist < bestDistance) {
+                    bestDistance = dist;
+                }
+            }
+        }
+
+        return bestDistance == Double.MAX_VALUE ? -1 : bestDistance;
+    }
+
     protected void updateArenaState(List<RobotState> robots) {
         this.robots = robots;
     }

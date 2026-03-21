@@ -1,5 +1,6 @@
 package com.jrobots.api;
 
+import com.jrobots.bots.ScannerBot;
 import com.jrobots.bots.SpinnerBot;
 import com.jrobots.engine.MatchEngine;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,6 @@ public class MatchController {
     public Object testMatch() {
         MatchEngine engine = new MatchEngine();
 
-        return engine.runMatch(new SpinnerBot(), new SpinnerBot(), 200);
+        return engine.runMatch(new SpinnerBot(), new ScannerBot(), 200);
     }
 }

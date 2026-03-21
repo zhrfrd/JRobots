@@ -21,7 +21,7 @@ public class MatchEngine {
     private int nextBulletId = 1;
 
     /**
-     * Manage the match between multiple robots through controllers. TODO: This method is messy. Needs to be cleaned.
+     * Manage the match between multiple robots through controllers.
      * @param controller1 Brain of robot 1.
      * @param controller2 Brain of robot 2.
      * @param maxTicks Max number of simulation ticks.
