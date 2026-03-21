@@ -38,13 +38,14 @@ JRobots/
 ```
 
 ## Current features
-- Robot movement and turning.
-- Bullet firing system.
-- Bullet physics and collision detection.
+- Robots can move and turn.
+- Robots can fire bullets.
+- Bullet have physics and collision detection.
 - Energy-based damage system.
 - Match result (WIN / DRAW).
 - Replay generation.
 - Event timeline per tick.
+- Robots can scan the battlefield to find the opponent.
 
 ## Design
 The game runs at a certain number of ticks per seconds during which a series of tasks are completed in order:

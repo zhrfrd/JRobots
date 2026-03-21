@@ -21,8 +21,8 @@ public class RobotView {
 
     /**
      * Scan battlefield (see enemies, detect direction, measure distance).
-     * @param angleDeg Direction where the robot scans.
-     * @return The distance of the closest target.
+     * @param angleDeg Double value of the scan view angle.
+     * @return The distance of the closest target robot.
      */
     public double scan(double angleDeg) {
         if (robots == null) {
@@ -49,7 +49,7 @@ public class RobotView {
 
             double dot = (rx * dx + ry * dy) / dist;
 
-            // Clamp to avoid floating point errors (i.e. 1.0000001 NaN)
+            // Clamp to avoid floating point errors (i.e.: 1.0000001 NaN)
             if (dot > 1) {
                 dot = 1;
             } else if (dot < -1) {
